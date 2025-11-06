@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Описание для пользователя при запросе доступа к уведомлениям -->
+    <key>NSUserNotificationsUsageDescription</key>
+    <string>Приложению нужны уведомления для напоминаний о кормлении и других событиях по уходу за ребенком</string>
+
+    <!-- Описание для использования Face ID -->
+    <key>NSFaceIDUsageDescription</key>
+    <string>Используйте Face ID для быстрого и безопасного входа в приложение</string>
+
+    <!-- Описание для использования камеры (для фото ребенка) -->
+    <key>NSCameraUsageDescription</key>
+    <string>Приложению нужен доступ к камере для добавления фото ребенка</string>
+
+    <!-- Описание для использования фотобиблиотеки -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Приложению нужен доступ к фотобиблиотеке для выбора фото ребенка</string>
+
+    <!-- Описание для сохранения фото -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Приложению нужен доступ для сохранения фото ребенка</string>
+
+    <!-- Поддержка Siri -->
+    <key>NSSiriUsageDescription</key>
+    <string>Siri используется для быстрого добавления событий по уходу за ребенком голосовыми командами</string>
+
+    <!-- Background Modes уже настраиваются в Xcode Capabilities -->
+    <!-- Но для справки, вот что нужно включить: -->
+    <!-- - Remote notifications -->
+    <!-- - Background fetch (опционально) -->
+
+    <!-- App Transport Security (если нужны HTTP запросы) -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+    </dict>
+
+    <!-- Supported Interface Orientations -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!-- Display Name -->
+    <key>CFBundleDisplayName</key>
+    <string>Baby Care Tracker</string>
+
+    <!-- Minimum iOS Version -->
+    <key>MinimumOSVersion</key>
+    <string>17.0</string>
+</dict>
+</plist>

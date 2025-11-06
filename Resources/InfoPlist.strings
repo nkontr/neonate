@@ -1,0 +1,27 @@
+/*
+  InfoPlist.strings (Russian)
+  neonate
+
+  Created by Claude on 13.12.2025.
+  Localized Info.plist values for Russian
+*/
+
+/* Camera Usage */
+"NSCameraUsageDescription" = "Приложение neonate использует камеру для добавления фотографий в профили детей";
+
+/* Photo Library Usage */
+"NSPhotoLibraryUsageDescription" = "Приложение neonate использует фотогалерею для выбора фотографий профилей детей";
+
+"NSPhotoLibraryAddUsageDescription" = "Приложение neonate использует фотогалерею для сохранения фотографий";
+
+/* Face ID Usage */
+"NSFaceIDUsageDescription" = "Приложение neonate использует Face ID для быстрого и безопасного входа в аккаунт";
+
+/* User Notifications */
+"NSUserNotificationsUsageDescription" = "Приложение neonate отправляет уведомления с напоминаниями о кормлении, сне и смене подгузников";
+
+/* Siri Usage */
+"NSSiriUsageDescription" = "Приложение neonate использует Siri для быстрого добавления событий с помощью голосовых команд";
+
+/* App Display Name */
+"CFBundleDisplayName" = "Baby Care Tracker";

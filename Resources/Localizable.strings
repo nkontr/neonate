@@ -1,0 +1,505 @@
+/*
+  Localizable.strings (Russian)
+  neonate
+
+  Created by Claude on 12.12.2025.
+
+*/
+
+// MARK: - Общие
+
+"app_name" = "Baby Care Tracker";
+"ok" = "ОК";
+"cancel" = "Отмена";
+"save" = "Сохранить";
+"delete" = "Удалить";
+"edit" = "Редактировать";
+"done" = "Готово";
+"close" = "Закрыть";
+"add" = "Добавить";
+"error" = "Ошибка";
+"success" = "Успешно";
+"loading" = "Загрузка...";
+"retry" = "Повторить";
+"continue" = "Продолжить";
+"back" = "Назад";
+"next" = "Далее";
+"yes" = "Да";
+"no" = "Нет";
+
+// MARK: - Навигация и Табы
+
+"tab_dashboard" = "Обзор";
+"tab_tracking" = "Отслеживание";
+"tab_analytics" = "Аналитика";
+"tab_settings" = "Настройки";
+
+// MARK: - Dashboard
+
+"dashboard_title" = "Обзор";
+"dashboard_quick_add" = "Быстрое добавление";
+"dashboard_today_events" = "Сегодняшние события";
+"dashboard_no_child_title" = "Добавьте профиль ребенка";
+"dashboard_no_child_message" = "Начните отслеживание событий, добавив профиль вашего ребенка";
+"dashboard_add_child_button" = "Добавить ребенка";
+"dashboard_select_child" = "Выбрать ребенка";
+
+// MARK: - События
+
+"event_feeding" = "Кормление";
+"event_sleep" = "Сон";
+"event_diaper" = "Подгузник";
+"event_bath" = "Купание";
+"event_medication" = "Лекарство";
+"event_temperature" = "Температура";
+"event_weight" = "Вес";
+"event_height" = "Рост";
+"event_note" = "Заметка";
+
+// MARK: - Профиль ребенка
+
+"profile_name" = "Имя";
+"profile_birth_date" = "Дата рождения";
+"profile_gender" = "Пол";
+"profile_photo" = "Фото";
+"profile_birth_weight" = "Вес при рождении";
+"profile_birth_height" = "Рост при рождении";
+"profile_blood_type" = "Группа крови";
+"profile_add_photo" = "Добавить фото";
+"profile_change_photo" = "Изменить фото";
+"profile_new" = "Новый профиль";
+"profile_edit" = "Редактировать профиль";
+
+// MARK: - Пол
+
+"gender_boy" = "Мальчик";
+"gender_girl" = "Девочка";
+"gender_other" = "Другое";
+
+// MARK: - Кормление
+
+"feeding_title" = "Кормление";
+"feeding_new" = "Новое кормление";
+"feeding_add" = "Добавить кормление";
+"feeding_type" = "Тип кормления";
+"feeding_type_breast" = "Грудное";
+"feeding_type_bottle" = "Бутылочка";
+"feeding_type_solid" = "Прикорм";
+"feeding_time" = "Время кормления";
+"feeding_duration" = "Длительность";
+"feeding_volume" = "Объем";
+"feeding_breast" = "Грудь";
+"feeding_breast_left" = "Левая";
+"feeding_breast_right" = "Правая";
+"feeding_breast_both" = "Обе";
+"feeding_notes" = "Заметки";
+"feeding_list_title" = "Кормления";
+"feeding_empty" = "Нет записей о кормлении";
+"feeding_empty_message" = "Начните отслеживать кормления вашего малыша";
+
+// MARK: - Сон
+
+"sleep_title" = "Сон";
+"sleep_new" = "Новый сон";
+"sleep_add" = "Добавить сон";
+"sleep_start" = "Начало сна";
+"sleep_end" = "Конец сна";
+"sleep_duration" = "Длительность сна";
+"sleep_notes" = "Заметки";
+"sleep_timer" = "Таймер сна";
+"sleep_timer_start" = "Начать таймер";
+"sleep_timer_stop" = "Остановить таймер";
+"sleep_in_progress" = "Сон в процессе";
+"sleep_list_title" = "Сессии сна";
+"sleep_empty" = "Нет записей о сне";
+"sleep_empty_message" = "Начните отслеживать сон вашего малыша";
+
+// MARK: - Подгузник
+
+"diaper_title" = "Подгузник";
+"diaper_new" = "Новая смена";
+"diaper_add" = "Добавить смену";
+"diaper_time" = "Время смены";
+"diaper_type" = "Тип";
+"diaper_type_wet" = "Мокрый";
+"diaper_type_dirty" = "Грязный";
+"diaper_type_both" = "Оба";
+"diaper_notes" = "Заметки";
+"diaper_list_title" = "Смены подгузников";
+"diaper_empty" = "Нет записей о подгузниках";
+"diaper_empty_message" = "Начните отслеживать смены подгузников";
+
+// MARK: - Аналитика
+
+"analytics_title" = "Аналитика";
+"analytics_period" = "Период";
+"analytics_period_day" = "День";
+"analytics_period_week" = "Неделя";
+"analytics_period_month" = "Месяц";
+"analytics_period_year" = "Год";
+"analytics_summary" = "Сводка";
+"analytics_refresh" = "Обновить";
+"analytics_no_child_title" = "Выберите ребенка";
+"analytics_no_child_message" = "Для просмотра аналитики необходимо выбрать профиль ребенка";
+"analytics_error_title" = "Ошибка загрузки";
+"analytics_loading" = "Загрузка аналитики...";
+
+// MARK: - Статистика
+
+"stats_feeding_per_day" = "Кормлений/день";
+"stats_sleep_per_day" = "Сна/день";
+"stats_diaper_per_day" = "Смен/день";
+"stats_total" = "Всего";
+"stats_average" = "Среднее";
+"stats_trend" = "Тренд";
+"stats_today" = "Сегодня";
+"stats_this_week" = "На этой неделе";
+"stats_this_month" = "В этом месяце";
+
+// MARK: - Настройки
+
+"settings_title" = "Настройки";
+"settings_user_profile" = "Профиль пользователя";
+"settings_children" = "Дети";
+"settings_manage_children" = "Управление профилями детей";
+"settings_notifications" = "Уведомления";
+"settings_reminders" = "Напоминания";
+"settings_app" = "Приложение";
+"settings_theme" = "Тема оформления";
+"settings_theme_system" = "Системная";
+"settings_theme_light" = "Светлая";
+"settings_theme_dark" = "Темная";
+"settings_about" = "О приложении";
+"settings_version" = "Версия";
+"settings_privacy_policy" = "Политика конфиденциальности";
+"settings_terms_of_service" = "Условия использования";
+"settings_logout" = "Выйти из аккаунта";
+"settings_logout_title" = "Выход";
+"settings_logout_message" = "Вы уверены, что хотите выйти из аккаунта?";
+
+// MARK: - Аутентификация
+
+"auth_login" = "Вход";
+"auth_register" = "Регистрация";
+"auth_username" = "Имя пользователя";
+"auth_password" = "Пароль";
+"auth_email" = "Email";
+"auth_confirm_password" = "Подтвердите пароль";
+"auth_login_button" = "Войти";
+"auth_register_button" = "Зарегистрироваться";
+"auth_no_account" = "Нет аккаунта?";
+"auth_have_account" = "Есть аккаунт?";
+"auth_demo_account" = "Создать демо-аккаунт";
+"auth_username_placeholder" = "Введите имя пользователя";
+"auth_password_placeholder" = "Введите пароль";
+"auth_email_placeholder" = "Введите email";
+"auth_or" = "или";
+
+// MARK: - Биометрия
+
+"biometry_reason" = "Войдите для доступа к приложению";
+"biometry_face_id" = "Face ID";
+"biometry_touch_id" = "Touch ID";
+"biometry_unavailable" = "Биометрия недоступна";
+"biometry_login" = "Войти с помощью %@";
+"biometry_setup_title" = "Настройка биометрии";
+"biometry_setup_message" = "Разрешите использование биометрии для быстрого входа";
+"biometry_enable" = "Включить %@";
+"biometry_skip" = "Пропустить";
+
+// MARK: - Onboarding
+
+"onboarding_welcome" = "Добро пожаловать";
+"onboarding_title_1" = "Отслеживайте события";
+"onboarding_message_1" = "Записывайте кормления, сон и смены подгузников";
+"onboarding_title_2" = "Анализируйте данные";
+"onboarding_message_2" = "Просматривайте графики и статистику";
+"onboarding_title_3" = "Получайте напоминания";
+"onboarding_message_3" = "Настройте уведомления для важных событий";
+"onboarding_get_started" = "Начать";
+
+// MARK: - Ошибки
+
+"error_loading_data" = "Ошибка загрузки данных";
+"error_saving_data" = "Ошибка сохранения данных";
+"error_deleting_data" = "Ошибка удаления данных";
+"error_network" = "Ошибка сети";
+"error_unknown" = "Неизвестная ошибка";
+"error_invalid_input" = "Неверные данные";
+"error_auth_failed" = "Ошибка аутентификации";
+"error_permission_denied" = "Доступ запрещен";
+
+// MARK: - Уведомления
+
+"notification_permission_title" = "Разрешение на уведомления";
+"notification_permission_message" = "Разрешите уведомления для напоминаний о кормлении и других событиях";
+"notification_permission_denied" = "Уведомления отключены";
+"notification_permission_denied_message" = "Для работы напоминаний необходимо разрешение на уведомления";
+"notification_open_settings" = "Открыть настройки";
+"notification_allow" = "Разрешить уведомления";
+
+// MARK: - Напоминания
+
+"reminder_feeding_title" = "Время кормления";
+"reminder_feeding_body" = "Пора покормить %@";
+"reminder_sleep_title" = "Время сна";
+"reminder_sleep_body" = "Пора уложить %@ спать";
+"reminder_diaper_title" = "Время менять подгузник";
+"reminder_diaper_body" = "Пора проверить подгузник у %@";
+
+// MARK: - Действия уведомлений
+
+"notification_action_mark_done" = "Отметить выполненным";
+"notification_action_snooze_10" = "Отложить на 10 мин";
+"notification_action_snooze_15" = "Отложить на 15 мин";
+"notification_action_snooze_30" = "Отложить на 30 мин";
+"notification_action_start_sleep" = "Начать сон";
+
+// MARK: - Типы напоминаний
+
+"reminder_type_feeding" = "Кормление";
+"reminder_type_sleep" = "Сон";
+"reminder_type_diaper" = "Подгузник";
+
+// MARK: - UI напоминаний
+
+"reminders_title" = "Напоминания";
+"reminders_add" = "Добавить напоминание";
+"reminders_edit" = "Редактировать напоминание";
+"reminders_delete" = "Удалить напоминание";
+"reminders_empty" = "Нет напоминаний";
+"reminders_empty_message" = "Создайте напоминания для отслеживания времени кормления, сна и смены подгузников";
+"reminders_interval" = "Интервал напоминания";
+"reminders_type" = "Тип напоминания";
+"reminders_every" = "Каждые";
+"reminders_last_triggered" = "Последнее срабатывание";
+"reminders_active" = "Активные напоминания";
+
+// MARK: - Разрешения
+
+"permission_notifications_denied" = "Уведомления отключены";
+"permission_notifications_message" = "Для работы напоминаний необходимо разрешение на уведомления";
+"permission_open_settings" = "Открыть настройки";
+"permission_allow_notifications" = "Разрешить уведомления";
+
+// MARK: - Единицы измерения
+
+"unit_grams" = "граммы";
+"unit_kg" = "кг";
+"unit_cm" = "см";
+"unit_ml" = "мл";
+"unit_minutes" = "минуты";
+"unit_hours" = "часы";
+"unit_days" = "дни";
+
+// MARK: - Форматирование времени
+
+"duration_hours_minutes" = "%dч %dм";
+"duration_hours" = "%dч";
+"duration_minutes" = "%dм";
+"duration_seconds" = "%dс";
+
+// MARK: - Формы и placeholders
+
+"form_basic_info" = "Основная информация";
+"form_at_birth" = "При рождении";
+"form_notes" = "Заметки";
+"form_photo" = "Фото";
+"form_time" = "Время";
+"form_duration" = "Длительность";
+"form_type" = "Тип";
+
+"placeholder_child_name" = "Имя ребенка";
+"placeholder_weight_grams" = "Вес (граммы)";
+"placeholder_height_cm" = "Рост (см)";
+"placeholder_volume_ml" = "Миллилитры";
+"placeholder_duration_minutes" = "Минуты";
+"placeholder_notes" = "Добавьте заметки...";
+
+// MARK: - Пустые состояния
+
+"empty_no_data" = "Нет данных";
+"empty_add_first" = "Добавьте первую запись";
+
+// MARK: - Действия
+
+"action_add" = "Добавить";
+"action_edit" = "Редактировать";
+"action_delete" = "Удалить";
+"action_cancel" = "Отмена";
+"action_save" = "Сохранить";
+"action_done" = "Готово";
+"action_close" = "Закрыть";
+
+// MARK: - Accessibility
+
+"a11y_empty_field" = "Пусто";
+"a11y_toggle_on" = "Включено";
+"a11y_toggle_off" = "Выключено";
+"a11y_tap_for_details" = "Коснитесь для просмотра деталей";
+"a11y_loading" = "Загрузка";
+"a11y_error_prefix" = "Ошибка";
+"a11y_alert_prefix" = "Внимание";
+"a11y_navigates_to" = "Переход к %@";
+"a11y_count_items" = "%d %@";
+
+// MARK: - Подтверждения удаления
+
+"delete_confirmation_title" = "Удалить запись?";
+"delete_confirmation_message" = "Это действие нельзя отменить";
+"delete_child_title" = "Удалить профиль?";
+"delete_child_message" = "Это удалит все записи, связанные с этим ребенком";
+
+// MARK: - Privacy & Terms
+
+"privacy_policy_title" = "Политика конфиденциальности";
+"privacy_policy_updated" = "Последнее обновление: 13 декабря 2025";
+"privacy_policy_intro" = "Ваша конфиденциальность важна для нас. Мы не собираем, не храним и не передаем третьим лицам персональные данные без вашего согласия.";
+"privacy_policy_data_storage" = "Все данные о ваших детях и их событиях хранятся локально на вашем устройстве и синхронизируются через iCloud, если включена синхронизация.";
+
+"terms_title" = "Условия использования";
+"terms_updated" = "Последнее обновление: 13 декабря 2025";
+"terms_intro" = "Используя приложение neonate, вы соглашаетесь с данными условиями использования.";
+"terms_disclaimer" = "Приложение предназначено для отслеживания и записи событий, связанных с уходом за ребенком. Информация, предоставляемая приложением, носит информационный характер и не заменяет профессиональную медицинскую консультацию.";
+
+// MARK: - Relative Time
+
+"yesterday" = "Вчера";
+"today_at" = "Сегодня в %@";
+"yesterday_at" = "Вчера в %@";
+
+// MARK: - Chart Accessibility
+
+"chart_feeding_summary" = "График кормлений за выбранный период";
+"chart_sleep_summary" = "График сна за выбранный период";
+"chart_diaper_summary" = "График смен подгузников за выбранный период";
+
+// MARK: - Age Formatting
+
+"age_years" = "%d %@";
+"age_months" = "%d %@";
+"age_days" = "%d %@";
+"age_hours" = "%d %@";
+
+// MARK: - Quick Actions Accessibility
+
+"a11y_quick_action_feeding" = "Добавить кормление";
+"a11y_quick_action_sleep" = "Добавить сон";
+"a11y_quick_action_diaper" = "Добавить смену подгузника";
+"a11y_select_child" = "Выбрать ребенка";
+"a11y_child_photo" = "Фото %@";
+"a11y_change_photo" = "Изменить фото";
+"a11y_remove_photo" = "Удалить фото";
+
+// MARK: - Form Validation
+
+"error_empty_name" = "Введите имя";
+"error_empty_username" = "Введите имя пользователя";
+"error_empty_password" = "Введите пароль";
+"error_password_mismatch" = "Пароли не совпадают";
+"error_invalid_email" = "Неверный формат email";
+"error_future_date" = "Дата не может быть в будущем";
+"error_end_before_start" = "Время окончания не может быть раньше времени начала";
+
+// MARK: - Tracking View
+
+"tracking_title" = "Отслеживание";
+"tracking_select_event" = "Выберите тип события для отслеживания";
+"tracking_recent" = "Недавние события";
+"tracking_all_events" = "Все события";
+
+// MARK: - Photo Picker
+
+"photo_select_source" = "Выберите источник";
+"photo_camera" = "Камера";
+"photo_library" = "Фотогалерея";
+"photo_remove" = "Удалить фото";
+
+// MARK: - Password Visibility
+
+"a11y_show_password" = "Показать пароль";
+"a11y_hide_password" = "Скрыть пароль";
+
+// MARK: - Loading States
+
+"loading_children" = "Загрузка профилей детей...";
+"loading_events" = "Загрузка событий...";
+"loading_statistics" = "Загрузка статистики...";
+
+// MARK: - Confirmation Actions
+
+"confirm" = "Подтвердить";
+"dismiss" = "Закрыть";
+
+// MARK: - Trends
+
+"trend_up" = "Рост";
+"trend_down" = "Снижение";
+"trend_stable" = "Стабильно";
+
+// MARK: - Siri & App Intents
+
+"siri_add_to_siri" = "Добавить в Siri";
+"siri_added_to_siri" = "Добавлено в Siri";
+"siri_shortcut_feeding" = "Скажите Siri для быстрого добавления кормления";
+"siri_shortcut_sleep" = "Скажите Siri для быстрого добавления сна";
+"siri_shortcut_sleep_timer" = "Скажите Siri для запуска таймера сна";
+"siri_shortcut_diaper" = "Скажите Siri для быстрого добавления смены подгузника";
+"siri_shortcut_last_event" = "Скажите Siri для получения последнего события";
+
+// App Intents названия и описания
+"intent_log_feeding_title" = "Записать кормление";
+"intent_log_feeding_description" = "Записать событие кормления ребенка с указанием типа, длительности и объема";
+"intent_log_sleep_title" = "Записать сон";
+"intent_log_sleep_description" = "Записать событие сна ребенка с указанием времени начала, окончания и качества";
+"intent_log_diaper_title" = "Записать смену подгузника";
+"intent_log_diaper_description" = "Записать событие смены подгузника с указанием типа";
+"intent_start_sleep_timer_title" = "Начать отслеживание сна";
+"intent_start_sleep_timer_description" = "Запустить таймер для отслеживания сна ребенка";
+"intent_get_last_event_title" = "Когда было последнее событие";
+"intent_get_last_event_description" = "Узнать информацию о последнем кормлении, сне или смене подгузника";
+
+// Параметры интентов
+"intent_param_feeding_type" = "Тип кормления";
+"intent_param_duration" = "Длительность";
+"intent_param_volume" = "Объем";
+"intent_param_breast" = "Грудь";
+"intent_param_notes" = "Заметки";
+"intent_param_start_time" = "Время начала";
+"intent_param_end_time" = "Время окончания";
+"intent_param_quality" = "Качество сна";
+"intent_param_diaper_type" = "Тип подгузника";
+"intent_param_event_type" = "Тип события";
+
+// Типы кормления для интентов
+"intent_feeding_type_breast" = "Грудное";
+"intent_feeding_type_bottle" = "Бутылочка";
+"intent_feeding_type_solid" = "Прикорм";
+
+// Типы груди для интентов
+"intent_breast_left" = "Левая";
+"intent_breast_right" = "Правая";
+"intent_breast_both" = "Обе";
+
+// Качество сна для интентов
+"intent_sleep_quality_good" = "Хорошо";
+"intent_sleep_quality_fair" = "Средне";
+"intent_sleep_quality_poor" = "Плохо";
+
+// Типы подгузника для интентов
+"intent_diaper_type_wet" = "Мокрый";
+"intent_diaper_type_dirty" = "Грязный";
+"intent_diaper_type_both" = "Оба";
+"intent_diaper_type_clean" = "Чистый";
+
+// Типы событий для запросов
+"intent_event_type_feeding" = "Кормление";
+"intent_event_type_sleep" = "Сон";
+"intent_event_type_diaper" = "Подгузник";
+"intent_event_type_any" = "Любое";
+
+// Ошибки интентов
+"intent_error_no_child_profile" = "Не найден профиль ребенка. Пожалуйста, создайте профиль в приложении.";
+"intent_error_save_failed" = "Не удалось сохранить запись. Попробуйте еще раз.";
+"intent_error_no_events" = "Пока нет записанных событий. Добавьте первое событие в приложении.";
+"intent_error_invalid_time_range" = "Неверный временной диапазон. Время окончания должно быть позже времени начала.";

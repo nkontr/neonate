@@ -1,0 +1,27 @@
+/*
+  InfoPlist.strings (English)
+  neonate
+
+  Created by Claude on 13.12.2025.
+  Localized Info.plist values for English
+*/
+
+/* Camera Usage */
+"NSCameraUsageDescription" = "neonate uses the camera to add photos to child profiles";
+
+/* Photo Library Usage */
+"NSPhotoLibraryUsageDescription" = "neonate uses the photo library to select photos for child profiles";
+
+"NSPhotoLibraryAddUsageDescription" = "neonate uses the photo library to save photos";
+
+/* Face ID Usage */
+"NSFaceIDUsageDescription" = "neonate uses Face ID for quick and secure sign in to your account";
+
+/* User Notifications */
+"NSUserNotificationsUsageDescription" = "neonate sends notifications with reminders for feeding, sleep, and diaper changes";
+
+/* Siri Usage */
+"NSSiriUsageDescription" = "neonate uses Siri to quickly add events using voice commands";
+
+/* App Display Name */
+"CFBundleDisplayName" = "Baby Care Tracker";

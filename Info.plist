@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Baby Care Tracker</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>Приложению нужен доступ к камере для добавления фото ребенка</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Используйте Face ID для быстрого и безопасного входа в приложение</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Приложению нужен доступ к фотобиблиотеке для выбора фото ребенка</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Siri используется для быстрого добавления событий по уходу за ребенком голосовыми командами</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Приложению нужны уведомления для напоминаний о кормлении и других событиях по уходу за ребенком</string>
+	<key>UIBackgroundModes</key>
+	<array/>
+</dict>
+</plist>

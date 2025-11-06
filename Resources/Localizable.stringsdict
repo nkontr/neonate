@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Events count -->
+	<key>events_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d событие</string>
+			<key>few</key>
+			<string>%d события</string>
+			<key>many</key>
+			<string>%d событий</string>
+			<key>other</key>
+			<string>%d событий</string>
+		</dict>
+	</dict>
+
+	<!-- Feedings count -->
+	<key>feedings_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d кормление</string>
+			<key>few</key>
+			<string>%d кормления</string>
+			<key>many</key>
+			<string>%d кормлений</string>
+			<key>other</key>
+			<string>%d кормлений</string>
+		</dict>
+	</dict>
+
+	<!-- Sleep sessions count -->
+	<key>sleep_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d сессия сна</string>
+			<key>few</key>
+			<string>%d сессии сна</string>
+			<key>many</key>
+			<string>%d сессий сна</string>
+			<key>other</key>
+			<string>%d сессий сна</string>
+		</dict>
+	</dict>
+
+	<!-- Diaper changes count -->
+	<key>diaper_changes_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d смена подгузника</string>
+			<key>few</key>
+			<string>%d смены подгузника</string>
+			<key>many</key>
+			<string>%d смен подгузника</string>
+			<key>other</key>
+			<string>%d смен подгузника</string>
+		</dict>
+	</dict>
+
+	<!-- Minutes count -->
+	<key>minutes_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d минута</string>
+			<key>few</key>
+			<string>%d минуты</string>
+			<key>many</key>
+			<string>%d минут</string>
+			<key>other</key>
+			<string>%d минут</string>
+		</dict>
+	</dict>
+
+	<!-- Hours count -->
+	<key>hours_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d час</string>
+			<key>few</key>
+			<string>%d часа</string>
+			<key>many</key>
+			<string>%d часов</string>
+			<key>other</key>
+			<string>%d часов</string>
+		</dict>
+	</dict>
+
+	<!-- Days count -->
+	<key>days_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d день</string>
+			<key>few</key>
+			<string>%d дня</string>
+			<key>many</key>
+			<string>%d дней</string>
+			<key>other</key>
+			<string>%d дней</string>
+		</dict>
+	</dict>
+
+	<!-- Children count -->
+	<key>children_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d ребенок</string>
+			<key>few</key>
+			<string>%d ребенка</string>
+			<key>many</key>
+			<string>%d детей</string>
+			<key>other</key>
+			<string>%d детей</string>
+		</dict>
+	</dict>
+
+	<!-- Reminders count -->
+	<key>reminders_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d напоминание</string>
+			<key>few</key>
+			<string>%d напоминания</string>
+			<key>many</key>
+			<string>%d напоминаний</string>
+			<key>other</key>
+			<string>%d напоминаний</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
