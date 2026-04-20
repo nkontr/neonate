@@ -153,20 +153,20 @@ class ReminderManager {
             return
         }
 
+        let intervalSeconds = TimeInterval(Int(reminder.intervalMinutes) * 60)
+
         let nextTriggerDate: Date
         if let lastTriggered = reminder.lastTriggered {
-
-            nextTriggerDate = lastTriggered.addingTimeInterval(TimeInterval(reminder.intervalMinutes * 60))
+            nextTriggerDate = lastTriggered.addingTimeInterval(intervalSeconds)
         } else {
-
-            nextTriggerDate = Date().addingTimeInterval(TimeInterval(reminder.intervalMinutes * 60))
+            nextTriggerDate = Date().addingTimeInterval(intervalSeconds)
         }
 
         let timeInterval: TimeInterval
         if nextTriggerDate > Date() {
             timeInterval = nextTriggerDate.timeIntervalSince(Date())
         } else {
-            timeInterval = TimeInterval(reminder.intervalMinutes * 60)
+            timeInterval = intervalSeconds
         }
 
         let identifier = "reminder_\(reminder.id?.uuidString ?? UUID().uuidString)"

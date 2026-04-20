@@ -73,7 +73,7 @@ struct TrackingView: View {
                     .environmentObject(childProfileViewModel)
                     .environment(\.managedObjectContext, viewContext)
             }
-            .onChange(of: childProfileViewModel.selectedChild) { newChild in
+            .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
                 if let childId = newChild?.id {
                     loadDataForChild(childId)
                 }

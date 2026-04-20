@@ -10,7 +10,10 @@ struct LoadingView: View {
         ZStack {
             if showBackground {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.2)]),
+                    gradient: Gradient(colors: [
+                        Color(red: 0.4, green: 0.6, blue: 1.0).opacity(0.4),
+                        Color(red: 0.6, green: 0.4, blue: 0.9).opacity(0.3)
+                    ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -18,17 +21,46 @@ struct LoadingView: View {
             }
 
             VStack(spacing: 20) {
-                Image(systemName: "heart.circle.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.blue)
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.blue.opacity(0.3),
+                                    Color.purple.opacity(0.2)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 140, height: 140)
+                        .blur(radius: 40)
+
+                    Image(systemName: "heart.circle.fill")
+                        .font(.system(size: 80))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.blue, .purple],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
 
                 Text("neonate")
                     .font(.system(size: 40, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.primary, .primary.opacity(0.8)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
 
                 if let message = message {
                     Text(message)
                         .font(.subheadline)
+                        .fontWeight(.medium)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
@@ -36,7 +68,7 @@ struct LoadingView: View {
 
                 ProgressView()
                     .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                    .scaleEffect(1.2)
+                    .scaleEffect(1.3)
                     .padding(.top, 20)
             }
         }

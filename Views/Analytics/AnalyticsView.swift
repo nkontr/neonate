@@ -41,12 +41,12 @@ struct AnalyticsView: View {
             .onAppear {
                 loadAnalyticsIfNeeded()
             }
-            .onChange(of: childProfileViewModel.selectedChild?.id) { newId in
+            .onChange(of: childProfileViewModel.selectedChild?.id) { _, newId in
                 if let childId = newId {
                     analyticsViewModel.loadAnalyticsData(for: childId)
                 }
             }
-            .onChange(of: analyticsViewModel.selectedPeriod) { _ in
+            .onChange(of: analyticsViewModel.selectedPeriod) { _, _ in
 
             }
         }

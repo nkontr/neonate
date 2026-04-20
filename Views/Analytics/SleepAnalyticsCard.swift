@@ -21,17 +21,38 @@ struct SleepAnalyticsCard: View {
                 pieChartView
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .liquidGlassCard(backgroundColor: .purple, cornerRadius: 20, glowColor: .purple)
     }
 
     private var headerView: some View {
         HStack {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.purple.opacity(0.3), Color.purple.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 50, height: 50)
+                    .shadow(color: Color.purple.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                Image(systemName: "moon.zzz.fill")
+                    .font(.title2)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.purple, .purple.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+
             VStack(alignment: .leading, spacing: 4) {
                 Text("Сон")
                     .font(.headline)
+                    .fontWeight(.bold)
                     .foregroundColor(.primary)
 
                 Text("\(analytics.summary.totalEvents) периодов сна")

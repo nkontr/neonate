@@ -15,10 +15,34 @@ struct AuthCredentials {
         !username.isEmpty && !password.isEmpty && password.count >= 6
     }
 
+    private func isValidEmailDomain(_ email: String) -> Bool {
+        let validTLDs = [
+            "com", "net", "org", "edu", "gov", "mil", "int", "info", "biz",
+            "io", "dev", "app", "tech", "online", "site", "store", "blog", "cloud",
+            "ru", "ua", "by", "kz", "us", "uk", "de", "fr", "it", "es", "cn", "jp", "kr",
+            "ca", "au", "br", "in", "mx", "nl", "se", "no", "fi", "dk", "pl", "cz",
+            "рф"
+        ]
+
+        guard let domain = email.split(separator: "@").last?.lowercased() else {
+            return false
+        }
+
+        for tld in validTLDs {
+            if domain.hasSuffix(".\(tld)") {
+                return true
+            }
+        }
+
+        return false
+    }
+
     var isEmail: Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: username)
+        let basicFormat = emailPredicate.evaluate(with: username)
+
+        return basicFormat && isValidEmailDomain(username)
     }
 }
 
@@ -75,7 +99,7 @@ struct RegistrationCredentials {
             case .passwordsDoNotMatch:
                 return "Пароли не совпадают"
             case .usernameContainsInvalidCharacters:
-                return "Имя пользователя может содержать только буквы, цифры и подчеркивания"
+                return "Имя пользователя может содержать только буквы (без цифр и символов)"
             }
         }
     }
@@ -114,15 +138,45 @@ struct RegistrationCredentials {
         validate().isEmpty
     }
 
+    private func isValidEmailDomain(_ email: String) -> Bool {
+        // Список популярных и реальных TLD
+        let validTLDs = [
+            // Международные
+            "com", "net", "org", "edu", "gov", "mil", "int", "info", "biz",
+            // Новые популярные
+            "io", "dev", "app", "tech", "online", "site", "store", "blog", "cloud",
+            // Страновые коды
+            "ru", "ua", "by", "kz", "us", "uk", "de", "fr", "it", "es", "cn", "jp", "kr",
+            "ca", "au", "br", "in", "mx", "nl", "se", "no", "fi", "dk", "pl", "cz",
+            // Кириллица
+            "рф"
+        ]
+
+        guard let domain = email.split(separator: "@").last?.lowercased(),
+              email.contains("@") else {
+            return false
+        }
+
+        // Проверяем TLD
+        for tld in validTLDs {
+            if domain.hasSuffix(".\(tld)") {
+                return true
+            }
+        }
+
+        return false
+    }
+
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
+        let basicFormat = emailPredicate.evaluate(with: email)
+
+        return basicFormat && isValidEmailDomain(email)
     }
 
     private func isValidUsername(_ username: String) -> Bool {
-        let usernameRegex = "^[a-zA-Z0-9_]+$"
-        let usernamePredicate = NSPredicate(format: "SELF MATCHES %@", usernameRegex)
-        return usernamePredicate.evaluate(with: username)
+        let allowedCharacters = CharacterSet.letters
+        return username.unicodeScalars.allSatisfy { allowedCharacters.contains($0) }
     }
 }

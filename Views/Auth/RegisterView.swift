@@ -14,12 +14,20 @@ struct RegisterView: View {
     @State private var showConfirmPassword: Bool = false
     @State private var agreedToTerms: Bool = false
 
+    @State private var usernameTouched: Bool = false
+    @State private var emailTouched: Bool = false
+    @State private var passwordTouched: Bool = false
+    @State private var confirmPasswordTouched: Bool = false
+
     var body: some View {
         NavigationView {
             ZStack {
-
+                // Background gradient
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.purple.opacity(0.6), Color.blue.opacity(0.4)]),
+                    gradient: Gradient(colors: [
+                        Color.glassPurple.opacity(0.8),
+                        Color.glassBlue.opacity(0.6)
+                    ]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -62,7 +70,7 @@ struct RegisterView: View {
                     Text(errorMessage)
                 }
             }
-            .onChange(of: authViewModel.isAuthenticated) { isAuth in
+            .onChange(of: authViewModel.isAuthenticated) { _, isAuth in
                 if isAuth {
                     dismiss()
                 }
@@ -89,20 +97,46 @@ struct RegisterView: View {
     private var registrationFormView: some View {
         VStack(spacing: 16) {
 
-            CustomTextField(
-                icon: "person.fill",
-                placeholder: "Имя пользователя",
-                text: $username,
-                isSecure: false
-            )
+            VStack(alignment: .leading, spacing: 4) {
+                CustomTextField(
+                    icon: "person.fill",
+                    placeholder: "Имя пользователя (только буквы)",
+                    text: $username,
+                    isSecure: false
+                )
+                .onChange(of: username) { _, _ in
+                    Task { @MainActor in
+                        if !usernameTouched {
+                            usernameTouched = true
+                        }
+                    }
+                }
 
-            CustomTextField(
-                icon: "envelope.fill",
-                placeholder: "Email",
-                text: $email,
-                isSecure: false,
-                keyboardType: .emailAddress
-            )
+                if let error = usernameError {
+                    ValidationErrorText(message: error)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                CustomTextField(
+                    icon: "envelope.fill",
+                    placeholder: "Email",
+                    text: $email,
+                    isSecure: false,
+                    keyboardType: .emailAddress
+                )
+                .onChange(of: email) { _, _ in
+                    Task { @MainActor in
+                        if !emailTouched {
+                            emailTouched = true
+                        }
+                    }
+                }
+
+                if let error = emailError {
+                    ValidationErrorText(message: error)
+                }
+            }
 
             CustomTextField(
                 icon: "person.text.rectangle.fill",
@@ -111,23 +145,49 @@ struct RegisterView: View {
                 isSecure: false
             )
 
-            CustomTextField(
-                icon: "lock.fill",
-                placeholder: "Пароль (минимум 6 символов)",
-                text: $password,
-                isSecure: !showPassword,
-                showToggle: true,
-                toggleAction: { showPassword.toggle() }
-            )
+            VStack(alignment: .leading, spacing: 4) {
+                CustomTextField(
+                    icon: "lock.fill",
+                    placeholder: "Пароль (минимум 6 символов)",
+                    text: $password,
+                    isSecure: !showPassword,
+                    showToggle: true,
+                    toggleAction: { showPassword.toggle() }
+                )
+                .onChange(of: password) { _, _ in
+                    Task { @MainActor in
+                        if !passwordTouched {
+                            passwordTouched = true
+                        }
+                    }
+                }
 
-            CustomTextField(
-                icon: "lock.fill",
-                placeholder: "Подтвердите пароль",
-                text: $confirmPassword,
-                isSecure: !showConfirmPassword,
-                showToggle: true,
-                toggleAction: { showConfirmPassword.toggle() }
-            )
+                if let error = passwordError {
+                    ValidationErrorText(message: error)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                CustomTextField(
+                    icon: "lock.fill",
+                    placeholder: "Подтвердите пароль",
+                    text: $confirmPassword,
+                    isSecure: !showConfirmPassword,
+                    showToggle: true,
+                    toggleAction: { showConfirmPassword.toggle() }
+                )
+                .onChange(of: confirmPassword) { _, _ in
+                    Task { @MainActor in
+                        if !confirmPasswordTouched {
+                            confirmPasswordTouched = true
+                        }
+                    }
+                }
+
+                if let error = confirmPasswordError {
+                    ValidationErrorText(message: error)
+                }
+            }
         }
     }
 
@@ -150,29 +210,129 @@ struct RegisterView: View {
         Button(action: handleRegister) {
             if authViewModel.isLoading {
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .purple))
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     .frame(maxWidth: .infinity)
-                    .padding()
             } else {
                 Text("Зарегистрироваться")
                     .font(.headline)
-                    .foregroundColor(.purple)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding()
             }
         }
-        .background(Color.white)
-        .cornerRadius(10)
+        .liquidGlassButton(color: .white, isPressed: false)
         .disabled(!isFormValid || authViewModel.isLoading)
         .opacity((!isFormValid || authViewModel.isLoading) ? 0.6 : 1.0)
     }
 
+    private func containsOnlyLetters(_ string: String) -> Bool {
+        let allowedCharacters = CharacterSet.letters
+        return string.unicodeScalars.allSatisfy { allowedCharacters.contains($0) }
+    }
+
+    private var isUsernameValid: Bool {
+        return username.count >= 3 && containsOnlyLetters(username)
+    }
+
+    private var usernameError: String? {
+        guard usernameTouched else { return nil }
+        if username.isEmpty {
+            return "Имя пользователя обязательно"
+        }
+
+        if !containsOnlyLetters(username) {
+            return "Только буквы (без цифр и символов)"
+        }
+
+        if username.count < 3 {
+            return "Минимум 3 символа"
+        }
+        return nil
+    }
+
+    private func isValidEmailDomain(_ email: String) -> Bool {
+        // Список популярных и реальных TLD
+        let validTLDs = [
+            // Международные
+            "com", "net", "org", "edu", "gov", "mil", "int", "info", "biz",
+            // Новые популярные
+            "io", "dev", "app", "tech", "online", "site", "store", "blog", "cloud",
+            // Страновые коды
+            "ru", "ua", "by", "kz", "us", "uk", "de", "fr", "it", "es", "cn", "jp", "kr",
+            "ca", "au", "br", "in", "mx", "nl", "se", "no", "fi", "dk", "pl", "cz",
+            // Кириллица
+            "рф"
+        ]
+
+        guard let domain = email.split(separator: "@").last?.lowercased(),
+              email.contains("@") else {
+            return false
+        }
+
+        // Проверяем TLD
+        for tld in validTLDs {
+            if domain.hasSuffix(".\(tld)") {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private var isEmailValid: Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        let basicFormat = emailPredicate.evaluate(with: email)
+
+        return basicFormat && isValidEmailDomain(email)
+    }
+
+    private var emailError: String? {
+        guard emailTouched else { return nil }
+        if email.isEmpty {
+            return "Email обязателен"
+        }
+        if !isEmailValid {
+            return "Неверный формат email"
+        }
+        return nil
+    }
+
+    private var isPasswordValid: Bool {
+        password.count >= 6
+    }
+
+    private var passwordError: String? {
+        guard passwordTouched else { return nil }
+        if password.isEmpty {
+            return "Пароль обязателен"
+        }
+        if password.count < 6 {
+            return "Минимум 6 символов"
+        }
+        return nil
+    }
+
+    private var doPasswordsMatch: Bool {
+        !confirmPassword.isEmpty && password == confirmPassword
+    }
+
+    private var confirmPasswordError: String? {
+        guard confirmPasswordTouched else { return nil }
+        if confirmPassword.isEmpty {
+            return "Подтвердите пароль"
+        }
+        if password != confirmPassword {
+            return "Пароли не совпадают"
+        }
+        return nil
+    }
+
     private var isFormValid: Bool {
-        !username.isEmpty &&
-        !email.isEmpty &&
-        !password.isEmpty &&
-        !confirmPassword.isEmpty &&
-        password.count >= 6 &&
+        isUsernameValid &&
+        isEmailValid &&
+        isPasswordValid &&
+        doPasswordsMatch &&
         agreedToTerms
     }
 
@@ -191,6 +351,27 @@ struct RegisterView: View {
     }
 }
 
+private struct ValidationErrorText: View {
+    let message: String
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "exclamationmark.circle.fill")
+                .font(.caption)
+            Text(message)
+                .font(.caption)
+        }
+        .foregroundColor(.red.opacity(0.95))
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.white.opacity(0.2))
+        )
+        .padding(.leading, 4)
+    }
+}
+
 private struct CustomTextField: View {
     let icon: String
     let placeholder: String
@@ -203,7 +384,7 @@ private struct CustomTextField: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(.white.opacity(0.8))
                 .frame(width: 20)
 
             if isSecure {
@@ -224,13 +405,11 @@ private struct CustomTextField: View {
             if showToggle, let action = toggleAction {
                 Button(action: action) {
                     Image(systemName: isSecure ? "eye.fill" : "eye.slash.fill")
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.white.opacity(0.8))
                 }
             }
         }
-        .padding()
-        .background(Color.white.opacity(0.2))
-        .cornerRadius(10)
+        .glassTextField(cornerRadius: 16)
     }
 }
 

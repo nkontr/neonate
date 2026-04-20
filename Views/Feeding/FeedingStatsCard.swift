@@ -8,12 +8,32 @@ struct FeedingStatsCard: View {
         VStack(alignment: .leading, spacing: 16) {
 
             HStack {
-                Image(systemName: "fork.knife.circle.fill")
-                    .foregroundColor(.green)
-                    .font(.title2)
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.green.opacity(0.3), Color.green.opacity(0.15)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 50, height: 50)
+                        .shadow(color: Color.green.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                    Image(systemName: "fork.knife.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.green, .green.opacity(0.7)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
 
                 Text("Кормления")
                     .font(.headline)
+                    .fontWeight(.bold)
 
                 Spacer()
             }
@@ -80,9 +100,7 @@ struct FeedingStatsCard: View {
             }
             .padding(.top, 8)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
+        .liquidGlassCard(backgroundColor: .green, cornerRadius: 20, glowColor: .green)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Статистика кормлений")
     }

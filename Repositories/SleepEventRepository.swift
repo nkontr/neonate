@@ -153,12 +153,8 @@ class SleepEventRepository: BaseRepository<SleepEvent> {
             return nil
         }
 
-        if lastSleep.endTime == nil {
-            return 0
-        }
-
         guard let endTime = lastSleep.endTime else {
-            return nil
+            return 0
         }
 
         let interval = Date().timeIntervalSince(endTime)

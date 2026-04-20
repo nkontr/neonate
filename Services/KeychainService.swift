@@ -50,8 +50,15 @@ class KeychainService {
         forKey key: KeychainKey,
         accessible: CFString = kSecAttrAccessibleWhenUnlocked
     ) throws {
-
-        try? delete(forKey: key)
+        // Delete existing item if present
+        do {
+            try delete(forKey: key)
+        } catch KeychainError.itemNotFound {
+            // Item doesn't exist, which is fine
+        } catch {
+            // Log other errors but continue
+            print("⚠️ Warning: Failed to delete existing keychain item: \(error)")
+        }
 
         var query = baseQuery(forKey: key)
         query[kSecValueData as String] = data

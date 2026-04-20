@@ -18,14 +18,52 @@ struct FloatingActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: icon)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .frame(width: 56, height: 56)
-                .background(backgroundColor)
-                .clipShape(Circle())
-                .shadow(color: backgroundColor.opacity(0.3), radius: 8, x: 0, y: 4)
+            ZStack {
+                // Glass circle with gradient
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                backgroundColor.opacity(0.8),
+                                backgroundColor.opacity(0.6)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 60, height: 60)
+                    .background(
+                        .ultraThinMaterial,
+                        in: Circle()
+                    )
+                    .overlay(
+                        Circle()
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.6),
+                                        Color.white.opacity(0.2)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                    )
+                    .shadow(color: backgroundColor.opacity(0.4), radius: 15, x: 0, y: 8)
+                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+
+                Image(systemName: icon)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, .white.opacity(0.9)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            }
         }
         .accessibilityLabel("Добавить")
     }

@@ -123,12 +123,19 @@ class AuthService {
             throw AuthError.invalidCredentials
         }
 
+        guard let accountId = account.id,
+              let accountUsername = account.username,
+              let accountEmail = account.email,
+              let accountRegisteredAt = account.registeredAt else {
+            throw AuthError.invalidCredentials
+        }
+
         let user = User(
-            id: account.id!,
-            username: account.username!,
-            email: account.email!,
+            id: accountId,
+            username: accountUsername,
+            email: accountEmail,
             fullName: nil,
-            registeredAt: account.registeredAt!,
+            registeredAt: accountRegisteredAt,
             lastLoginAt: Date()
         )
 

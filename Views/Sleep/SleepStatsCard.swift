@@ -8,12 +8,32 @@ struct SleepStatsCard: View {
         VStack(alignment: .leading, spacing: 16) {
 
             HStack {
-                Image(systemName: "moon.zzz.fill")
-                    .foregroundColor(.indigo)
-                    .font(.title2)
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color.indigo.opacity(0.3), Color.indigo.opacity(0.15)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 50, height: 50)
+                        .shadow(color: Color.indigo.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                    Image(systemName: "moon.zzz.fill")
+                        .font(.title2)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [.indigo, .indigo.opacity(0.7)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
 
                 Text("Сон")
                     .font(.headline)
+                    .fontWeight(.bold)
 
                 Spacer()
 
@@ -92,9 +112,7 @@ struct SleepStatsCard: View {
             }
             .padding(.top, 8)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
+        .liquidGlassCard(backgroundColor: .indigo, cornerRadius: 20, glowColor: .indigo)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Статистика сна")
     }

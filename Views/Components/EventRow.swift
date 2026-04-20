@@ -28,13 +28,29 @@ struct EventRow: View {
     var body: some View {
         HStack(spacing: 16) {
 
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(.white)
-                .frame(width: 48, height: 48)
-                .background(iconColor)
-                .clipShape(Circle())
-                .accessibilityLabel(title)
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [iconColor.opacity(0.8), iconColor.opacity(0.6)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 48, height: 48)
+                    .shadow(color: iconColor.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, .white.opacity(0.9)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            }
+            .accessibilityLabel(title)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)

@@ -137,12 +137,12 @@ struct PersistenceController {
 
         try await context.perform {
             try context.save()
+        }
 
-            if let parent = context.parent {
-                try parent.performAndWait {
-                    if parent.hasChanges {
-                        try parent.save()
-                    }
+        if let parent = context.parent {
+            try await parent.perform {
+                if parent.hasChanges {
+                    try parent.save()
                 }
             }
         }

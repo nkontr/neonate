@@ -168,7 +168,7 @@ struct SettingsView: View {
                 }
             }
             .disabled(!authViewModel.isBiometricAvailable)
-            .onChange(of: authViewModel.isBiometricEnabled) { _ in
+            .onChange(of: authViewModel.isBiometricEnabled) { _, _ in
                 Task {
                     await authViewModel.toggleBiometric()
                 }

@@ -51,7 +51,7 @@ struct RootView: View {
         }
         .animation(.easeInOut, value: authViewModel.isAuthenticated)
         .animation(.easeInOut, value: authViewModel.isLoading)
-        .onChange(of: authViewModel.isAuthenticated) { newValue in
+        .onChange(of: authViewModel.isAuthenticated) { _, newValue in
             print("🔐 Authentication status changed: \(newValue)")
         }
     }

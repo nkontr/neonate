@@ -12,13 +12,9 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             ZStack {
-
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.4)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                // Background gradient
+                LiquidGlassGradients.primaryAuth
+                    .ignoresSafeArea()
 
                 ScrollView {
                     VStack(spacing: 30) {
@@ -84,11 +80,12 @@ struct LoginView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(localized: "auth_username"))
                     .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.9))
 
                 HStack {
                     Image(systemName: "person.fill")
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.white.opacity(0.8))
                         .accessibilityHidden(true)
                     TextField(String(localized: "auth_username_placeholder"), text: $username)
                         .textFieldStyle(PlainTextFieldStyle())
@@ -98,19 +95,18 @@ struct LoginView: View {
                         .accessibilityLabel(String(localized: "auth_username"))
                         .accessibilityValue(username.isEmpty ? String(localized: "a11y_empty_field") : username)
                 }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
+                .glassTextField(cornerRadius: 16)
             }
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(localized: "auth_password"))
                     .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.9))
 
                 HStack {
                     Image(systemName: "lock.fill")
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.white.opacity(0.8))
                         .accessibilityHidden(true)
 
                     if showPassword {
@@ -131,32 +127,28 @@ struct LoginView: View {
 
                     Button(action: { showPassword.toggle() }) {
                         Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                            .foregroundColor(.white.opacity(0.7))
+                            .foregroundColor(.white.opacity(0.8))
                     }
                     .accessibilityLabel(showPassword ? String(localized: "a11y_hide_password") : String(localized: "a11y_show_password"))
                 }
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
+                .glassTextField(cornerRadius: 16)
             }
 
             Button(action: handleLogin) {
                 if authViewModel.isLoading {
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .frame(maxWidth: .infinity)
-                        .padding()
                         .accessibilityLabel(String(localized: "loading"))
                 } else {
                     Text(String(localized: "auth_login_button"))
                         .font(.headline)
-                        .foregroundColor(.blue)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding()
                 }
             }
-            .background(Color.white)
-            .cornerRadius(10)
+            .liquidGlassButton(color: .white, isPressed: false)
             .disabled(authViewModel.isLoading || username.isEmpty || password.isEmpty)
             .opacity((authViewModel.isLoading || username.isEmpty || password.isEmpty) ? 0.6 : 1.0)
             .buttonAccessibility(
@@ -165,38 +157,51 @@ struct LoginView: View {
                 isEnabled: !authViewModel.isLoading && !username.isEmpty && !password.isEmpty
             )
         }
+        .padding(.horizontal, 4)
     }
 
     private var biometricButton: some View {
         VStack(spacing: 15) {
             HStack {
                 Rectangle()
-                    .fill(Color.white.opacity(0.3))
+                    .fill(
+                        LinearGradient(
+                            colors: [.clear, .white.opacity(0.4), .clear],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .frame(height: 1)
                     .accessibilityHidden(true)
                 Text(String(localized: "auth_or"))
                     .font(.caption)
-                    .foregroundColor(.white.opacity(0.8))
+                    .fontWeight(.medium)
+                    .foregroundColor(.white.opacity(0.9))
                 Rectangle()
-                    .fill(Color.white.opacity(0.3))
+                    .fill(
+                        LinearGradient(
+                            colors: [.clear, .white.opacity(0.4), .clear],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .frame(height: 1)
                     .accessibilityHidden(true)
             }
 
             Button(action: handleBiometricLogin) {
-                HStack {
+                HStack(spacing: 10) {
                     Image(systemName: authViewModel.biometricIcon)
-                        .font(.title2)
+                        .font(.title3)
                         .accessibilityHidden(true)
                     Text(String(format: NSLocalizedString("biometry_login", comment: ""), authViewModel.biometricDisplayName))
                         .font(.subheadline)
+                        .fontWeight(.medium)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.white.opacity(0.2))
-                .cornerRadius(10)
             }
+            .liquidGlassButton(color: .white.opacity(0.5), isPressed: false)
             .disabled(authViewModel.isLoading || !authViewModel.isBiometricEnabled)
             .buttonAccessibility(
                 label: String(format: NSLocalizedString("biometry_login", comment: ""), authViewModel.biometricDisplayName),

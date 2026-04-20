@@ -45,7 +45,7 @@ struct DashboardView: View {
                     ChildrenListView(viewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .onChange(of: childProfileViewModel.selectedChild) { newChild in
+                .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
                     if let childId = newChild?.id {
                         loadDataForChild(childId)
                     }
@@ -69,19 +69,33 @@ struct DashboardView: View {
     }
 
     private var mainContent: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                childSelectorSection
+        ZStack {
+            // Subtle gradient background
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground),
+                    Color.blue.opacity(0.03),
+                    Color.purple.opacity(0.03)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
-                if let selectedChild = childProfileViewModel.selectedChild {
-                    statsCardsSection(for: selectedChild)
-                    quickActionsSection
-                    recentEventsSection(for: selectedChild)
-                } else {
-                    noChildSelectedView
+            ScrollView {
+                VStack(spacing: 20) {
+                    childSelectorSection
+
+                    if let selectedChild = childProfileViewModel.selectedChild {
+                        statsCardsSection(for: selectedChild)
+                        quickActionsSection
+                        recentEventsSection(for: selectedChild)
+                    } else {
+                        noChildSelectedView
+                    }
                 }
+                .padding()
             }
-            .padding()
         }
     }
 
@@ -91,20 +105,51 @@ struct DashboardView: View {
                 Button {
                     showingChildSelector = true
                 } label: {
-                    HStack {
-                        if let photoData = selectedChild.photoData,
-                           let uiImage = UIImage(data: photoData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.gray)
-                                .accessibilityHidden(true)
+                    HStack(spacing: 16) {
+                        ZStack {
+                            if let photoData = selectedChild.photoData,
+                               let uiImage = UIImage(data: photoData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 70, height: 70)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .strokeBorder(
+                                                LinearGradient(
+                                                    colors: [.white.opacity(0.5), .clear],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                ),
+                                                lineWidth: 2
+                                            )
+                                    )
+                            } else {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.2)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 70, height: 70)
+                                    .overlay(
+                                        Image(systemName: "person.circle.fill")
+                                            .font(.system(size: 50))
+                                            .foregroundStyle(
+                                                LinearGradient(
+                                                    colors: [.blue, .purple],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                    )
+                                    .accessibilityHidden(true)
+                            }
                         }
+                        .shadow(color: .blue.opacity(0.2), radius: 8, x: 0, y: 4)
 
                         VStack(alignment: .leading, spacing: 4) {
                             Text(selectedChild.name ?? "")
@@ -114,18 +159,18 @@ struct DashboardView: View {
 
                             Text(childProfileViewModel.getFormattedAge(for: selectedChild))
                                 .font(.subheadline)
+                                .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
 
                         Spacer()
 
                         Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.secondary.opacity(0.7))
+                            .font(.title3)
                             .accessibilityHidden(true)
                     }
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(12)
+                    .liquidGlassCard(backgroundColor: .blue, cornerRadius: 20)
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("\(selectedChild.name ?? ""), \(childProfileViewModel.getFormattedAge(for: selectedChild))")
                     .accessibilityHint(String(localized: "dashboard_select_child"))
@@ -187,6 +232,7 @@ struct DashboardView: View {
             HStack {
                 Text(String(localized: "dashboard_today_events"))
                     .font(.headline)
+                    .fontWeight(.bold)
                     .accessibilityAddTraits(.isHeader)
 
                 Spacer()
@@ -197,13 +243,16 @@ struct DashboardView: View {
                 let sleepEvents = sleepViewModel.getStatistics(for: childId).todayCount
                 let diaperEvents = diaperViewModel.getEventsToday(for: childId)
 
-                VStack(spacing: 8) {
+                VStack(spacing: 12) {
                     RecentEventRow(
                         icon: "fork.knife.circle.fill",
                         color: .green,
                         title: String(localized: "event_feeding"),
                         count: feedingEvents.count
                     )
+
+                    Divider()
+                        .background(Color.white.opacity(0.3))
 
                     RecentEventRow(
                         icon: "moon.zzz.fill",
@@ -212,6 +261,9 @@ struct DashboardView: View {
                         count: sleepEvents
                     )
 
+                    Divider()
+                        .background(Color.white.opacity(0.3))
+
                     RecentEventRow(
                         icon: "drop.fill",
                         color: .blue,
@@ -219,9 +271,7 @@ struct DashboardView: View {
                         count: diaperEvents.count
                     )
                 }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(12)
+                .liquidGlassCard(backgroundColor: .blue, cornerRadius: 20)
                 .accessibilityElement(children: .contain)
             }
         }
@@ -229,14 +279,33 @@ struct DashboardView: View {
 
     private var noChildSelectedView: some View {
         VStack(spacing: 20) {
-            Image(systemName: "person.crop.circle.badge.plus")
-                .font(.system(size: 80))
-                .foregroundColor(.gray)
-                .accessibilityHidden(true)
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.blue.opacity(0.2), Color.purple.opacity(0.1)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 140, height: 140)
+                    .blur(radius: 40)
+
+                Image(systemName: "person.crop.circle.badge.plus")
+                    .font(.system(size: 80))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.blue, .purple],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .accessibilityHidden(true)
+            }
 
             Text(String(localized: "dashboard_no_child_title"))
                 .font(.title2)
-                .fontWeight(.semibold)
+                .fontWeight(.bold)
 
             Text(String(localized: "dashboard_no_child_message"))
                 .font(.body)
@@ -251,10 +320,8 @@ struct DashboardView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
             }
+            .liquidGlassButton(color: .blue, isPressed: false)
             .padding(.horizontal)
             .buttonAccessibility(
                 label: String(localized: "dashboard_add_child_button"),
@@ -283,20 +350,38 @@ struct QuickActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title)
-                    .foregroundColor(color)
-                    .accessibilityHidden(true)
+            VStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [color.opacity(0.3), color.opacity(0.15)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 50, height: 50)
+                        .shadow(color: color.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                    Image(systemName: icon)
+                        .font(.title2)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [color, color.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .accessibilityHidden(true)
+                }
 
                 Text(title)
                     .font(.caption)
+                    .fontWeight(.medium)
                     .foregroundColor(.primary)
             }
             .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
+            .liquidGlassCard(backgroundColor: color, cornerRadius: 18)
         }
         .buttonAccessibility(
             label: String(format: NSLocalizedString("add", comment: ""), title),
