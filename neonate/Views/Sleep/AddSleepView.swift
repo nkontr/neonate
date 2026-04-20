@@ -52,13 +52,6 @@ struct AddSleepView: View {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
-
-                Section {
-                    SiriShortcutButton(
-                        shortcutType: .sleep,
-                        title: "Скажите Siri для быстрого добавления сна"
-                    )
-                }
             }
             .navigationTitle("Добавить сон")
             .navigationBarTitleDisplayMode(.inline)

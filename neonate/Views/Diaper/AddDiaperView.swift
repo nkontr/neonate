@@ -74,13 +74,6 @@ struct AddDiaperView: View {
                 } footer: {
                     Text("Добавьте дополнительную информацию о смене подгузника")
                 }
-
-                Section {
-                    SiriShortcutButton(
-                        shortcutType: .diaper,
-                        title: "Скажите Siri для быстрого добавления смены"
-                    )
-                }
             }
             .navigationTitle("Смена подгузника")
             .navigationBarTitleDisplayMode(.inline)

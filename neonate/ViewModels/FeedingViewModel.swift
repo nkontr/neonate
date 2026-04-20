@@ -62,15 +62,6 @@ class FeedingViewModel: ObservableObject {
                 type: .feeding
             )
 
-            if #available(iOS 16.0, *) {
-                AppIntentsManager.shared.donateLogFeedingIntent(
-                    feedingType: feedingType,
-                    duration: duration,
-                    volume: volume,
-                    breast: breast
-                )
-            }
-
         } catch {
             self.error = error
             self.showError = true

@@ -84,14 +84,6 @@ struct SleepTimerView: View {
                     .padding(.horizontal)
                 }
 
-                if viewModel.currentSleepSession == nil {
-                    SiriShortcutButton(
-                        shortcutType: .sleepTimer,
-                        title: "Скажите Siri для запуска таймера"
-                    )
-                    .padding(.horizontal)
-                }
-
                 Spacer()
             }
             .navigationTitle("Таймер сна")

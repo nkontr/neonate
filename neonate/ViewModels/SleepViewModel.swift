@@ -57,10 +57,6 @@ class SleepViewModel: ObservableObject {
             startTimer()
             loadSleepEvents(for: childId)
 
-            if #available(iOS 16.0, *) {
-                AppIntentsManager.shared.donateStartSleepTimerIntent()
-            }
-
         } catch {
             self.error = error
             self.showError = true
@@ -94,14 +90,6 @@ class SleepViewModel: ObservableObject {
                 childId: childId,
                 type: .sleep
             )
-
-            if #available(iOS 16.0, *) {
-                AppIntentsManager.shared.donateLogSleepIntent(
-                    startTime: session.startTime ?? Date(),
-                    endTime: endTime,
-                    quality: quality
-                )
-            }
 
         } catch {
             self.error = error

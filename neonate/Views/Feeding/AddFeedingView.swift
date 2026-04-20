@@ -58,13 +58,6 @@ struct AddFeedingView: View {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
-
-                Section {
-                    SiriShortcutButton(
-                        shortcutType: .feeding,
-                        title: "Скажите Siri для быстрого добавления кормления"
-                    )
-                }
             }
             .navigationTitle("Новое кормление")
             .navigationBarTitleDisplayMode(.inline)

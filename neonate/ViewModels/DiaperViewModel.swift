@@ -51,13 +51,6 @@ class DiaperViewModel: ObservableObject {
                 type: .diaper
             )
 
-            if #available(iOS 16.0, *) {
-                AppIntentsManager.shared.donateLogDiaperIntent(
-                    diaperType: diaperType,
-                    timestamp: timestamp
-                )
-            }
-
         } catch {
             self.error = error
             self.showError = true
