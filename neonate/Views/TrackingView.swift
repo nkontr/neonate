@@ -12,6 +12,7 @@ struct TrackingView: View {
     @State private var showingAddFeeding = false
     @State private var showingAddSleep = false
     @State private var showingAddDiaper = false
+    @State private var showingSleepTimer = false
     @State private var showingFeedingList = false
     @State private var showingSleepList = false
     @State private var showingDiaperList = false
@@ -71,6 +72,10 @@ struct TrackingView: View {
             .fullScreenCover(isPresented: $showingDiaperList) {
                 DiaperListView()
                     .environmentObject(childProfileViewModel)
+                    .environment(\.managedObjectContext, viewContext)
+            }
+            .fullScreenCover(isPresented: $showingSleepTimer) {
+                SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
                     .environment(\.managedObjectContext, viewContext)
             }
             .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
@@ -134,13 +139,43 @@ struct TrackingView: View {
                     showingAddFeeding = true
                 }
 
-                TrackingButton(
-                    title: String(localized: "event_sleep"),
-                    subtitle: String(localized: "sleep_timer_start"),
-                    icon: "moon.zzz.fill",
-                    color: .indigo
-                ) {
-                    showingAddSleep = true
+                Menu {
+                    Button {
+                        showingSleepTimer = true
+                    } label: {
+                        Label(String(localized: "sleep_timer"), systemImage: "timer")
+                    }
+
+                    Button {
+                        showingAddSleep = true
+                    } label: {
+                        Label(String(localized: "sleep_manual_entry"), systemImage: "pencil")
+                    }
+                } label: {
+                    HStack(spacing: 16) {
+                        Image(systemName: "moon.zzz.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.indigo)
+                            .frame(width: 60)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(String(localized: "event_sleep"))
+                                .font(.headline)
+                                .foregroundColor(.primary)
+
+                            Text(String(localized: "sleep_timer_start"))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
                 }
 
                 TrackingButton(

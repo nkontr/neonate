@@ -12,6 +12,7 @@ struct DashboardView: View {
     @State private var showingAddFeeding = false
     @State private var showingAddSleep = false
     @State private var showingAddDiaper = false
+    @State private var showingSleepTimer = false
     @State private var showingChildSelector = false
 
     var body: some View {
@@ -43,6 +44,10 @@ struct DashboardView: View {
                 }
                 .sheet(isPresented: $showingChildSelector) {
                     ChildrenListView(viewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
+                .fullScreenCover(isPresented: $showingSleepTimer) {
+                    SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
                 .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
@@ -89,7 +94,6 @@ struct DashboardView: View {
                     if let selectedChild = childProfileViewModel.selectedChild {
                         statsCardsSection(for: selectedChild)
                         quickActionsSection
-                        recentEventsSection(for: selectedChild)
                     } else {
                         noChildSelectedView
                     }
@@ -208,12 +212,50 @@ struct DashboardView: View {
                     showingAddFeeding = true
                 }
 
-                QuickActionButton(
-                    title: String(localized: "event_sleep"),
-                    icon: "moon.zzz.fill",
-                    color: .indigo
-                ) {
-                    showingAddSleep = true
+                Menu {
+                    Button {
+                        showingSleepTimer = true
+                    } label: {
+                        Label(String(localized: "sleep_timer"), systemImage: "timer")
+                    }
+
+                    Button {
+                        showingAddSleep = true
+                    } label: {
+                        Label(String(localized: "sleep_manual_entry"), systemImage: "pencil")
+                    }
+                } label: {
+                    VStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.indigo.opacity(0.3), Color.indigo.opacity(0.15)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 50, height: 50)
+                                .shadow(color: Color.indigo.opacity(0.3), radius: 8, x: 0, y: 4)
+
+                            Image(systemName: "moon.zzz.fill")
+                                .font(.title2)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [Color.indigo, Color.indigo.opacity(0.8)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+
+                        Text(String(localized: "event_sleep"))
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.primary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .liquidGlassCard(backgroundColor: .indigo, cornerRadius: 18)
                 }
 
                 QuickActionButton(
@@ -223,56 +265,6 @@ struct DashboardView: View {
                 ) {
                     showingAddDiaper = true
                 }
-            }
-        }
-    }
-
-    private func recentEventsSection(for child: ChildProfile) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(String(localized: "dashboard_today_events"))
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .accessibilityAddTraits(.isHeader)
-
-                Spacer()
-            }
-
-            if let childId = child.id {
-                let feedingEvents = feedingViewModel.getFeedingsToday(for: childId)
-                let sleepEvents = sleepViewModel.getStatistics(for: childId).todayCount
-                let diaperEvents = diaperViewModel.getEventsToday(for: childId)
-
-                VStack(spacing: 12) {
-                    RecentEventRow(
-                        icon: "fork.knife.circle.fill",
-                        color: .green,
-                        title: String(localized: "event_feeding"),
-                        count: feedingEvents.count
-                    )
-
-                    Divider()
-                        .background(Color.white.opacity(0.3))
-
-                    RecentEventRow(
-                        icon: "moon.zzz.fill",
-                        color: .indigo,
-                        title: String(localized: "sleep_list_title"),
-                        count: sleepEvents
-                    )
-
-                    Divider()
-                        .background(Color.white.opacity(0.3))
-
-                    RecentEventRow(
-                        icon: "drop.fill",
-                        color: .blue,
-                        title: String(localized: "diaper_list_title"),
-                        count: diaperEvents.count
-                    )
-                }
-                .liquidGlassCard(backgroundColor: .blue, cornerRadius: 20)
-                .accessibilityElement(children: .contain)
             }
         }
     }
@@ -388,35 +380,6 @@ struct QuickActionButton: View {
             hint: nil
         )
         .ensureMinimumTouchTarget()
-    }
-}
-
-struct RecentEventRow: View {
-    let icon: String
-    let color: Color
-    let title: String
-    let count: Int
-
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(color)
-                .font(.title3)
-                .accessibilityHidden(true)
-
-            Text(title)
-                .font(.body)
-
-            Spacer()
-
-            Text("\(count)")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(color)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(title): \(count)")
-        .accessibilityAddTraits(.isStaticText)
     }
 }
 

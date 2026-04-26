@@ -561,6 +561,8 @@
 "sleep_quality_not_specified" = "Quality not specified";
 "add_completed" = "Add completed";
 "start_timer" = "Start timer";
+"sleep_timer" = "Timer";
+"sleep_manual_entry" = "Manual entry";
 
 // MARK: - Diaper Change
 

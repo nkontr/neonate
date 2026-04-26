@@ -561,6 +561,8 @@
 "sleep_quality_not_specified" = "Качество не указано";
 "add_completed" = "Добавить завершенный";
 "start_timer" = "Начать таймер";
+"sleep_timer" = "Таймер";
+"sleep_manual_entry" = "Ручной ввод";
 
 // MARK: - Diaper Change
 
