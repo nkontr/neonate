@@ -5,6 +5,8 @@ struct SleepListView: View {
     @ObservedObject var viewModel: SleepViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
+    @Environment(\.dismiss) private var dismiss
+
     @State private var selectedRange: DateRangePicker.DateRange = .today
     @State private var showAddSleep = false
     @State private var showSleepTimer = false
@@ -67,6 +69,14 @@ struct SleepListView: View {
             .navigationTitle(String(localized: "sleep_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button {

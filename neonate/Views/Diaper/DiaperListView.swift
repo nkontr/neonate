@@ -4,6 +4,7 @@ import CoreData
 struct DiaperListView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var childProfileViewModel: ChildProfileViewModel
 
     @StateObject private var viewModel: DiaperViewModel
@@ -26,6 +27,14 @@ struct DiaperListView: View {
                 .navigationTitle(String(localized: "diaper_list_title"))
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                    }
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         addButton
                     }
