@@ -31,7 +31,7 @@ struct SleepStatsCard: View {
                         )
                 }
 
-                Text("Сон")
+                Text(String(localized: "sleep_title"))
                     .font(.headline)
                     .fontWeight(.bold)
 
@@ -43,7 +43,7 @@ struct SleepStatsCard: View {
                             .fill(Color.green)
                             .frame(width: 8, height: 8)
 
-                        Text("Спит")
+                        Text(String(localized: "sleeping_now"))
                             .font(.caption)
                             .foregroundColor(.green)
                     }
@@ -52,7 +52,7 @@ struct SleepStatsCard: View {
 
             HStack(spacing: 20) {
                 StatItem(
-                    title: "Сегодня",
+                    title: String(localized: "today_stats"),
                     value: formatDuration(statistics.todayTotalMinutes),
                     icon: "calendar",
                     color: .indigo
@@ -62,7 +62,7 @@ struct SleepStatsCard: View {
                     .frame(height: 40)
 
                 StatItem(
-                    title: "Сессий",
+                    title: String(localized: "sessions_stats"),
                     value: "\(statistics.todayCount)",
                     icon: "bed.double.fill",
                     color: .purple
@@ -71,20 +71,20 @@ struct SleepStatsCard: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    Label("Среднее время", systemImage: "chart.bar.fill")
+                    Label(String(localized: "average_time"), systemImage: "chart.bar.fill")
                         .foregroundColor(.blue)
                         .font(.caption)
 
                     Spacer()
 
-                    Text(String(format: "%.1f мин", statistics.averageDuration))
+                    Text(String(format: NSLocalizedString("minutes_short_format", comment: ""), statistics.averageDuration))
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
 
                 if !statistics.isCurrentlySleeping {
                     HStack {
-                        Label("С последнего сна", systemImage: "clock.fill")
+                        Label(String(localized: "since_last_sleep"), systemImage: "clock.fill")
                             .foregroundColor(.orange)
                             .font(.caption)
 
@@ -98,7 +98,7 @@ struct SleepStatsCard: View {
 
                 if let bestQuality = getMostCommonQuality() {
                     HStack {
-                        Label("Частое качество", systemImage: "star.fill")
+                        Label(String(localized: "common_quality"), systemImage: "star.fill")
                             .foregroundColor(.yellow)
                             .font(.caption)
 
@@ -114,7 +114,7 @@ struct SleepStatsCard: View {
         }
         .liquidGlassCard(backgroundColor: .indigo, cornerRadius: 20, glowColor: .indigo)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Статистика сна")
+        .accessibilityLabel(String(localized: "stats_accessibility_sleep"))
     }
 
     private func formatDuration(_ minutes: Int) -> String {
@@ -130,7 +130,7 @@ struct SleepStatsCard: View {
 
     private func formatTimeSinceLastSleep() -> String {
         guard let timeSince = statistics.timeSinceLastSleep else {
-            return "Нет данных"
+            return String(localized: "no_data_stats")
         }
 
         let hours = timeSince / 60

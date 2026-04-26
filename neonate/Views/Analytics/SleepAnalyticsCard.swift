@@ -50,12 +50,12 @@ struct SleepAnalyticsCard: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Сон")
+                Text(String(localized: "analytics_sleep"))
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
 
-                Text("\(analytics.summary.totalEvents) периодов сна")
+                Text(String(format: NSLocalizedString("analytics_events_in_period", comment: ""), analytics.summary.totalEvents))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -74,8 +74,8 @@ struct SleepAnalyticsCard: View {
         Chart {
             ForEach(analytics.totalTimeOverPeriod) { point in
                 BarMark(
-                    x: .value("Дата", point.date, unit: .day),
-                    y: .value("Часы", point.value / 60)
+                    x: .value(String(localized: "analytics_date"), point.date, unit: .day),
+                    y: .value(String(localized: "unit_hours"), point.value / 60)
                 )
                 .foregroundStyle(Color.purple.gradient)
                 .cornerRadius(4)
@@ -83,10 +83,10 @@ struct SleepAnalyticsCard: View {
                 .accessibilityValue(formatDuration(point.value))
             }
 
-            RuleMark(y: .value("Среднее", analytics.averageDuration / 60))
+            RuleMark(y: .value(String(localized: "analytics_average_value"), analytics.averageDuration / 60))
                 .foregroundStyle(.gray.opacity(0.5))
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                .accessibilityLabel("Среднее значение")
+                .accessibilityLabel(String(localized: "analytics_average_value"))
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { value in
@@ -115,7 +115,7 @@ struct SleepAnalyticsCard: View {
         VStack(spacing: 8) {
             StatRow(
                 icon: "moon.fill",
-                title: "Средняя продолжительность",
+                title: String(localized: "analytics_average_duration"),
                 value: formatDuration(analytics.averageDuration),
                 iconColor: .purple
             )
@@ -123,7 +123,7 @@ struct SleepAnalyticsCard: View {
             if analytics.longestSleep > 0 {
                 StatRow(
                     icon: "arrow.up.circle.fill",
-                    title: "Самый длинный сон",
+                    title: String(localized: "analytics_longest_sleep"),
                     value: formatDuration(analytics.longestSleep),
                     iconColor: .indigo
                 )
@@ -132,7 +132,7 @@ struct SleepAnalyticsCard: View {
             if analytics.shortestSleep > 0 {
                 StatRow(
                     icon: "arrow.down.circle.fill",
-                    title: "Самый короткий сон",
+                    title: String(localized: "analytics_shortest_sleep"),
                     value: formatDuration(analytics.shortestSleep),
                     iconColor: .blue
                 )
@@ -142,7 +142,7 @@ struct SleepAnalyticsCard: View {
             if totalSleep > 0 {
                 StatRow(
                     icon: "clock.fill",
-                    title: "Общее время сна",
+                    title: String(localized: "analytics_total_time"),
                     value: formatDuration(totalSleep),
                     iconColor: .cyan
                 )
@@ -152,7 +152,7 @@ struct SleepAnalyticsCard: View {
 
     private var pieChartView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Распределение по качеству")
+            Text(String(localized: "analytics_distribution_by_quality"))
                 .font(.subheadline)
                 .fontWeight(.semibold)
 
@@ -192,7 +192,7 @@ struct SleepAnalyticsCard: View {
 
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.locale = Locale.current
         formatter.dateFormat = period.dateFormat
         return formatter.string(from: date)
     }

@@ -147,14 +147,14 @@ class ChildProfileViewModel: ObservableObject {
         let days = getAgeInDays(for: child)
 
         if months < 1 {
-            return "\(days) дн."
+            return "\(days) \(String(localized: "age_days_short"))"
         } else if months < 12 {
             let remainingDays = days - (months * 30)
-            return "\(months) мес. \(remainingDays) дн."
+            return "\(months) \(String(localized: "age_months_short")) \(remainingDays) \(String(localized: "age_days_short"))"
         } else {
             let years = months / 12
             let remainingMonths = months % 12
-            return "\(years) г. \(remainingMonths) мес."
+            return "\(years) \(String(localized: "age_years_short")) \(remainingMonths) \(String(localized: "age_months_short"))"
         }
     }
 

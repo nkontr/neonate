@@ -91,6 +91,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = E145E6FB2EEB413E009EDBBA;
 			minimizedProjectReferenceProxies = 1;
@@ -179,7 +180,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = NO;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -237,7 +238,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = NO;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -255,11 +256,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6455KN44MK;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Baby Care Tracker";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Приложению нужен доступ к камере для добавления фото ребенка";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Используйте Face ID для быстрого и безопасного входа в приложение";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Приложению нужен доступ к фотобиблиотеке для выбора фото ребенка";
+				INFOPLIST_FILE = "neonate/Resources/Info-additions.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -287,11 +284,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6455KN44MK;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Baby Care Tracker";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Приложению нужен доступ к камере для добавления фото ребенка";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Используйте Face ID для быстрого и безопасного входа в приложение";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Приложению нужен доступ к фотобиблиотеке для выбора фото ребенка";
+				INFOPLIST_FILE = "neonate/Resources/Info-additions.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

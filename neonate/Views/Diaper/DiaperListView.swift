@@ -23,7 +23,7 @@ struct DiaperListView: View {
     private var bodyContent: some View {
         NavigationView {
             mainContent
-                .navigationTitle("Подгузники")
+                .navigationTitle(String(localized: "diaper_list_title"))
                 .navigationBarTitleDisplayMode(.large)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -71,15 +71,15 @@ struct DiaperListView: View {
             Image(systemName: "plus.circle.fill")
                 .font(.title3)
         }
-        .accessibilityLabel("Добавить смену подгузника")
+        .accessibilityLabel(String(localized: "add_diaper_change"))
     }
 
     private var emptyStateView: some View {
         EmptyStateView(
             icon: "drop.fill",
-            title: "Нет записей",
-            message: "Добавьте первую смену подгузника",
-            actionTitle: "Добавить",
+            title: String(localized: "no_records"),
+            message: String(localized: "add_first_diaper_change"),
+            actionTitle: String(localized: "add"),
             action: { showingAddDiaperView = true }
         )
     }
@@ -90,7 +90,7 @@ struct DiaperListView: View {
                 EventRow(
                     icon: getDiaperIcon(for: event.diaperType),
                     iconColor: getDiaperColor(for: event.diaperType),
-                    title: event.diaperType ?? "Смена подгузника",
+                    title: localizedDiaperType(event.diaperType),
                     subtitle: event.notes ?? "",
                     timestamp: formatTime(event.timestamp),
                     details: nil
@@ -106,11 +106,11 @@ struct DiaperListView: View {
     }
 
     private var dateFilterPicker: some View {
-        Picker("Период", selection: $dateFilter) {
-            Text("Сегодня").tag(DateFilter.today)
-            Text("Вчера").tag(DateFilter.yesterday)
-            Text("Неделя").tag(DateFilter.week)
-            Text("Месяц").tag(DateFilter.month)
+        Picker(String(localized: "period_label"), selection: $dateFilter) {
+            Text(String(localized: "today_label")).tag(DateFilter.today)
+            Text(String(localized: "yesterday_label")).tag(DateFilter.yesterday)
+            Text(String(localized: "week_label")).tag(DateFilter.week)
+            Text(String(localized: "month_label")).tag(DateFilter.month)
         }
         .pickerStyle(.segmented)
         .padding()
@@ -157,34 +157,57 @@ struct DiaperListView: View {
         }
     }
 
+    private func localizedDiaperType(_ type: String?) -> String {
+        guard let type = type else {
+            return String(localized: "diaper_change_default")
+        }
+
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
+            return String(localized: "diaper_type_wet")
+        } else if normalized == "Грязный" || normalized == "Dirty" {
+            return String(localized: "diaper_type_dirty")
+        } else if normalized == "Оба" || normalized == "Both" {
+            return String(localized: "diaper_type_both")
+        }
+
+        return type
+    }
+
     private func getDiaperIcon(for type: String?) -> String {
         guard let type = type else { return "drop.fill" }
 
-        switch type {
-        case "Мокрый":
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Check both Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
             return "drop.fill"
-        case "Грязный":
+        } else if normalized == "Грязный" || normalized == "Dirty" {
             return "sparkles"
-        case "Оба":
+        } else if normalized == "Оба" || normalized == "Both" {
             return "drop.triangle.fill"
-        default:
-            return "drop.fill"
         }
+
+        return "drop.fill"
     }
 
     private func getDiaperColor(for type: String?) -> Color {
         guard let type = type else { return .blue }
 
-        switch type {
-        case "Мокрый":
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Check both Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
             return .blue
-        case "Грязный":
+        } else if normalized == "Грязный" || normalized == "Dirty" {
             return .brown
-        case "Оба":
+        } else if normalized == "Оба" || normalized == "Both" {
             return .orange
-        default:
-            return .blue
         }
+
+        return .blue
     }
 
     private func formatTime(_ date: Date?) -> String {
@@ -196,9 +219,9 @@ struct DiaperListView: View {
 
         let calendar = Calendar.current
         if calendar.isDateInToday(date) {
-            return "Сегодня, \(formatter.string(from: date))"
+            return String(localized: "today_at").replacingOccurrences(of: "%@", with: formatter.string(from: date))
         } else if calendar.isDateInYesterday(date) {
-            return "Вчера, \(formatter.string(from: date))"
+            return String(localized: "yesterday_at").replacingOccurrences(of: "%@", with: formatter.string(from: date))
         } else {
             formatter.dateStyle = .short
             return formatter.string(from: date)

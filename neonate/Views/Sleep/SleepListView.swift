@@ -22,7 +22,7 @@ struct SleepListView: View {
                         HStack {
                             Image(systemName: "moon.zzz.fill")
                                 .foregroundColor(.purple)
-                            Text("Ребенок спит")
+                            Text(String(localized: "sleep_child_sleeping"))
                                 .fontWeight(.medium)
                             Spacer()
                             Text(formatDuration(viewModel.currentSleepDuration))
@@ -38,9 +38,9 @@ struct SleepListView: View {
                 if viewModel.sleepEvents.isEmpty {
                     EmptyStateView(
                         icon: "bed.double.fill",
-                        title: "Нет записей о сне",
-                        message: "Начните отслеживать сон вашего малыша",
-                        actionTitle: "Начать отслеживание",
+                        title: String(localized: "sleep_empty"),
+                        message: String(localized: "sleep_empty_message"),
+                        actionTitle: String(localized: "sleep_start_tracking"),
                         action: { showSleepTimer = true }
                     )
                 } else {
@@ -51,7 +51,7 @@ struct SleepListView: View {
                                     icon: "bed.double.fill",
                                     iconColor: .purple,
                                     title: sleepTitle(event),
-                                    subtitle: event.quality ?? "Качество не указано",
+                                    subtitle: localizedQuality(event.quality),
                                     timestamp: formatTimestamp(event.startTime),
                                     details: sleepDetails(event)
                                 )
@@ -64,7 +64,7 @@ struct SleepListView: View {
                     .listStyle(.plain)
                 }
             }
-            .navigationTitle("Сон")
+            .navigationTitle(String(localized: "sleep_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -72,12 +72,12 @@ struct SleepListView: View {
                         Button {
                             showSleepTimer = true
                         } label: {
-                            Label("Начать таймер", systemImage: "timer")
+                            Label(String(localized: "start_timer"), systemImage: "timer")
                         }
                         Button {
                             showAddSleep = true
                         } label: {
-                            Label("Добавить завершенный", systemImage: "plus")
+                            Label(String(localized: "add_completed"), systemImage: "plus")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -108,18 +108,18 @@ struct SleepListView: View {
 
     private func sleepTitle(_ event: SleepEvent) -> String {
         if let location = event.location {
-            return "Сон в \(location)"
+            return String(localized: "sleep_at_location").replacingOccurrences(of: "%@", with: location)
         }
-        return "Сон"
+        return String(localized: "sleep_title")
     }
 
     private func sleepDetails(_ event: SleepEvent) -> String {
         if event.endTime == nil {
-            return "В процессе..."
+            return String(localized: "sleep_in_progress_status")
         }
         let hours = event.duration / 60
         let minutes = event.duration % 60
-        return "Длительность: \(hours)ч \(minutes)м"
+        return String(localized: "sleep_duration_label").replacingOccurrences(of: "%d", with: "\(hours)").replacingOccurrences(of: "%d", with: "\(minutes)")
     }
 
     private func formatTimestamp(_ date: Date?) -> String {
@@ -143,5 +143,26 @@ struct SleepListView: View {
                 await viewModel.deleteSleep(event, childId: childId)
             }
         }
+    }
+
+    private func localizedQuality(_ quality: String?) -> String {
+        guard let quality = quality else {
+            return String(localized: "sleep_quality_not_specified")
+        }
+
+        let normalized = quality.trimmingCharacters(in: .whitespaces)
+
+        // Russian variants
+        if normalized == "Отличный" || normalized == "Excellent" {
+            return String(localized: "sleep_quality_excellent")
+        } else if normalized == "Хороший" || normalized == "Good" {
+            return String(localized: "sleep_quality_good")
+        } else if normalized == "Средний" || normalized == "Average" {
+            return String(localized: "sleep_quality_average")
+        } else if normalized == "Плохой" || normalized == "Poor" {
+            return String(localized: "sleep_quality_poor")
+        }
+
+        return quality
     }
 }

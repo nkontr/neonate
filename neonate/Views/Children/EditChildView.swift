@@ -10,14 +10,20 @@ struct EditChildView: View {
 
     @State private var name: String = ""
     @State private var dateOfBirth: Date = Date()
-    @State private var gender: String = "Мальчик"
+    @State private var gender: String = String(localized: "gender_boy")
     @State private var birthWeight: String = ""
     @State private var birthHeight: String = ""
     @State private var notes: String = ""
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoData: Data?
 
-    let genderOptions = ["Мальчик", "Девочка", "Другое"]
+    var genderOptions: [String] {
+        [
+            String(localized: "gender_boy"),
+            String(localized: "gender_girl"),
+            String(localized: "gender_other")
+        ]
+    }
 
     init(viewModel: ChildProfileViewModel, child: ChildProfile) {
         self.viewModel = viewModel
@@ -25,7 +31,7 @@ struct EditChildView: View {
 
         _name = State(initialValue: child.name ?? "")
         _dateOfBirth = State(initialValue: child.dateOfBirth ?? Date())
-        _gender = State(initialValue: child.gender ?? "Мальчик")
+        _gender = State(initialValue: child.gender ?? String(localized: "gender_boy"))
         _birthWeight = State(initialValue: child.birthWeight > 0 ? String(Int(child.birthWeight)) : "")
         _birthHeight = State(initialValue: child.birthHeight > 0 ? String(Int(child.birthHeight)) : "")
         _notes = State(initialValue: child.notes ?? "")
@@ -35,24 +41,24 @@ struct EditChildView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section("Основная информация") {
-                    TextField("Имя ребенка", text: $name)
+                Section(String(localized: "form_basic_info")) {
+                    TextField(String(localized: "placeholder_child_name"), text: $name)
 
                     DatePicker(
-                        "Дата рождения",
+                        String(localized: "profile_birth_date"),
                         selection: $dateOfBirth,
                         in: ...Date(),
                         displayedComponents: .date
                     )
 
-                    Picker("Пол", selection: $gender) {
+                    Picker(String(localized: "profile_gender"), selection: $gender) {
                         ForEach(genderOptions, id: \.self) { option in
                             Text(option)
                         }
                     }
                 }
 
-                Section("Фото") {
+                Section(String(localized: "form_photo")) {
                     PhotosPicker(selection: $selectedPhoto, matching: .images) {
                         if let photoData = photoData, let uiImage = UIImage(data: photoData) {
                             HStack {
@@ -62,10 +68,10 @@ struct EditChildView: View {
                                     .frame(width: 60, height: 60)
                                     .clipShape(Circle())
 
-                                Text("Изменить фото")
+                                Text(String(localized: "profile_change_photo"))
                             }
                         } else {
-                            Label("Добавить фото", systemImage: "camera")
+                            Label(String(localized: "profile_add_photo"), systemImage: "camera")
                         }
                     }
                     .onChange(of: selectedPhoto) { _, newValue in
@@ -77,30 +83,30 @@ struct EditChildView: View {
                     }
                 }
 
-                Section("При рождении") {
-                    TextField("Вес (граммы)", text: $birthWeight)
+                Section(String(localized: "form_at_birth")) {
+                    TextField(String(localized: "placeholder_weight_grams"), text: $birthWeight)
                         .keyboardType(.numberPad)
 
-                    TextField("Рост (см)", text: $birthHeight)
+                    TextField(String(localized: "placeholder_height_cm"), text: $birthHeight)
                         .keyboardType(.decimalPad)
                 }
 
-                Section("Заметки") {
+                Section(String(localized: "form_notes")) {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
             }
-            .navigationTitle("Редактировать")
+            .navigationTitle(String(localized: "profile_edit"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") {
+                    Button(String(localized: "cancel")) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") {
+                    Button(String(localized: "save")) {
                         saveChanges()
                     }
                     .disabled(name.isEmpty)

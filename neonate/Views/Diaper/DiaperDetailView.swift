@@ -11,14 +11,14 @@ struct DiaperDetailView: View {
         NavigationView {
             List {
 
-                Section("Информация") {
+                Section(String(localized: "detail_information")) {
                     HStack {
                         Image(systemName: getDiaperIcon(for: event.diaperType))
                             .foregroundColor(getDiaperColor(for: event.diaperType))
                             .font(.title2)
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(event.diaperType ?? "Смена подгузника")
+                            Text(localizedDiaperType(event.diaperType))
                                 .font(.headline)
 
                             Text(formatDateTime(event.timestamp))
@@ -30,13 +30,13 @@ struct DiaperDetailView: View {
                 }
 
                 if let notes = event.notes, !notes.isEmpty {
-                    Section("Заметки") {
+                    Section(String(localized: "form_notes")) {
                         Text(notes)
                             .font(.body)
                     }
                 }
 
-                Section("Интервал") {
+                Section(String(localized: "diaper_interval_section")) {
                     HStack {
                         Image(systemName: "clock.fill")
                             .foregroundColor(.blue)
@@ -47,7 +47,7 @@ struct DiaperDetailView: View {
                 }
 
                 if let child = event.child {
-                    Section("Ребенок") {
+                    Section(String(localized: "child_section")) {
                         HStack {
                             if let photoData = child.photoData,
                                let uiImage = UIImage(data: photoData) {
@@ -77,11 +77,11 @@ struct DiaperDetailView: View {
                     }
                 }
             }
-            .navigationTitle("Смена подгузника")
+            .navigationTitle(String(localized: "diaper_change_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Готово") {
+                    Button(String(localized: "done")) {
                         dismiss()
                     }
                 }
@@ -89,34 +89,57 @@ struct DiaperDetailView: View {
         }
     }
 
+    private func localizedDiaperType(_ type: String?) -> String {
+        guard let type = type else {
+            return String(localized: "diaper_change_default")
+        }
+
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
+            return String(localized: "diaper_type_wet")
+        } else if normalized == "Грязный" || normalized == "Dirty" {
+            return String(localized: "diaper_type_dirty")
+        } else if normalized == "Оба" || normalized == "Both" {
+            return String(localized: "diaper_type_both")
+        }
+
+        return type
+    }
+
     private func getDiaperIcon(for type: String?) -> String {
         guard let type = type else { return "drop.fill" }
 
-        switch type {
-        case "Мокрый":
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Check both Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
             return "drop.fill"
-        case "Грязный":
+        } else if normalized == "Грязный" || normalized == "Dirty" {
             return "sparkles"
-        case "Оба":
+        } else if normalized == "Оба" || normalized == "Both" {
             return "drop.triangle.fill"
-        default:
-            return "drop.fill"
         }
+
+        return "drop.fill"
     }
 
     private func getDiaperColor(for type: String?) -> Color {
         guard let type = type else { return .blue }
 
-        switch type {
-        case "Мокрый":
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        // Check both Russian and English variants
+        if normalized == "Мокрый" || normalized == "Wet" {
             return .blue
-        case "Грязный":
+        } else if normalized == "Грязный" || normalized == "Dirty" {
             return .brown
-        case "Оба":
+        } else if normalized == "Оба" || normalized == "Both" {
             return .orange
-        default:
-            return .blue
         }
+
+        return .blue
     }
 
     private func formatDateTime(_ date: Date?) -> String {
@@ -131,7 +154,7 @@ struct DiaperDetailView: View {
 
     private func getTimeSinceLastChange() -> String {
         guard let timestamp = event.timestamp else {
-            return "Неизвестно"
+            return String(localized: "unknown")
         }
 
         let now = Date()
@@ -141,11 +164,16 @@ struct DiaperDetailView: View {
         let minutes = (Int(interval) % 3600) / 60
 
         if hours > 0 {
-            return "\(hours) ч. \(minutes) мин. назад"
+            let hoursStr = String(localized: "hours_short")
+            let minsStr = String(localized: "minutes_short")
+            let agoStr = String(localized: "time_ago")
+            return "\(hours) \(hoursStr) \(minutes) \(minsStr) \(agoStr)"
         } else if minutes > 0 {
-            return "\(minutes) мин. назад"
+            let minsStr = String(localized: "minutes_short")
+            let agoStr = String(localized: "time_ago")
+            return "\(minutes) \(minsStr) \(agoStr)"
         } else {
-            return "Только что"
+            return String(localized: "just_now")
         }
     }
 
@@ -155,13 +183,13 @@ struct DiaperDetailView: View {
 
         if let months = components.month, let days = components.day {
             if months < 1 {
-                return "\(days) дн."
+                return "\(days) \(String(localized: "age_days_short"))"
             } else if months < 12 {
-                return "\(months) мес."
+                return "\(months) \(String(localized: "age_months_short"))"
             } else {
                 let years = months / 12
                 let remainingMonths = months % 12
-                return "\(years) г. \(remainingMonths) мес."
+                return "\(years) \(String(localized: "age_years_short")) \(remainingMonths) \(String(localized: "age_months_short"))"
             }
         }
 

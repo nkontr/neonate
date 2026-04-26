@@ -32,7 +32,7 @@ struct RemindersListView: View {
                 noChildSelectedView
             }
         }
-        .navigationTitle("Напоминания")
+        .navigationTitle(String(localized: "reminders_title"))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -58,17 +58,17 @@ struct RemindersListView: View {
         .sheet(isPresented: $showingPermissionView) {
             NotificationPermissionView(viewModel: viewModel)
         }
-        .alert("Удалить напоминание?", isPresented: $showingDeleteAlert) {
-            Button("Отмена", role: .cancel) {
+        .alert(String(localized: "delete_reminder"), isPresented: $showingDeleteAlert) {
+            Button(String(localized: "cancel"), role: .cancel) {
                 reminderToDelete = nil
             }
-            Button("Удалить", role: .destructive) {
+            Button(String(localized: "action_delete"), role: .destructive) {
                 if let reminder = reminderToDelete {
                     deleteReminder(reminder)
                 }
             }
         } message: {
-            Text("Это действие нельзя отменить")
+            Text(String(localized: "delete_reminder_message"))
         }
     }
 
@@ -97,11 +97,11 @@ struct RemindersListView: View {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
 
-                    Text("Уведомления отключены")
+                    Text(String(localized: "notifications_disabled"))
                         .font(.headline)
                 }
 
-                Text("Для работы напоминаний необходимо разрешение на уведомления")
+                Text(String(localized: "notifications_required"))
                     .font(.caption)
                     .foregroundColor(.secondary)
 
@@ -112,7 +112,7 @@ struct RemindersListView: View {
                         showingPermissionView = true
                     }
                 } label: {
-                    Text(viewModel.notificationPermissionStatus == .denied ? "Открыть настройки" : "Разрешить уведомления")
+                    Text(viewModel.notificationPermissionStatus == .denied ? String(localized: "open_settings") : String(localized: "allow_notifications"))
                         .font(.subheadline)
                         .foregroundColor(.blue)
                 }
@@ -130,10 +130,10 @@ struct RemindersListView: View {
                     .foregroundColor(.secondary)
 
                 VStack(spacing: 8) {
-                    Text("Нет напоминаний")
+                    Text(String(localized: "no_reminders"))
                         .font(.headline)
 
-                    Text("Создайте напоминания для отслеживания времени кормления, сна и смены подгузников")
+                    Text(String(localized: "no_reminders_message"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -146,7 +146,7 @@ struct RemindersListView: View {
                         showingPermissionView = true
                     }
                 } label: {
-                    Label("Добавить напоминание", systemImage: "plus.circle.fill")
+                    Label(String(localized: "add_reminder"), systemImage: "plus.circle.fill")
                         .font(.headline)
                 }
                 .buttonStyle(.borderedProminent)
@@ -175,7 +175,7 @@ struct RemindersListView: View {
                     }
             }
         } header: {
-            Text("Активные напоминания (\(viewModel.activeRemindersCount))")
+            Text(String(format: NSLocalizedString("active_reminders", comment: ""), viewModel.activeRemindersCount))
         }
     }
 
@@ -184,21 +184,21 @@ struct RemindersListView: View {
             VStack(alignment: .leading, spacing: 8) {
                 InfoRow(
                     icon: "info.circle.fill",
-                    text: "Напоминания будут приходить на основе установленного интервала"
+                    text: String(localized: "reminder_info_interval")
                 )
 
                 InfoRow(
                     icon: "arrow.clockwise",
-                    text: "После добавления события напоминание автоматически перепланируется"
+                    text: String(localized: "reminder_info_reschedule")
                 )
 
                 InfoRow(
                     icon: "hand.tap.fill",
-                    text: "Нажмите на напоминание для редактирования или смахните для удаления"
+                    text: String(localized: "reminder_info_edit")
                 )
             }
         } header: {
-            Text("Информация")
+            Text(String(localized: "reminder_info_title"))
         }
     }
 
@@ -208,11 +208,11 @@ struct RemindersListView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.secondary)
 
-            Text("Выберите ребенка")
+            Text(String(localized: "select_child_title"))
                 .font(.title)
                 .fontWeight(.bold)
 
-            Text("Для настройки напоминаний необходимо выбрать профиль ребенка")
+            Text(String(localized: "select_child_message"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

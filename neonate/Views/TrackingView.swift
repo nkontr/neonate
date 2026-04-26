@@ -45,7 +45,7 @@ struct TrackingView: View {
     private var mainView: some View {
         NavigationView {
             mainScrollView
-                .navigationTitle("Отслеживание")
+                .navigationTitle(String(localized: "tracking_title"))
                 .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $showingAddFeeding) {
                 AddFeedingView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
@@ -120,14 +120,14 @@ struct TrackingView: View {
 
     private var quickTrackingButtons: some View {
         VStack(spacing: 16) {
-            Text("Добавить событие")
+            Text(String(localized: "tracking_select_event"))
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 12) {
                 TrackingButton(
-                    title: "Кормление",
-                    subtitle: "Грудное, бутылочка или прикорм",
+                    title: String(localized: "event_feeding"),
+                    subtitle: String(localized: "feeding_type_breast") + ", " + String(localized: "feeding_type_bottle") + " " + String(localized: "feeding_type_solid"),
                     icon: "fork.knife.circle.fill",
                     color: .green
                 ) {
@@ -135,8 +135,8 @@ struct TrackingView: View {
                 }
 
                 TrackingButton(
-                    title: "Сон",
-                    subtitle: "Начать или добавить сессию сна",
+                    title: String(localized: "event_sleep"),
+                    subtitle: String(localized: "sleep_timer_start"),
                     icon: "moon.zzz.fill",
                     color: .indigo
                 ) {
@@ -144,8 +144,8 @@ struct TrackingView: View {
                 }
 
                 TrackingButton(
-                    title: "Подгузник",
-                    subtitle: "Мокрый, грязный или оба",
+                    title: String(localized: "event_diaper"),
+                    subtitle: String(localized: "diaper_type_wet") + ", " + String(localized: "diaper_type_dirty"),
                     icon: "drop.fill",
                     color: .blue
                 ) {
@@ -157,7 +157,7 @@ struct TrackingView: View {
 
     private func recentEventsSection(for child: ChildProfile) -> some View {
         VStack(spacing: 16) {
-            Text("Последние события")
+            Text(String(localized: "tracking_recent"))
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -166,10 +166,10 @@ struct TrackingView: View {
 
                     if let lastFeeding = feedingViewModel.getFeedingsToday(for: childId).first {
                         LastEventCard(
-                            title: "Кормление",
+                            title: String(localized: "event_feeding"),
                             icon: "fork.knife.circle.fill",
                             color: .green,
-                            subtitle: lastFeeding.feedingType ?? "",
+                            subtitle: localizedFeedingType(lastFeeding.feedingType ?? ""),
                             time: formatTime(lastFeeding.timestamp),
                             action: { showingFeedingList = true }
                         )
@@ -178,10 +178,10 @@ struct TrackingView: View {
                     let sleepStats = sleepViewModel.getStatistics(for: childId)
                     if sleepStats.todayCount > 0 {
                         LastEventCard(
-                            title: "Сон",
+                            title: String(localized: "event_sleep"),
                             icon: "moon.zzz.fill",
                             color: .indigo,
-                            subtitle: sleepStats.isCurrentlySleeping ? "Сейчас спит" : "Завершен",
+                            subtitle: sleepStats.isCurrentlySleeping ? String(localized: "sleep_in_progress") : String(localized: "done"),
                             time: formatTimeSince(sleepStats.timeSinceLastSleep),
                             action: { showingSleepList = true }
                         )
@@ -189,10 +189,10 @@ struct TrackingView: View {
 
                     if let lastDiaper = diaperViewModel.getEventsToday(for: childId).first {
                         LastEventCard(
-                            title: "Подгузник",
+                            title: String(localized: "event_diaper"),
                             icon: "drop.fill",
                             color: .blue,
-                            subtitle: lastDiaper.diaperType ?? "",
+                            subtitle: localizedDiaperType(lastDiaper.diaperType ?? ""),
                             time: formatTime(lastDiaper.timestamp),
                             action: { showingDiaperList = true }
                         )
@@ -208,11 +208,11 @@ struct TrackingView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.gray)
 
-            Text("Выберите ребенка")
+            Text(String(localized: "analytics_no_child_title"))
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Перейдите в настройки, чтобы добавить профиль ребенка")
+            Text(String(localized: "analytics_no_child_message"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -237,22 +237,64 @@ struct TrackingView: View {
         let minutes = Int(interval / 60)
 
         if minutes < 60 {
-            return "\(minutes) мин. назад"
+            return "\(minutes) \(String(localized: "time_ago_minutes"))"
         } else {
             let hours = minutes / 60
-            return "\(hours) ч. назад"
+            return "\(hours) \(String(localized: "time_ago_hours"))"
         }
     }
 
     private func formatTimeSince(_ minutes: Int?) -> String {
-        guard let minutes = minutes else { return "Только что" }
+        guard let minutes = minutes else { return String(localized: "just_now") }
 
         if minutes < 60 {
-            return "\(minutes) мин. назад"
+            return "\(minutes) \(String(localized: "time_ago_minutes"))"
         } else {
             let hours = minutes / 60
-            return "\(hours) ч. назад"
+            return "\(hours) \(String(localized: "time_ago_hours"))"
         }
+    }
+
+    private func localizedFeedingType(_ type: String) -> String {
+        // Проверяем русские варианты
+        if type == "Грудное" || type == "Грудное вскармливание" {
+            return String(localized: "feeding_type_breast_feeding")
+        } else if type == "Бутылочка" || type == "Кормление из бутылочки" {
+            return String(localized: "feeding_type_bottle_feeding")
+        } else if type == "Прикорм" {
+            return String(localized: "feeding_type_complementary_feeding")
+        }
+        // Проверяем английские варианты
+        else if type == "Breast" || type == "Breastfeeding" {
+            return String(localized: "feeding_type_breast_feeding")
+        } else if type == "Bottle" || type == "Bottle feeding" {
+            return String(localized: "feeding_type_bottle_feeding")
+        } else if type == "Solid" || type == "Complementary feeding" {
+            return String(localized: "feeding_type_complementary_feeding")
+        }
+        // Если не нашли совпадение, возвращаем как есть
+        return type
+    }
+
+    private func localizedDiaperType(_ type: String) -> String {
+        // Проверяем русские варианты
+        if type == "Мокрый" {
+            return String(localized: "diaper_type_wet")
+        } else if type == "Грязный" {
+            return String(localized: "diaper_type_dirty")
+        } else if type == "Оба" {
+            return String(localized: "diaper_type_both")
+        }
+        // Проверяем английские варианты
+        else if type == "Wet" {
+            return String(localized: "diaper_type_wet")
+        } else if type == "Dirty" {
+            return String(localized: "diaper_type_dirty")
+        } else if type == "Both" {
+            return String(localized: "diaper_type_both")
+        }
+        // Если не нашли совпадение, возвращаем как есть
+        return type
     }
 }
 
@@ -290,7 +332,7 @@ struct TrackingButton: View {
             .background(Color(.systemGray6))
             .cornerRadius(12)
         }
-        .accessibilityLabel("Добавить \(title.lowercased())")
+        .accessibilityLabel(String(localized: "add_to").replacingOccurrences(of: "%@", with: title.lowercased()))
     }
 }
 
@@ -335,7 +377,7 @@ struct LastEventCard: View {
             .background(Color(.systemGray6))
             .cornerRadius(8)
         }
-        .accessibilityLabel("Посмотреть все \(title.lowercased())")
+        .accessibilityLabel(String(localized: "view_all").replacingOccurrences(of: "%@", with: title.lowercased()))
     }
 }
 

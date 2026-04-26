@@ -34,7 +34,7 @@ class ReminderViewModel: ObservableObject {
         await withCheckedContinuation { continuation in
             notificationService.requestAuthorization { [weak self] granted, error in
                 if let error = error {
-                    self?.errorMessage = "Ошибка запроса разрешений: \(error.localizedDescription)"
+                    self?.errorMessage = String(format: NSLocalizedString("reminder_error_request", comment: ""), error.localizedDescription)
                 }
 
                 self?.checkNotificationPermission()
@@ -63,14 +63,14 @@ class ReminderViewModel: ObservableObject {
 
     func createReminder(type: ReminderManager.ReminderType, intervalMinutes: Int) async {
         guard let childId = currentChildId else {
-            errorMessage = "Не выбран ребенок"
+            errorMessage = String(localized: "reminder_error_no_child")
             return
         }
 
         if notificationPermissionStatus != .authorized {
             await requestNotificationPermission()
             if notificationPermissionStatus != .authorized {
-                errorMessage = "Требуется разрешение на уведомления"
+                errorMessage = String(localized: "reminder_error_permission")
                 return
             }
         }
@@ -87,7 +87,7 @@ class ReminderViewModel: ObservableObject {
 
             refreshReminders()
         } catch {
-            errorMessage = "Ошибка создания напоминания: \(error.localizedDescription)"
+            errorMessage = String(format: NSLocalizedString("reminder_error_create", comment: ""), error.localizedDescription)
         }
 
         isLoading = false

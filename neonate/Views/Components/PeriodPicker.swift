@@ -5,9 +5,9 @@ struct PeriodPicker: View {
     @Binding var selectedPeriod: AnalyticsPeriod
 
     var body: some View {
-        Picker("Период", selection: $selectedPeriod) {
+        Picker("", selection: $selectedPeriod) {
             ForEach(AnalyticsPeriod.allCases, id: \.self) { period in
-                Text(period.rawValue)
+                Text(period.localizedName)
                     .tag(period)
             }
         }

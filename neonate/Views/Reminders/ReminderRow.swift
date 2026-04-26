@@ -22,12 +22,12 @@ struct ReminderRow: View {
                         .foregroundColor(reminder.isEnabled ? .primary : .secondary)
                 }
 
-                Text("Каждые \(viewModel.getFormattedInterval(reminder))")
+                Text(String(format: NSLocalizedString("reminder_every", comment: ""), viewModel.getFormattedInterval(reminder)))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
 
                 if let lastTriggered = reminder.lastTriggered {
-                    Text("Последнее: \(formatDate(lastTriggered))")
+                    Text(String(format: NSLocalizedString("reminder_last", comment: ""), formatDate(lastTriggered)))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

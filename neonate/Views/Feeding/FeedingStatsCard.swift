@@ -31,7 +31,7 @@ struct FeedingStatsCard: View {
                         )
                 }
 
-                Text("Кормления")
+                Text(String(localized: "feedings_title"))
                     .font(.headline)
                     .fontWeight(.bold)
 
@@ -40,7 +40,7 @@ struct FeedingStatsCard: View {
 
             HStack(spacing: 20) {
                 StatItem(
-                    title: "Сегодня",
+                    title: String(localized: "today_stats"),
                     value: "\(statistics.todayCount)",
                     icon: "calendar",
                     color: .green
@@ -50,7 +50,7 @@ struct FeedingStatsCard: View {
                     .frame(height: 40)
 
                 StatItem(
-                    title: "Последнее",
+                    title: String(localized: "last_stats"),
                     value: formatLastFeeding(),
                     icon: "clock.fill",
                     color: .orange
@@ -60,13 +60,13 @@ struct FeedingStatsCard: View {
             VStack(spacing: 8) {
                 if statistics.todayVolume > 0 {
                     HStack {
-                        Label("Объем сегодня", systemImage: "drop.fill")
+                        Label(String(localized: "volume_today"), systemImage: "drop.fill")
                             .foregroundColor(.blue)
                             .font(.caption)
 
                         Spacer()
 
-                        Text("\(Int(statistics.todayVolume)) мл")
+                        Text("\(Int(statistics.todayVolume)) \(String(localized: "unit_ml"))")
                             .font(.caption)
                             .fontWeight(.semibold)
                     }
@@ -74,26 +74,26 @@ struct FeedingStatsCard: View {
 
                 if statistics.todayDuration > 0 {
                     HStack {
-                        Label("Время сегодня", systemImage: "timer")
+                        Label(String(localized: "time_today"), systemImage: "timer")
                             .foregroundColor(.purple)
                             .font(.caption)
 
                         Spacer()
 
-                        Text("\(statistics.todayDuration) мин")
+                        Text(String(format: NSLocalizedString("minutes_short_format", comment: ""), statistics.todayDuration))
                             .font(.caption)
                             .fontWeight(.semibold)
                     }
                 }
 
                 HStack {
-                    Label("Среднее время", systemImage: "chart.bar.fill")
+                    Label(String(localized: "average_time"), systemImage: "chart.bar.fill")
                         .foregroundColor(.green)
                         .font(.caption)
 
                     Spacer()
 
-                    Text(String(format: "%.1f мин", statistics.averageDuration))
+                    Text(String(format: "%.1f \(String(localized: "unit_minutes"))", statistics.averageDuration))
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
@@ -102,7 +102,7 @@ struct FeedingStatsCard: View {
         }
         .liquidGlassCard(backgroundColor: .green, cornerRadius: 20, glowColor: .green)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Статистика кормлений")
+        .accessibilityLabel(String(localized: "stats_accessibility_feeding"))
     }
 
     private func formatLastFeeding() -> String {

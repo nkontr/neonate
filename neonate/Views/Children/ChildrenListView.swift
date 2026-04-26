@@ -14,9 +14,9 @@ struct ChildrenListView: View {
                 if viewModel.children.isEmpty {
                     EmptyStateView(
                         icon: "person.2.fill",
-                        title: "Нет профилей детей",
-                        message: "Добавьте профиль вашего малыша",
-                        actionTitle: "Добавить ребенка",
+                        title: String(localized: "no_child_profiles"),
+                        message: String(localized: "add_child_profile_message"),
+                        actionTitle: String(localized: "add_child_button"),
                         action: { showAddChild = true }
                     )
                 } else {
@@ -36,13 +36,13 @@ struct ChildrenListView: View {
                                         await viewModel.deleteChild(child)
                                     }
                                 } label: {
-                                    Label("Удалить", systemImage: "trash")
+                                    Label(String(localized: "action_delete"), systemImage: "trash")
                                 }
 
                                 Button {
                                     childToEdit = child
                                 } label: {
-                                    Label("Изменить", systemImage: "pencil")
+                                    Label(String(localized: "action_edit"), systemImage: "pencil")
                                 }
                                 .tint(.blue)
                             }
@@ -51,7 +51,7 @@ struct ChildrenListView: View {
                     .listStyle(.plain)
                 }
             }
-            .navigationTitle("Профили детей")
+            .navigationTitle(String(localized: "children_profiles_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

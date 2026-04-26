@@ -31,7 +31,7 @@ struct AnalyticsView: View {
                     contentView
                 }
             }
-            .navigationTitle("Аналитика")
+            .navigationTitle(String(localized: "analytics_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -78,21 +78,21 @@ struct AnalyticsView: View {
 
             SummaryCard(
                 icon: "fork.knife",
-                title: "Кормлений/день",
+                title: String(localized: "feedings_per_day"),
                 value: String(format: "%.1f", analyticsViewModel.getAverageFeedingsPerDay()),
                 color: .blue
             )
 
             SummaryCard(
                 icon: "moon.fill",
-                title: "Сна/день",
+                title: String(localized: "sleep_per_day"),
                 value: String(format: "%.1fч", analyticsViewModel.getAverageSleepPerDay()),
                 color: .purple
             )
 
             SummaryCard(
                 icon: "leaf.fill",
-                title: "Смен/день",
+                title: String(localized: "changes_per_day"),
                 value: String(format: "%.1f", analyticsViewModel.getAverageDiaperChangesPerDay()),
                 color: .green
             )
@@ -156,7 +156,7 @@ struct AnalyticsView: View {
                 .font(.system(size: 60))
                 .foregroundColor(.orange)
 
-            Text("Ошибка загрузки")
+            Text(String(localized: "error_loading"))
                 .font(.title2)
                 .fontWeight(.bold)
 
@@ -169,7 +169,7 @@ struct AnalyticsView: View {
             Button {
                 analyticsViewModel.refreshAnalytics()
             } label: {
-                Label("Повторить", systemImage: "arrow.clockwise")
+                Label(String(localized: "retry_button"), systemImage: "arrow.clockwise")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
@@ -186,11 +186,11 @@ struct AnalyticsView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.gray)
 
-            Text("Выберите ребенка")
+            Text(String(localized: "analytics_no_child_title"))
                 .font(.title2)
                 .fontWeight(.bold)
 
-            Text("Для просмотра аналитики необходимо выбрать профиль ребенка")
+            Text(String(localized: "analytics_no_child_message"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

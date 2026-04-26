@@ -503,3 +503,294 @@
 "intent_error_save_failed" = "Failed to save record. Please try again.";
 "intent_error_no_events" = "No events recorded yet. Add your first event in the app.";
 "intent_error_invalid_time_range" = "Invalid time range. End time must be after start time.";
+
+// MARK: - Time Ago
+
+"time_ago_minutes" = "min. ago";
+"time_ago_hours" = "h. ago";
+"time_ago" = "ago";
+"just_now" = "Just now";
+"unknown" = "Unknown";
+
+// MARK: - Sleep Quality
+
+"sleep_quality_excellent" = "Excellent";
+"sleep_quality_good" = "Good";
+"sleep_quality_average" = "Average";
+"sleep_quality_poor" = "Poor";
+"sleep_quality_normal" = "Normal";
+"sleep_quality_restless" = "Restless";
+
+// MARK: - Sleep Location
+
+"sleep_location_crib" = "Crib";
+"sleep_location_stroller" = "Stroller";
+"sleep_location_arms" = "In arms";
+"sleep_location_car" = "In car";
+"sleep_location_label" = "Location";
+"sleep_location" = "Sleep location";
+
+// MARK: - Feeding Types Detailed
+
+"feeding_type_breast_feeding" = "Breast";
+"feeding_type_bottle_feeding" = "Bottle";
+"feeding_type_complementary_feeding" = "Solid";
+
+// MARK: - Form Labels Extended
+
+"form_time_label" = "Time";
+"form_quality" = "Quality";
+"form_location" = "Location";
+"form_feeding_time" = "Feeding time";
+"form_change_time" = "Change time";
+"form_child" = "Child";
+
+// MARK: - Duration Display
+
+"duration_short_format" = "%dh %dm";
+
+// MARK: - Sleep UI
+
+"sleep_child_sleeping" = "Baby is sleeping";
+"sleep_ready_tracking" = "Ready to track";
+"sleep_finish" = "Finish sleep";
+"sleep_start_tracking" = "Start tracking";
+"sleep_at_location" = "Sleep at %@";
+"sleep_in_progress_status" = "In progress...";
+"sleep_duration_label" = "Duration: %dh %dm";
+"sleep_quality_not_specified" = "Quality not specified";
+"add_completed" = "Add completed";
+"start_timer" = "Start timer";
+
+// MARK: - Diaper Change
+
+"diaper_change_title" = "Diaper Change";
+"diaper_type_label" = "Diaper type";
+"diaper_add_info" = "Add additional information about diaper change";
+
+// MARK: - Add Actions
+
+"add_to" = "Add %@";
+"view_all" = "View all %@";
+
+// MARK: - Feeding Details
+
+"feeding_duration_label" = "Duration: %d min";
+"feeding_volume_label" = "Volume: %d ml";
+"feeding_default_title" = "Feeding";
+
+// MARK: - Diaper Details
+
+"diaper_change_default" = "Diaper change";
+"diaper_interval_section" = "Interval";
+"child_section" = "Child";
+"period_label" = "Period";
+"today_label" = "Today";
+"yesterday_label" = "Yesterday";
+"week_label" = "Week";
+"month_label" = "Month";
+"today_at" = "Today, %@";
+"yesterday_at" = "Yesterday, %@";
+
+// MARK: - General Actions
+
+"add_diaper_change" = "Add diaper change";
+"add_first_diaper_change" = "Add first diaper change";
+"no_records" = "No records";
+
+// MARK: - Reminder Details
+
+"reminder_type_label" = "Reminder type";
+"cannot_change" = "Cannot change";
+"hours_label" = "Hours: %d";
+"minutes_label" = "Minutes: %d";
+"reminder_interval_label" = "Reminder interval";
+"reminder_every" = "Reminder will come every %@";
+"information_label" = "Information";
+"last_triggered_label" = "Last triggered";
+"zero_minutes" = "0 minutes";
+"hours_short" = "%d h";
+"minutes_short" = "%d min";
+
+// MARK: - Notification Permission
+
+"notification_permission_title" = "Allow Notifications";
+"notification_permission_reason_timely" = "Timely reminders about feeding, sleep and diaper changes";
+"notification_permission_reason_customizable" = "Customizable reminder intervals for each event type";
+"notification_permission_reason_quick_actions" = "Quick actions directly from notifications";
+"notification_permission_allow" = "Allow Notifications";
+"notification_permission_skip" = "Skip";
+"notification_permission_open_settings" = "Open Settings";
+"notification_permission_denied_message" = "Permissions denied. Go to settings to change them";
+
+// MARK: - Sleep Detail
+
+"information" = "Information";
+"start_label" = "Start";
+"end_label" = "End";
+"status_label" = "Status";
+"in_progress" = "In progress";
+"duration_label" = "Duration";
+"quality_label" = "Quality";
+"location_label" = "Location";
+
+// MARK: - Analytics Summary
+
+"feedings_per_day" = "Feedings/day";
+"sleep_per_day" = "Sleep/day";
+"changes_per_day" = "Changes/day";
+"error_loading" = "Loading error";
+"retry_button" = "Retry";
+
+// MARK: - Biometric Setup
+
+"biometric_setup" = "Set up %@";
+"biometric_fast_secure" = "Fast and secure login to the app";
+"biometric_security_title" = "Security";
+"biometric_security_desc" = "Your data is securely protected";
+"biometric_fast_login_title" = "Fast login";
+"biometric_fast_login_desc" = "Sign in to the app instantly";
+"biometric_convenience_title" = "Convenience";
+"biometric_convenience_desc" = "No need to remember password";
+"biometric_enable_button" = "Enable %@";
+"biometric_setup_later" = "Set up later";
+
+// MARK: - Component Views
+
+"loading_message" = "Loading...";
+"empty_state_message" = "No data yet";
+"select_period" = "Select period";
+
+// MARK: - Stats Cards
+
+"feedings_title" = "Feedings";
+"sleep_title" = "Sleep";
+"diapers_title" = "Diapers";
+"today_stats" = "Today";
+"last_stats" = "Last";
+"sessions_stats" = "Sessions";
+"volume_today" = "Volume today";
+"time_today" = "Time today";
+"average_time" = "Average time";
+"since_last_sleep" = "Since last sleep";
+"common_quality" = "Common quality";
+"wet_count" = "Wet";
+"dirty_count" = "Dirty";
+"average_per_day" = "Average per day";
+"sleeping_now" = "Sleeping";
+"stats_accessibility_feeding" = "Feeding statistics";
+"stats_accessibility_sleep" = "Sleep statistics";
+"stats_accessibility_diaper" = "Diaper change statistics";
+"no_data_stats" = "No data";
+"just_now_stats" = "Just now";
+"minutes_short_format" = "%d min";
+
+// MARK: - Children Profiles
+"children_profiles_title" = "Children Profiles";
+"no_child_profiles" = "No child profiles";
+"add_child_profile_message" = "Add your baby's profile";
+"add_child_button" = "Add Child";
+"child_without_name" = "Unnamed";
+
+// MARK: - Analytics Periods
+"period_day" = "Day";
+"period_week" = "Week";
+"period_month" = "Month";
+
+// MARK: - Analytics Cards
+"analytics_feedings" = "Feedings";
+"analytics_sleep" = "Sleep";
+"analytics_diapers" = "Diapers";
+"analytics_events_in_period" = "%d in period";
+"analytics_chart_type" = "Chart type";
+"analytics_count" = "Count";
+"analytics_volume" = "Volume";
+"analytics_date" = "Date";
+"analytics_count_value" = "Count";
+"analytics_volume_ml" = "Volume, ml";
+"analytics_time" = "Time";
+"analytics_feedings_count" = "%d feedings";
+"analytics_average_value" = "Average value";
+"analytics_average_per_day" = "Average per day";
+"analytics_total_volume" = "Total volume";
+"analytics_average_interval" = "Average interval";
+"analytics_distribution_by_type" = "Distribution by type";
+"analytics_duration" = "Duration";
+"analytics_sessions" = "Sessions";
+"analytics_total_time" = "Total time";
+"analytics_average_duration" = "Average duration";
+"analytics_longest_sleep" = "Longest sleep";
+"analytics_shortest_sleep" = "Shortest sleep";
+"analytics_distribution_by_quality" = "Distribution by quality";
+"analytics_changes" = "Changes";
+"analytics_pattern_by_hour" = "Pattern by hour";
+"since_last_change" = "Since last change";
+"total_in_period" = "Total in period";
+"hour_label" = "Hour";
+"pattern_description" = "Most common diaper change times in the last 30 days";
+
+// MARK: - Age Abbreviations
+"age_days_short" = "d";
+"age_months_short" = "mo";
+"age_years_short" = "y";
+
+// MARK: - Reminders
+"reminders_title" = "Reminders";
+"reminder_type_feeding" = "Feeding";
+"reminder_type_sleep" = "Sleep";
+"reminder_type_diaper" = "Diaper";
+"reminder_every" = "Every %@";
+"reminder_last" = "Last: %@";
+"delete_reminder" = "Delete reminder?";
+"delete_reminder_message" = "This action cannot be undone";
+"notifications_disabled" = "Notifications disabled";
+"notifications_required" = "Notification permission is required for reminders to work";
+"open_settings" = "Open Settings";
+"allow_notifications" = "Allow Notifications";
+"no_reminders" = "No reminders";
+"no_reminders_message" = "Create reminders to track feeding, sleep, and diaper change times";
+"add_reminder" = "Add Reminder";
+"active_reminders" = "Active Reminders (%d)";
+"reminder_info_title" = "Information";
+"reminder_info_interval" = "Reminders will arrive based on the set interval";
+"reminder_info_reschedule" = "After adding an event, the reminder will automatically reschedule";
+"reminder_info_edit" = "Tap on a reminder to edit or swipe to delete";
+"select_child_title" = "Select a Child";
+"select_child_message" = "You need to select a child profile to set up reminders";
+"reminder_error_no_child" = "No child selected";
+"reminder_error_permission" = "Notification permission required";
+"reminder_error_create" = "Error creating reminder: %@";
+"reminder_error_request" = "Error requesting permissions: %@";
+"reminder_type_section" = "Reminder Type";
+"reminder_type_label" = "Type";
+"reminder_interval_section" = "Reminder Interval";
+"reminder_interval_footer" = "Reminder will arrive every %@";
+"reminder_hours" = "Hours: %d";
+"reminder_minutes" = "Minutes: %d";
+"reminder_new_title" = "New Reminder";
+"reminder_edit_title" = "Edit Reminder";
+"reminder_add_button" = "Add";
+"hours_short" = "h";
+"minutes_short" = "min";
+"zero_minutes" = "0 minutes";
+
+// MARK: - Notification Texts
+"notification_feeding_title" = "Feeding Time";
+"notification_sleep_title" = "Sleep Time";
+"notification_diaper_title" = "Diaper Change Time";
+"notification_feeding_body" = "Time to feed %@";
+"notification_sleep_body" = "Time to put %@ to sleep";
+"notification_diaper_body" = "Time to check %@'s diaper";
+
+// MARK: - Detail Views
+"detail_information" = "Information";
+"detail_type" = "Type";
+"detail_time" = "Time";
+"detail_breast" = "Breast";
+"detail_duration" = "Duration";
+"detail_volume" = "Volume";
+"detail_notes" = "Notes";
+"detail_delete" = "Delete";
+"detail_feeding_title" = "Feeding";
+"detail_sleep_title" = "Sleep";
+"detail_diaper_title" = "Diaper Change";

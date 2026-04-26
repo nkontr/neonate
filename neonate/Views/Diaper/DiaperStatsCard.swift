@@ -31,7 +31,7 @@ struct DiaperStatsCard: View {
                         )
                 }
 
-                Text("Подгузники")
+                Text(String(localized: "diapers_title"))
                     .font(.headline)
                     .fontWeight(.bold)
 
@@ -40,7 +40,7 @@ struct DiaperStatsCard: View {
 
             HStack(spacing: 20) {
                 StatItem(
-                    title: "Сегодня",
+                    title: String(localized: "today_stats"),
                     value: "\(statistics.todayCount)",
                     icon: "calendar",
                     color: .blue
@@ -50,7 +50,7 @@ struct DiaperStatsCard: View {
                     .frame(height: 40)
 
                 StatItem(
-                    title: "Последняя",
+                    title: String(localized: "last_stats"),
                     value: formatLastChange(),
                     icon: "clock.fill",
                     color: .orange
@@ -59,7 +59,7 @@ struct DiaperStatsCard: View {
 
             VStack(spacing: 8) {
                 HStack {
-                    Label("Мокрых", systemImage: "drop.fill")
+                    Label(String(localized: "wet_count"), systemImage: "drop.fill")
                         .foregroundColor(.blue)
                         .font(.caption)
 
@@ -71,7 +71,7 @@ struct DiaperStatsCard: View {
                 }
 
                 HStack {
-                    Label("Грязных", systemImage: "sparkles")
+                    Label(String(localized: "dirty_count"), systemImage: "sparkles")
                         .foregroundColor(.brown)
                         .font(.caption)
 
@@ -83,7 +83,7 @@ struct DiaperStatsCard: View {
                 }
 
                 HStack {
-                    Label("Среднее в день", systemImage: "chart.bar.fill")
+                    Label(String(localized: "average_per_day"), systemImage: "chart.bar.fill")
                         .foregroundColor(.green)
                         .font(.caption)
 
@@ -98,16 +98,16 @@ struct DiaperStatsCard: View {
         }
         .liquidGlassCard(backgroundColor: .blue, cornerRadius: 20, glowColor: .blue)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Статистика смен подгузников")
+        .accessibilityLabel(String(localized: "stats_accessibility_diaper"))
     }
 
     private func formatLastChange() -> String {
         guard let lastChange = statistics.lastChangeTime else {
-            return "Нет данных"
+            return String(localized: "no_data_stats")
         }
 
         guard let timeSince = statistics.timeSinceLastChange else {
-            return "Только что"
+            return String(localized: "just_now_stats")
         }
 
         let hours = timeSince / 60

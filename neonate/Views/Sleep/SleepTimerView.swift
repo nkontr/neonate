@@ -7,12 +7,27 @@ struct SleepTimerView: View {
     @ObservedObject var viewModel: SleepViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
-    @State private var location: String = "Кроватка"
-    @State private var quality: String = "Хорошее"
+    @State private var location: String = String(localized: "sleep_location_crib")
+    @State private var quality: String = String(localized: "sleep_quality_good")
     @State private var notes: String = ""
 
-    let locationOptions = ["Кроватка", "Коляска", "На руках", "В машине"]
-    let qualityOptions = ["Отличное", "Хорошее", "Нормальное", "Беспокойное"]
+    var locationOptions: [String] {
+        [
+            String(localized: "sleep_location_crib"),
+            String(localized: "sleep_location_stroller"),
+            String(localized: "sleep_location_arms"),
+            String(localized: "sleep_location_car")
+        ]
+    }
+
+    var qualityOptions: [String] {
+        [
+            String(localized: "sleep_quality_excellent"),
+            String(localized: "sleep_quality_good"),
+            String(localized: "sleep_quality_normal"),
+            String(localized: "sleep_quality_restless")
+        ]
+    }
 
     var body: some View {
         NavigationView {
@@ -29,11 +44,11 @@ struct SleepTimerView: View {
                         .monospacedDigit()
 
                     if viewModel.currentSleepSession != nil {
-                        Text("Ребенок спит")
+                        Text(String(localized: "sleep_child_sleeping"))
                             .font(.title3)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Готов к отслеживанию")
+                        Text(String(localized: "sleep_ready_tracking"))
                             .font(.title3)
                             .foregroundColor(.secondary)
                     }
@@ -43,7 +58,7 @@ struct SleepTimerView: View {
 
                 if viewModel.currentSleepSession == nil {
                     VStack(spacing: 16) {
-                        Picker("Место сна", selection: $location) {
+                        Picker(String(localized: "sleep_location"), selection: $location) {
                             ForEach(locationOptions, id: \.self) { option in
                                 Text(option)
                             }
@@ -60,7 +75,7 @@ struct SleepTimerView: View {
                     Button {
                         endSleep()
                     } label: {
-                        Text("Завершить сон")
+                        Text(String(localized: "sleep_finish"))
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -73,7 +88,7 @@ struct SleepTimerView: View {
                     Button {
                         startSleep()
                     } label: {
-                        Text("Начать отслеживание")
+                        Text(String(localized: "sleep_start_tracking"))
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -86,11 +101,11 @@ struct SleepTimerView: View {
 
                 Spacer()
             }
-            .navigationTitle("Таймер сна")
+            .navigationTitle(String(localized: "sleep_timer"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Закрыть") { dismiss() }
+                    Button(String(localized: "close")) { dismiss() }
                 }
             }
         }

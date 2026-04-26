@@ -55,7 +55,7 @@ struct ChildProfileCard: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(child.name ?? "Без имени")
+                    Text(child.name ?? String(localized: "child_without_name"))
                         .font(.headline)
                         .foregroundColor(.primary)
 
@@ -64,7 +64,7 @@ struct ChildProfileCard: View {
                         .foregroundColor(.secondary)
 
                     if let gender = child.gender {
-                        Text(gender)
+                        Text(localizedGender(gender))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -85,5 +85,20 @@ struct ChildProfileCard: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
+    }
+
+    private func localizedGender(_ gender: String) -> String {
+        let normalized = gender.trimmingCharacters(in: .whitespaces)
+
+        // Check both Russian and English variants
+        if normalized == "Мальчик" || normalized == "Boy" {
+            return String(localized: "gender_boy")
+        } else if normalized == "Девочка" || normalized == "Girl" {
+            return String(localized: "gender_girl")
+        } else if normalized == "Другое" || normalized == "Other" {
+            return String(localized: "gender_other")
+        }
+
+        return gender
     }
 }

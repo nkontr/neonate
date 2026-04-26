@@ -23,7 +23,7 @@ struct AddDiaperView: View {
             Form {
 
                 if let selectedChild = childProfileViewModel.selectedChild {
-                    Section("Ребенок") {
+                    Section(String(localized: "form_child")) {
                         HStack {
                             if let photoData = selectedChild.photoData,
                                let uiImage = UIImage(data: photoData) {
@@ -44,13 +44,13 @@ struct AddDiaperView: View {
                     }
                 }
 
-                Section("Тип") {
-                    Picker("Тип подгузника", selection: $selectedType) {
+                Section(String(localized: "form_type")) {
+                    Picker(String(localized: "diaper_type_label"), selection: $selectedType) {
                         ForEach(DiaperType.allCases) { type in
                             HStack {
                                 Image(systemName: type.icon)
                                     .foregroundColor(type.color)
-                                Text(type.rawValue)
+                                Text(type.localizedName)
                             }
                             .tag(type)
                         }
@@ -59,40 +59,40 @@ struct AddDiaperView: View {
                     .labelsHidden()
                 }
 
-                Section("Время") {
-                    DatePicker("Время смены",
+                Section(String(localized: "form_time_label")) {
+                    DatePicker(String(localized: "form_change_time"),
                               selection: $timestamp,
                               displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
                 }
 
                 Section {
-                    TextField("Заметки (опционально)", text: $notes, axis: .vertical)
+                    TextField(String(localized: "placeholder_notes"), text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 } header: {
-                    Text("Заметки")
+                    Text(String(localized: "form_notes"))
                 } footer: {
-                    Text("Добавьте дополнительную информацию о смене подгузника")
+                    Text(String(localized: "diaper_add_info"))
                 }
             }
-            .navigationTitle("Смена подгузника")
+            .navigationTitle(String(localized: "diaper_change_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") {
+                    Button(String(localized: "cancel")) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") {
+                    Button(String(localized: "save")) {
                         saveDiaperChange()
                     }
                     .disabled(childProfileViewModel.selectedChild == nil)
                 }
             }
-            .alert("Ошибка", isPresented: $viewModel.showError) {
-                Button("OK", role: .cancel) {}
+            .alert(String(localized: "error"), isPresented: $viewModel.showError) {
+                Button(String(localized: "ok"), role: .cancel) {}
             } message: {
                 if let error = viewModel.error {
                     Text(error.localizedDescription)
@@ -110,7 +110,7 @@ struct AddDiaperView: View {
             await viewModel.addDiaperChange(
                 childId: childId,
                 timestamp: timestamp,
-                diaperType: selectedType.rawValue,
+                diaperType: selectedType.localizedName,
                 notes: notes.isEmpty ? nil : notes
             )
 
@@ -122,11 +122,22 @@ struct AddDiaperView: View {
 }
 
 enum DiaperType: String, CaseIterable, Identifiable {
-    case wet = "Мокрый"
-    case dirty = "Грязный"
-    case both = "Оба"
+    case wet = "wet"
+    case dirty = "dirty"
+    case both = "both"
 
     var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .wet:
+            return String(localized: "diaper_type_wet")
+        case .dirty:
+            return String(localized: "diaper_type_dirty")
+        case .both:
+            return String(localized: "diaper_type_both")
+        }
+    }
 
     var icon: String {
         switch self {

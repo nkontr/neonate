@@ -55,12 +55,12 @@ struct DiaperAnalyticsCard: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Подгузники")
+                Text(String(localized: "analytics_diapers"))
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
 
-                Text("\(analytics.summary.totalEvents) смен")
+                Text(String(format: NSLocalizedString("analytics_events_in_period", comment: ""), analytics.summary.totalEvents))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -79,19 +79,19 @@ struct DiaperAnalyticsCard: View {
         Chart {
             ForEach(analytics.countByDay) { daily in
                 BarMark(
-                    x: .value("Дата", daily.day, unit: .day),
-                    y: .value("Количество", daily.eventCount)
+                    x: .value(String(localized: "analytics_date"), daily.day, unit: .day),
+                    y: .value(String(localized: "analytics_count_value"), daily.eventCount)
                 )
                 .foregroundStyle(Color.green.gradient)
                 .cornerRadius(4)
                 .accessibilityLabel(formatDate(daily.day))
-                .accessibilityValue("\(daily.eventCount) смен")
+                .accessibilityValue("\(daily.eventCount)")
             }
 
-            RuleMark(y: .value("Среднее", analytics.averageChangesPerDay))
+            RuleMark(y: .value(String(localized: "analytics_average_value"), analytics.averageChangesPerDay))
                 .foregroundStyle(.gray.opacity(0.5))
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                .accessibilityLabel("Среднее значение")
+                .accessibilityLabel(String(localized: "analytics_average_value"))
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { value in
@@ -113,7 +113,7 @@ struct DiaperAnalyticsCard: View {
         VStack(spacing: 8) {
             StatRow(
                 icon: "number",
-                title: "Среднее в день",
+                title: String(localized: "analytics_average_per_day"),
                 value: String(format: "%.1f", analytics.averageChangesPerDay),
                 iconColor: .green
             )
@@ -121,7 +121,7 @@ struct DiaperAnalyticsCard: View {
             if let timeSinceLast = analytics.timeSinceLastChange {
                 StatRow(
                     icon: "clock.fill",
-                    title: "С последней смены",
+                    title: String(localized: "since_last_change"),
                     value: formatInterval(Double(timeSinceLast)),
                     iconColor: .orange
                 )
@@ -129,7 +129,7 @@ struct DiaperAnalyticsCard: View {
 
             StatRow(
                 icon: "calendar",
-                title: "Всего за период",
+                title: String(localized: "total_in_period"),
                 value: "\(analytics.summary.totalEvents)",
                 iconColor: .blue
             )
@@ -138,7 +138,7 @@ struct DiaperAnalyticsCard: View {
 
     private var pieChartView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Распределение по типам")
+            Text(String(localized: "analytics_distribution_by_type"))
                 .font(.subheadline)
                 .fontWeight(.semibold)
 
@@ -178,19 +178,19 @@ struct DiaperAnalyticsCard: View {
 
     private var heatmapView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Паттерн смены по часам")
+            Text(String(localized: "analytics_pattern_by_hour"))
                 .font(.subheadline)
                 .fontWeight(.semibold)
 
             Chart {
                 ForEach(Array(analytics.patternByHour.sorted(by: { $0.key < $1.key })), id: \.key) { hour, count in
                     BarMark(
-                        x: .value("Час", hour),
-                        y: .value("Смены", count)
+                        x: .value(String(localized: "hour_label"), hour),
+                        y: .value(String(localized: "analytics_changes"), count)
                     )
                     .foregroundStyle(Color.teal.gradient)
                     .accessibilityLabel("\(hour):00")
-                    .accessibilityValue("\(count) смен")
+                    .accessibilityValue("\(count)")
                 }
             }
             .frame(height: 150)
@@ -208,7 +208,7 @@ struct DiaperAnalyticsCard: View {
                 AxisMarks(position: .leading)
             }
 
-            Text("Наиболее частое время смены подгузников за последние 30 дней")
+            Text(String(localized: "pattern_description"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -216,7 +216,7 @@ struct DiaperAnalyticsCard: View {
 
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.locale = Locale.current
         formatter.dateFormat = period.dateFormat
         return formatter.string(from: date)
     }

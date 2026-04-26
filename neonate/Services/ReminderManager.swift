@@ -21,11 +21,11 @@ class ReminderManager {
         var displayName: String {
             switch self {
             case .feeding:
-                return "Кормление"
+                return String(localized: "reminder_type_feeding")
             case .sleep:
-                return "Сон"
+                return String(localized: "reminder_type_sleep")
             case .diaper:
-                return "Подгузник"
+                return String(localized: "reminder_type_diaper")
             }
         }
 
@@ -54,22 +54,22 @@ class ReminderManager {
         func notificationTitle(childName: String) -> String {
             switch self {
             case .feeding:
-                return "Время кормления"
+                return String(localized: "notification_feeding_title")
             case .sleep:
-                return "Время сна"
+                return String(localized: "notification_sleep_title")
             case .diaper:
-                return "Время менять подгузник"
+                return String(localized: "notification_diaper_title")
             }
         }
 
         func notificationBody(childName: String) -> String {
             switch self {
             case .feeding:
-                return "Пора покормить \(childName)"
+                return String(format: NSLocalizedString("notification_feeding_body", comment: ""), childName)
             case .sleep:
-                return "Пора уложить \(childName) спать"
+                return String(format: NSLocalizedString("notification_sleep_body", comment: ""), childName)
             case .diaper:
-                return "Пора проверить подгузник у \(childName)"
+                return String(format: NSLocalizedString("notification_diaper_body", comment: ""), childName)
             }
         }
     }

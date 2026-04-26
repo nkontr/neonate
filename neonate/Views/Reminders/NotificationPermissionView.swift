@@ -16,7 +16,7 @@ struct NotificationPermissionView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.orange)
 
-            Text("Разрешите уведомления")
+            Text(String(localized: "notification_permission_title"))
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
@@ -24,17 +24,17 @@ struct NotificationPermissionView: View {
             VStack(spacing: 12) {
                 PermissionReasonRow(
                     icon: "clock.fill",
-                    text: "Своевременные напоминания о кормлении, сне и смене подгузников"
+                    text: String(localized: "notification_permission_reason_timely")
                 )
 
                 PermissionReasonRow(
                     icon: "bell.fill",
-                    text: "Настраиваемые интервалы напоминаний для каждого типа события"
+                    text: String(localized: "notification_permission_reason_customizable")
                 )
 
                 PermissionReasonRow(
                     icon: "checkmark.circle.fill",
-                    text: "Быстрые действия прямо из уведомлений"
+                    text: String(localized: "notification_permission_reason_quick_actions")
                 )
             }
             .padding(.horizontal)
@@ -47,7 +47,7 @@ struct NotificationPermissionView: View {
                     Button {
                         viewModel.openAppSettings()
                     } label: {
-                        Text("Открыть настройки")
+                        Text(String(localized: "notification_permission_open_settings"))
                             .font(.headline)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -56,7 +56,7 @@ struct NotificationPermissionView: View {
                             .cornerRadius(12)
                     }
 
-                    Text("Разрешения отклонены. Перейдите в настройки для их изменения")
+                    Text(String(localized: "notification_permission_denied_message"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -71,7 +71,7 @@ struct NotificationPermissionView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding()
                         } else {
-                            Text("Разрешить уведомления")
+                            Text(String(localized: "notification_permission_allow"))
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -82,7 +82,7 @@ struct NotificationPermissionView: View {
                     }
                     .disabled(isRequesting)
 
-                    Button("Пропустить") {
+                    Button(String(localized: "notification_permission_skip")) {
                         dismiss()
                     }
                     .foregroundColor(.secondary)

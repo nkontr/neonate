@@ -7,21 +7,34 @@ struct AddFeedingView: View {
     @ObservedObject var viewModel: FeedingViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
-    @State private var feedingType: String = "Грудное"
+    @State private var feedingType: String = String(localized: "feeding_type_breast_feeding")
     @State private var timestamp: Date = Date()
     @State private var duration: String = ""
     @State private var volume: String = ""
-    @State private var breast: String = "Левая"
+    @State private var breast: String = String(localized: "feeding_breast_left")
     @State private var notes: String = ""
 
-    let feedingTypes = ["Грудное", "Бутылочка", "Прикорм"]
-    let breastOptions = ["Левая", "Правая", "Обе"]
+    var feedingTypes: [String] {
+        [
+            String(localized: "feeding_type_breast_feeding"),
+            String(localized: "feeding_type_bottle_feeding"),
+            String(localized: "feeding_type_complementary_feeding")
+        ]
+    }
+
+    var breastOptions: [String] {
+        [
+            String(localized: "feeding_breast_left"),
+            String(localized: "feeding_breast_right"),
+            String(localized: "feeding_breast_both")
+        ]
+    }
 
     var body: some View {
         NavigationView {
             Form {
-                Section("Тип кормления") {
-                    Picker("Тип", selection: $feedingType) {
+                Section(String(localized: "feeding_type")) {
+                    Picker(String(localized: "form_type"), selection: $feedingType) {
                         ForEach(feedingTypes, id: \.self) { type in
                             Text(type)
                         }
@@ -29,13 +42,13 @@ struct AddFeedingView: View {
                     .pickerStyle(.segmented)
                 }
 
-                Section("Время") {
-                    DatePicker("Время кормления", selection: $timestamp)
+                Section(String(localized: "form_time_label")) {
+                    DatePicker(String(localized: "form_feeding_time"), selection: $timestamp)
                 }
 
-                if feedingType == "Грудное" {
-                    Section("Грудь") {
-                        Picker("Грудь", selection: $breast) {
+                if feedingType == String(localized: "feeding_type_breast_feeding") {
+                    Section(String(localized: "feeding_breast")) {
+                        Picker(String(localized: "feeding_breast"), selection: $breast) {
                             ForEach(breastOptions, id: \.self) { option in
                                 Text(option)
                             }
@@ -43,30 +56,30 @@ struct AddFeedingView: View {
                         .pickerStyle(.segmented)
                     }
 
-                    Section("Длительность") {
-                        TextField("Минуты", text: $duration)
+                    Section(String(localized: "form_duration")) {
+                        TextField(String(localized: "unit_minutes"), text: $duration)
                             .keyboardType(.numberPad)
                     }
                 } else {
-                    Section("Объем") {
-                        TextField("Миллилитры", text: $volume)
+                    Section(String(localized: "feeding_volume")) {
+                        TextField(String(localized: "placeholder_volume_ml"), text: $volume)
                             .keyboardType(.numberPad)
                     }
                 }
 
-                Section("Заметки") {
+                Section(String(localized: "form_notes")) {
                     TextEditor(text: $notes)
                         .frame(height: 100)
                 }
             }
-            .navigationTitle("Новое кормление")
+            .navigationTitle(String(localized: "feeding_new"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") { dismiss() }
+                    Button(String(localized: "cancel")) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") { saveFeeding() }
+                    Button(String(localized: "save")) { saveFeeding() }
                 }
             }
         }
@@ -82,7 +95,7 @@ struct AddFeedingView: View {
                 feedingType: feedingType,
                 duration: Int32(duration) ?? 0,
                 volume: Double(volume) ?? 0,
-                breast: feedingType == "Грудное" ? breast : nil,
+                breast: feedingType == String(localized: "feeding_type_breast_feeding") ? breast : nil,
                 notes: notes.isEmpty ? nil : notes
             )
             dismiss()

@@ -2,43 +2,77 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- Описание для пользователя при запросе доступа к уведомлениям -->
-    <key>NSUserNotificationsUsageDescription</key>
-    <string>Приложению нужны уведомления для напоминаний о кормлении и других событиях по уходу за ребенком</string>
+    <!-- Bundle Identifier -->
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 
-    <!-- Описание для использования Face ID -->
-    <key>NSFaceIDUsageDescription</key>
-    <string>Используйте Face ID для быстрого и безопасного входа в приложение</string>
+    <!-- Bundle Name -->
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
 
-    <!-- Описание для использования камеры (для фото ребенка) -->
+    <!-- Display Name -->
+    <key>CFBundleDisplayName</key>
+    <string>Baby Care Tracker</string>
+
+    <!-- Bundle Version -->
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+
+    <!-- Short Version String -->
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+
+    <!-- Bundle Executable -->
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <!-- Bundle Package Type -->
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <!-- Supported Localizations -->
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>ru</string>
+    </array>
+
+    <!-- Development Region (fallback language) -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+
+    <!-- Localized strings are in InfoPlist.strings files in en.lproj and ru.lproj -->
+    <!-- These usage description keys will use the localized strings automatically -->
     <key>NSCameraUsageDescription</key>
-    <string>Приложению нужен доступ к камере для добавления фото ребенка</string>
+    <string>$(PRODUCT_NAME) needs camera access</string>
 
-    <!-- Описание для использования фотобиблиотеки -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Приложению нужен доступ к фотобиблиотеке для выбора фото ребенка</string>
+    <string>$(PRODUCT_NAME) needs photo library access</string>
 
-    <!-- Описание для сохранения фото -->
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Приложению нужен доступ для сохранения фото ребенка</string>
+    <string>$(PRODUCT_NAME) needs to save photos</string>
 
-    <!-- Поддержка Siri -->
+    <key>NSFaceIDUsageDescription</key>
+    <string>$(PRODUCT_NAME) uses Face ID for authentication</string>
+
+    <key>NSUserNotificationsUsageDescription</key>
+    <string>$(PRODUCT_NAME) sends notifications</string>
+
     <key>NSSiriUsageDescription</key>
-    <string>Siri используется для быстрого добавления событий по уходу за ребенком голосовыми командами</string>
+    <string>$(PRODUCT_NAME) uses Siri</string>
 
-    <!-- Background Modes уже настраиваются в Xcode Capabilities -->
-    <!-- Но для справки, вот что нужно включить: -->
-    <!-- - Remote notifications -->
-    <!-- - Background fetch (опционально) -->
-
-    <!-- App Transport Security (если нужны HTTP запросы) -->
-    <key>NSAppTransportSecurity</key>
+    <!-- UI Configuration -->
+    <key>UIApplicationSceneManifest</key>
     <dict>
-        <key>NSAllowsArbitraryLoads</key>
+        <key>UIApplicationSupportsMultipleScenes</key>
         <false/>
+        <key>UISceneConfigurations</key>
+        <dict/>
     </dict>
 
-    <!-- Supported Interface Orientations -->
+    <key>UILaunchScreen</key>
+    <dict/>
+
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
@@ -46,12 +80,19 @@
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
 
-    <!-- Display Name -->
-    <key>CFBundleDisplayName</key>
-    <string>Baby Care Tracker</string>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
 
-    <!-- Minimum iOS Version -->
-    <key>MinimumOSVersion</key>
-    <string>17.0</string>
+    <!-- App Transport Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+    </dict>
 </dict>
 </plist>

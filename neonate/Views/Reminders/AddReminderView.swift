@@ -14,8 +14,8 @@ struct AddReminderView: View {
         NavigationView {
             Form {
 
-                Section("Тип напоминания") {
-                    Picker("Тип", selection: $selectedType) {
+                Section(String(localized: "reminder_type_section")) {
+                    Picker(String(localized: "reminder_type_label"), selection: $selectedType) {
                         ForEach(ReminderManager.ReminderType.allCases, id: \.self) { type in
                             HStack {
                                 Image(systemName: type.icon)
@@ -28,12 +28,12 @@ struct AddReminderView: View {
                 }
 
                 Section {
-                    Stepper("Часы: \(intervalHours)", value: $intervalHours, in: 0...24)
-                    Stepper("Минуты: \(intervalMinutes)", value: $intervalMinutes, in: 0...55, step: 5)
+                    Stepper(String(format: NSLocalizedString("reminder_hours", comment: ""), intervalHours), value: $intervalHours, in: 0...24)
+                    Stepper(String(format: NSLocalizedString("reminder_minutes", comment: ""), intervalMinutes), value: $intervalMinutes, in: 0...55, step: 5)
                 } header: {
-                    Text("Интервал напоминания")
+                    Text(String(localized: "reminder_interval_section"))
                 } footer: {
-                    Text("Напоминание будет приходить каждые \(totalIntervalText)")
+                    Text(String(format: NSLocalizedString("reminder_interval_footer", comment: ""), totalIntervalText))
                 }
 
                 if viewModel.notificationPermissionStatus != .authorized {
@@ -43,10 +43,10 @@ struct AddReminderView: View {
                                 .foregroundColor(.orange)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Уведомления отключены")
+                                Text(String(localized: "notifications_disabled"))
                                     .font(.headline)
 
-                                Text("Для работы напоминаний необходимо разрешение на уведомления")
+                                Text(String(localized: "notifications_required"))
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -54,17 +54,17 @@ struct AddReminderView: View {
                     }
                 }
             }
-            .navigationTitle("Новое напоминание")
+            .navigationTitle(String(localized: "reminder_new_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") {
+                    Button(String(localized: "cancel")) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Добавить") {
+                    Button(String(localized: "reminder_add_button")) {
                         saveReminder()
                     }
                     .disabled(!isValid || isSaving)
@@ -80,17 +80,17 @@ struct AddReminderView: View {
 
     private var totalIntervalText: String {
         if totalIntervalMinutes == 0 {
-            return "0 минут"
+            return String(localized: "zero_minutes")
         }
 
         var components: [String] = []
 
         if intervalHours > 0 {
-            components.append("\(intervalHours) ч")
+            components.append("\(intervalHours) \(String(localized: "hours_short"))")
         }
 
         if intervalMinutes > 0 {
-            components.append("\(intervalMinutes) мин")
+            components.append("\(intervalMinutes) \(String(localized: "minutes_short"))")
         }
 
         return components.joined(separator: " ")

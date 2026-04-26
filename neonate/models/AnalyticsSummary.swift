@@ -28,10 +28,21 @@ enum TrendDirection: String {
     }
 }
 
-enum AnalyticsPeriod: String, CaseIterable {
-    case day = "День"
-    case week = "Неделя"
-    case month = "Месяц"
+enum AnalyticsPeriod: CaseIterable {
+    case day
+    case week
+    case month
+
+    var localizedName: String {
+        switch self {
+        case .day:
+            return String(localized: "period_day")
+        case .week:
+            return String(localized: "period_week")
+        case .month:
+            return String(localized: "period_month")
+        }
+    }
 
     var days: Int {
         switch self {

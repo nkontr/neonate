@@ -65,7 +65,7 @@ struct FloatingActionButton: View {
                     )
             }
         }
-        .accessibilityLabel("Добавить")
+        .accessibilityLabel(String(localized: "add"))
     }
 }
 

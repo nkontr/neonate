@@ -54,12 +54,12 @@ struct FeedingAnalyticsCard: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Кормления")
+                Text(String(localized: "analytics_feedings"))
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
 
-                Text("\(analytics.summary.totalEvents) за период")
+                Text(String(format: NSLocalizedString("analytics_events_in_period", comment: ""), analytics.summary.totalEvents))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -75,9 +75,9 @@ struct FeedingAnalyticsCard: View {
     }
 
     private var chartTypePicker: some View {
-        Picker("Тип графика", selection: $selectedChart) {
-            Text("Количество").tag(FeedingChartType.count)
-            Text("Объем").tag(FeedingChartType.volume)
+        Picker(String(localized: "analytics_chart_type"), selection: $selectedChart) {
+            Text(String(localized: "analytics_count")).tag(FeedingChartType.count)
+            Text(String(localized: "analytics_volume")).tag(FeedingChartType.volume)
         }
         .pickerStyle(.segmented)
     }
@@ -96,19 +96,19 @@ struct FeedingAnalyticsCard: View {
         Chart {
             ForEach(analytics.countByDay) { daily in
                 BarMark(
-                    x: .value("Дата", daily.day, unit: .day),
-                    y: .value("Количество", daily.eventCount)
+                    x: .value(String(localized: "analytics_date"), daily.day, unit: .day),
+                    y: .value(String(localized: "analytics_count_value"), daily.eventCount)
                 )
                 .foregroundStyle(Color.blue.gradient)
                 .cornerRadius(4)
                 .accessibilityLabel(formatDate(daily.day))
-                .accessibilityValue("\(daily.eventCount) кормлений")
+                .accessibilityValue(String(format: NSLocalizedString("analytics_feedings_count", comment: ""), daily.eventCount))
             }
 
-            RuleMark(y: .value("Среднее", analytics.summary.averagePerDay))
+            RuleMark(y: .value(String(localized: "analytics_average_value"), analytics.summary.averagePerDay))
                 .foregroundStyle(.gray.opacity(0.5))
                 .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
-                .accessibilityLabel("Среднее значение")
+                .accessibilityLabel(String(localized: "analytics_average_value"))
         }
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { value in
@@ -130,15 +130,15 @@ struct FeedingAnalyticsCard: View {
         Chart {
             ForEach(analytics.volumeOverTime) { point in
                 LineMark(
-                    x: .value("Время", point.date),
-                    y: .value("Объем, мл", point.value)
+                    x: .value(String(localized: "analytics_time"), point.date),
+                    y: .value(String(localized: "analytics_volume_ml"), point.value)
                 )
                 .foregroundStyle(Color.cyan.gradient)
                 .interpolationMethod(.catmullRom)
 
                 PointMark(
-                    x: .value("Время", point.date),
-                    y: .value("Объем, мл", point.value)
+                    x: .value(String(localized: "analytics_time"), point.date),
+                    y: .value(String(localized: "analytics_volume_ml"), point.value)
                 )
                 .foregroundStyle(Color.cyan)
                 .symbolSize(30)
@@ -158,7 +158,7 @@ struct FeedingAnalyticsCard: View {
             AxisMarks(position: .leading) { value in
                 AxisValueLabel {
                     if let volume = value.as(Double.self) {
-                        Text("\(Int(volume)) мл")
+                        Text("\(Int(volume)) \(String(localized: "unit_ml"))")
                             .font(.caption2)
                     }
                 }
@@ -171,7 +171,7 @@ struct FeedingAnalyticsCard: View {
         VStack(spacing: 8) {
             StatRow(
                 icon: "number",
-                title: "Среднее в день",
+                title: String(localized: "analytics_average_per_day"),
                 value: String(format: "%.1f", analytics.summary.averagePerDay),
                 iconColor: .blue
             )
@@ -179,8 +179,8 @@ struct FeedingAnalyticsCard: View {
             if analytics.totalVolume > 0 {
                 StatRow(
                     icon: "drop.fill",
-                    title: "Общий объем",
-                    value: "\(Int(analytics.totalVolume)) мл",
+                    title: String(localized: "analytics_total_volume"),
+                    value: "\(Int(analytics.totalVolume)) \(String(localized: "unit_ml"))",
                     iconColor: .cyan
                 )
             }
@@ -188,7 +188,7 @@ struct FeedingAnalyticsCard: View {
             if analytics.averageInterval > 0 {
                 StatRow(
                     icon: "clock.fill",
-                    title: "Средний интервал",
+                    title: String(localized: "analytics_average_interval"),
                     value: formatInterval(analytics.averageInterval),
                     iconColor: .orange
                 )
@@ -198,7 +198,7 @@ struct FeedingAnalyticsCard: View {
 
     private var pieChartView: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Распределение по типам")
+            Text(String(localized: "analytics_distribution_by_type"))
                 .font(.subheadline)
                 .fontWeight(.semibold)
 
@@ -238,7 +238,7 @@ struct FeedingAnalyticsCard: View {
 
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
+        formatter.locale = Locale.current
         formatter.dateFormat = period.dateFormat
         return formatter.string(from: date)
     }

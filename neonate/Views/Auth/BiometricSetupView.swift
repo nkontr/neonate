@@ -31,8 +31,8 @@ struct BiometricSetupView: View {
             )
             .ignoresSafeArea()
         )
-        .alert("Успех", isPresented: $authViewModel.showSuccess) {
-            Button("OK") {
+        .alert(String(localized: "success"), isPresented: $authViewModel.showSuccess) {
+            Button(String(localized: "ok")) {
                 authViewModel.clearSuccess()
                 isSetupComplete = true
                 dismiss()
@@ -42,8 +42,8 @@ struct BiometricSetupView: View {
                 Text(successMessage)
             }
         }
-        .alert("Ошибка", isPresented: $authViewModel.showError) {
-            Button("OK") {
+        .alert(String(localized: "error"), isPresented: $authViewModel.showError) {
+            Button(String(localized: "ok")) {
                 authViewModel.clearError()
             }
         } message: {
@@ -67,12 +67,12 @@ struct BiometricSetupView: View {
 
     private var headerView: some View {
         VStack(spacing: 12) {
-            Text("Настроить \(authViewModel.biometricDisplayName)")
+            Text(String(format: NSLocalizedString("biometric_setup", comment: ""), authViewModel.biometricDisplayName))
                 .font(.title)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
 
-            Text("Быстрый и безопасный вход в приложение")
+            Text(String(localized: "biometric_fast_secure"))
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -83,20 +83,20 @@ struct BiometricSetupView: View {
         VStack(alignment: .leading, spacing: 20) {
             BenefitRow(
                 icon: "lock.shield.fill",
-                title: "Безопасность",
-                description: "Ваши данные надежно защищены"
+                title: String(localized: "biometric_security_title"),
+                description: String(localized: "biometric_security_desc")
             )
 
             BenefitRow(
                 icon: "bolt.fill",
-                title: "Быстрый вход",
-                description: "Входите в приложение мгновенно"
+                title: String(localized: "biometric_fast_login_title"),
+                description: String(localized: "biometric_fast_login_desc")
             )
 
             BenefitRow(
                 icon: "hand.raised.fill",
-                title: "Удобство",
-                description: "Не нужно запоминать пароль"
+                title: String(localized: "biometric_convenience_title"),
+                description: String(localized: "biometric_convenience_desc")
             )
         }
     }
@@ -111,7 +111,7 @@ struct BiometricSetupView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                 } else {
-                    Text("Включить \(authViewModel.biometricDisplayName)")
+                    Text(String(format: NSLocalizedString("biometric_enable_button", comment: ""), authViewModel.biometricDisplayName))
                         .font(.headline)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -123,7 +123,7 @@ struct BiometricSetupView: View {
             .disabled(authViewModel.isLoading)
 
             Button(action: { dismiss() }) {
-                Text("Настроить позже")
+                Text(String(localized: "biometric_setup_later"))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

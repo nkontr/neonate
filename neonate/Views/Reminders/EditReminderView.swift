@@ -15,7 +15,7 @@ struct EditReminderView: View {
         NavigationView {
             Form {
 
-                Section("Тип напоминания") {
+                Section(String(localized: "reminder_type_label")) {
                     if let type = viewModel.getReminderType(reminder) {
                         HStack {
                             Image(systemName: type.icon)
@@ -26,7 +26,7 @@ struct EditReminderView: View {
 
                             Spacer()
 
-                            Text("Нельзя изменить")
+                            Text(String(localized: "cannot_change"))
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -34,18 +34,18 @@ struct EditReminderView: View {
                 }
 
                 Section {
-                    Stepper("Часы: \(intervalHours)", value: $intervalHours, in: 0...24)
-                    Stepper("Минуты: \(intervalMinutes)", value: $intervalMinutes, in: 0...55, step: 5)
+                    Stepper(String(format: NSLocalizedString("reminder_hours", comment: ""), intervalHours), value: $intervalHours, in: 0...24)
+                    Stepper(String(format: NSLocalizedString("reminder_minutes", comment: ""), intervalMinutes), value: $intervalMinutes, in: 0...55, step: 5)
                 } header: {
-                    Text("Интервал напоминания")
+                    Text(String(localized: "reminder_interval_section"))
                 } footer: {
-                    Text("Напоминание будет приходить каждые \(totalIntervalText)")
+                    Text(String(format: NSLocalizedString("reminder_interval_footer", comment: ""), totalIntervalText))
                 }
 
                 if let lastTriggered = reminder.lastTriggered {
-                    Section("Информация") {
+                    Section(String(localized: "information_label")) {
                         HStack {
-                            Text("Последнее срабатывание")
+                            Text(String(localized: "last_triggered_label"))
                             Spacer()
                             Text(formatDate(lastTriggered))
                                 .foregroundColor(.secondary)
@@ -53,17 +53,17 @@ struct EditReminderView: View {
                     }
                 }
             }
-            .navigationTitle("Редактировать")
+            .navigationTitle(String(localized: "reminder_edit_title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Отмена") {
+                    Button(String(localized: "cancel")) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") {
+                    Button(String(localized: "save")) {
                         saveChanges()
                     }
                     .disabled(!isValid || isSaving)
@@ -82,17 +82,17 @@ struct EditReminderView: View {
 
     private var totalIntervalText: String {
         if totalIntervalMinutes == 0 {
-            return "0 минут"
+            return String(localized: "zero_minutes")
         }
 
         var components: [String] = []
 
         if intervalHours > 0 {
-            components.append("\(intervalHours) ч")
+            components.append("\(intervalHours) \(String(localized: "hours_short"))")
         }
 
         if intervalMinutes > 0 {
-            components.append("\(intervalMinutes) мин")
+            components.append("\(intervalMinutes) \(String(localized: "minutes_short"))")
         }
 
         return components.joined(separator: " ")
