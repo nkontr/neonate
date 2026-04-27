@@ -186,13 +186,16 @@ struct DashboardView: View {
 
     private func statsCardsSection(for child: ChildProfile) -> some View {
         VStack(spacing: 12) {
+            if let feedingStats = feedingViewModel.cachedStatistics {
+                FeedingStatsCard(statistics: feedingStats)
+            }
 
-            if let childId = child.id {
-                FeedingStatsCard(statistics: feedingViewModel.getStatistics(for: childId))
+            if let sleepStats = sleepViewModel.cachedStatistics {
+                SleepStatsCard(statistics: sleepStats)
+            }
 
-                SleepStatsCard(statistics: sleepViewModel.getStatistics(for: childId))
-
-                DiaperStatsCard(statistics: diaperViewModel.getStatistics(for: childId))
+            if let diaperStats = diaperViewModel.cachedStatistics {
+                DiaperStatsCard(statistics: diaperStats)
             }
         }
     }

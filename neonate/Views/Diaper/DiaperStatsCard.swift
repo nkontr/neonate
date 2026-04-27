@@ -114,9 +114,9 @@ struct DiaperStatsCard: View {
         let minutes = timeSince % 60
 
         if hours > 0 {
-            return "\(hours)ч \(minutes)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, minutes)
         } else {
-            return "\(minutes)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), minutes)
         }
     }
 }

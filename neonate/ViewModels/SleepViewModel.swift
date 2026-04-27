@@ -18,6 +18,8 @@ class SleepViewModel: ObservableObject {
 
     @Published var currentSleepDuration: TimeInterval = 0
 
+    @Published var cachedStatistics: SleepStatistics?
+
     private var timer: Timer?
 
     private let repository: SleepEventRepository
@@ -32,6 +34,7 @@ class SleepViewModel: ObservableObject {
         isLoading = true
         sleepEvents = repository.fetchSleepEvents(for: childId, ascending: false)
         loadCurrentSleepSession(for: childId)
+        cachedStatistics = getStatistics(for: childId)
         isLoading = false
     }
 

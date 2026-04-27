@@ -14,6 +14,8 @@ class DiaperViewModel: ObservableObject {
 
     @Published var showError: Bool = false
 
+    @Published var cachedStatistics: DiaperStatistics?
+
     private let repository: DiaperEventRepository
     private let reminderManager = ReminderManager.shared
     private var cancellables = Set<AnyCancellable>()
@@ -25,6 +27,7 @@ class DiaperViewModel: ObservableObject {
     func loadDiaperEvents(for childId: UUID) {
         isLoading = true
         diaperEvents = repository.fetchDiaperEvents(for: childId, ascending: false)
+        cachedStatistics = getStatistics(for: childId)
         isLoading = false
     }
 

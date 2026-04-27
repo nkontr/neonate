@@ -18,6 +18,8 @@ class FeedingViewModel: ObservableObject {
     @Published var todayVolume: Double = 0.0
     @Published var lastFeedingTime: Date?
 
+    @Published var cachedStatistics: FeedingStatistics?
+
     private let repository: FeedingEventRepository
     private let reminderManager = ReminderManager.shared
     private var cancellables = Set<AnyCancellable>()
@@ -30,6 +32,7 @@ class FeedingViewModel: ObservableObject {
         isLoading = true
         feedingEvents = repository.fetchFeedingEvents(for: childId, ascending: false)
         loadStatistics(for: childId)
+        cachedStatistics = getStatistics(for: childId)
         isLoading = false
     }
 

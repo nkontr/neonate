@@ -77,7 +77,7 @@ struct SleepStatsCard: View {
 
                     Spacer()
 
-                    Text(String(format: NSLocalizedString("minutes_short_format", comment: ""), statistics.averageDuration))
+                    Text(formatDuration(Int(statistics.averageDuration)))
                         .font(.caption)
                         .fontWeight(.semibold)
                 }
@@ -122,9 +122,9 @@ struct SleepStatsCard: View {
         let mins = minutes % 60
 
         if hours > 0 {
-            return "\(hours)ч \(mins)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, mins)
         } else {
-            return "\(mins)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), mins)
         }
     }
 
@@ -137,9 +137,9 @@ struct SleepStatsCard: View {
         let minutes = timeSince % 60
 
         if hours > 0 {
-            return "\(hours)ч \(minutes)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, minutes)
         } else {
-            return "\(minutes)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), minutes)
         }
     }
 
