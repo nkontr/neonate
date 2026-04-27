@@ -48,46 +48,36 @@ struct TrackingView: View {
             mainScrollView
                 .navigationTitle(String(localized: "tracking_title"))
                 .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showingAddFeeding) {
-                AddFeedingView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .sheet(isPresented: $showingAddSleep) {
-                AddSleepView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .sheet(isPresented: $showingAddDiaper) {
-                AddDiaperView()
-                    .environmentObject(childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .fullScreenCover(isPresented: $showingFeedingList) {
-                FeedingListView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .fullScreenCover(isPresented: $showingSleepList) {
-                SleepListView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .fullScreenCover(isPresented: $showingDiaperList) {
-                DiaperListView()
-                    .environmentObject(childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .fullScreenCover(isPresented: $showingSleepTimer) {
-                SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
-                    .environment(\.managedObjectContext, viewContext)
-            }
-            .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
-                if let childId = newChild?.id {
-                    loadDataForChild(childId)
+                .sheet(isPresented: $showingAddFeeding, onDismiss: reloadIfNeeded) {
+                    AddFeedingView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
                 }
-            }
-            .onAppear {
-                if let childId = childProfileViewModel.selectedChild?.id {
-                    loadDataForChild(childId)
+                .sheet(isPresented: $showingAddSleep, onDismiss: reloadIfNeeded) {
+                    AddSleepView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
                 }
-            }
+                .sheet(isPresented: $showingAddDiaper, onDismiss: reloadIfNeeded) {
+                    AddDiaperView()
+                        .environmentObject(childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
+                .fullScreenCover(isPresented: $showingFeedingList, onDismiss: reloadIfNeeded) {
+                    FeedingListView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
+                .fullScreenCover(isPresented: $showingSleepList, onDismiss: reloadIfNeeded) {
+                    SleepListView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
+                .fullScreenCover(isPresented: $showingDiaperList, onDismiss: reloadIfNeeded) {
+                    DiaperListView()
+                        .environmentObject(childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
+                .fullScreenCover(isPresented: $showingSleepTimer, onDismiss: reloadIfNeeded) {
+                    SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
+                        .environment(\.managedObjectContext, viewContext)
+                }
         }
     }
 
@@ -199,7 +189,10 @@ struct TrackingView: View {
             if let childId = child.id {
                 VStack(spacing: 12) {
 
-                    if let lastFeeding = feedingViewModel.getFeedingsToday(for: childId).first {
+                    if let lastFeeding = feedingViewModel.feedingEvents.first(where: {
+                        guard let ts = $0.timestamp else { return false }
+                        return Calendar.current.isDateInToday(ts)
+                    }) {
                         LastEventCard(
                             title: String(localized: "event_feeding"),
                             icon: "fork.knife.circle.fill",
@@ -210,8 +203,8 @@ struct TrackingView: View {
                         )
                     }
 
-                    let sleepStats = sleepViewModel.getStatistics(for: childId)
-                    if sleepStats.todayCount > 0 {
+                    // Используем cachedStatistics вместо getStatistics
+                    if let sleepStats = sleepViewModel.cachedStatistics, sleepStats.todayCount > 0 {
                         LastEventCard(
                             title: String(localized: "event_sleep"),
                             icon: "moon.zzz.fill",
@@ -222,7 +215,10 @@ struct TrackingView: View {
                         )
                     }
 
-                    if let lastDiaper = diaperViewModel.getEventsToday(for: childId).first {
+                    if let lastDiaper = diaperViewModel.diaperEvents.first(where: {
+                        guard let ts = $0.timestamp else { return false }
+                        return Calendar.current.isDateInToday(ts)
+                    }) {
                         LastEventCard(
                             title: String(localized: "event_diaper"),
                             icon: "drop.fill",
@@ -256,7 +252,8 @@ struct TrackingView: View {
         .padding()
     }
 
-    private func loadDataForChild(_ childId: UUID) {
+    private func reloadIfNeeded() {
+        guard let childId = childProfileViewModel.selectedChild?.id else { return }
         feedingViewModel.loadFeedingEvents(for: childId)
         sleepViewModel.loadSleepEvents(for: childId)
         diaperViewModel.loadDiaperEvents(for: childId)
@@ -264,9 +261,6 @@ struct TrackingView: View {
 
     private func formatTime(_ date: Date?) -> String {
         guard let date = date else { return "" }
-
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
 
         let interval = Date().timeIntervalSince(date)
         let minutes = Int(interval / 60)
@@ -291,44 +285,30 @@ struct TrackingView: View {
     }
 
     private func localizedFeedingType(_ type: String) -> String {
-        // Проверяем русские варианты
         if type == "Грудное" || type == "Грудное вскармливание" {
             return String(localized: "feeding_type_breast_feeding")
         } else if type == "Бутылочка" || type == "Кормление из бутылочки" {
             return String(localized: "feeding_type_bottle_feeding")
         } else if type == "Прикорм" {
             return String(localized: "feeding_type_complementary_feeding")
-        }
-        // Проверяем английские варианты
-        else if type == "Breast" || type == "Breastfeeding" {
+        } else if type == "Breast" || type == "Breastfeeding" {
             return String(localized: "feeding_type_breast_feeding")
         } else if type == "Bottle" || type == "Bottle feeding" {
             return String(localized: "feeding_type_bottle_feeding")
         } else if type == "Solid" || type == "Complementary feeding" {
             return String(localized: "feeding_type_complementary_feeding")
         }
-        // Если не нашли совпадение, возвращаем как есть
         return type
     }
 
     private func localizedDiaperType(_ type: String) -> String {
-        // Проверяем русские варианты
-        if type == "Мокрый" {
+        if type == "Мокрый" || type == "Wet" {
             return String(localized: "diaper_type_wet")
-        } else if type == "Грязный" {
+        } else if type == "Грязный" || type == "Dirty" {
             return String(localized: "diaper_type_dirty")
-        } else if type == "Оба" {
+        } else if type == "Оба" || type == "Both" {
             return String(localized: "diaper_type_both")
         }
-        // Проверяем английские варианты
-        else if type == "Wet" {
-            return String(localized: "diaper_type_wet")
-        } else if type == "Dirty" {
-            return String(localized: "diaper_type_dirty")
-        } else if type == "Both" {
-            return String(localized: "diaper_type_both")
-        }
-        // Если не нашли совпадение, возвращаем как есть
         return type
     }
 }

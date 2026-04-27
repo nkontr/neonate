@@ -5,6 +5,7 @@ struct DiaperStatsCard: View {
     let statistics: DiaperStatistics
 
     var body: some View {
+        let _ = Self._printChanges()
         VStack(alignment: .leading, spacing: 16) {
 
             HStack {

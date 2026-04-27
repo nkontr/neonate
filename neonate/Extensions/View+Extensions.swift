@@ -130,44 +130,32 @@ struct LiquidGlassCardModifier: ViewModifier {
             .padding()
             .background(
                 ZStack {
-                    // Main glass background
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(backgroundColor.opacity(0.15))
-                        .background(
-                            .ultraThinMaterial,
-                            in: RoundedRectangle(cornerRadius: cornerRadius)
-                        )
-
-                    // Gradient overlay
+                        .fill(backgroundColor.opacity(0.08))
+                    
                     RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Color.white.opacity(0.2),
-                                    Color.white.opacity(0.05)
+                                    Color.white.opacity(0.12),
+                                    Color.white.opacity(0.04)
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
                         )
-
-                    // Border
+                    
                     RoundedRectangle(cornerRadius: cornerRadius)
                         .strokeBorder(
-                            LinearGradient(
-                                colors: [
-                                    Color.white.opacity(0.5),
-                                    Color.white.opacity(0.1)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 1.5
+                            backgroundColor.opacity(0.2),
+                            lineWidth: 1
                         )
                 }
             )
-            .shadow(color: (glowColor ?? backgroundColor).opacity(0.15), radius: 15, x: 0, y: 8)
-            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+            .shadow(
+                color: (glowColor ?? backgroundColor).opacity(0.12),
+                radius: 8, x: 0, y: 4
+            )
     }
 }
 

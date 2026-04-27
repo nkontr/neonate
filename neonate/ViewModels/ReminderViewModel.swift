@@ -9,7 +9,7 @@ class ReminderViewModel: ObservableObject {
 
     @Published var reminders: [ReminderSchedule] = []
     @Published var notificationPermissionStatus: UNAuthorizationStatus = .notDetermined
-    @Published var isLoading: Bool = false
+    private var isLoading: Bool = false
     @Published var errorMessage: String?
 
     private let reminderManager = ReminderManager.shared

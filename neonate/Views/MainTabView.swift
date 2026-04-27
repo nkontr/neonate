@@ -13,7 +13,8 @@ struct MainTabView: View {
 
     @State private var selectedTab: Tab = .dashboard
 
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init() {
+        let context = PersistenceController.shared.container.viewContext
         _childProfileViewModel = StateObject(wrappedValue: ChildProfileViewModel(context: context))
         _feedingViewModel = StateObject(wrappedValue: FeedingViewModel(context: context))
         _sleepViewModel = StateObject(wrappedValue: SleepViewModel(context: context))
@@ -21,6 +22,7 @@ struct MainTabView: View {
     }
 
     var body: some View {
+        let _ = Self._printChanges()
         TabView(selection: $selectedTab) {
 
             DashboardView()
@@ -67,6 +69,22 @@ struct MainTabView: View {
                 .accessibilityLabel(String(localized: "tab_settings"))
         }
         .accentColor(.blue)
+        .onAppear {
+            if let childId = childProfileViewModel.selectedChild?.id {
+                loadDataForChild(childId)
+            }
+        }
+        .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
+            if let childId = newChild?.id {
+                loadDataForChild(childId)
+            }
+        }
+    }
+
+    private func loadDataForChild(_ childId: UUID) {
+        feedingViewModel.loadFeedingEvents(for: childId)
+        sleepViewModel.loadSleepEvents(for: childId)
+        diaperViewModel.loadDiaperEvents(for: childId)
     }
 }
 
@@ -80,7 +98,7 @@ enum Tab {
 #if DEBUG
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabView(context: PersistenceController.preview.container.viewContext)
+        MainTabView()
             .environmentObject(AuthViewModel.preview)
             .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }

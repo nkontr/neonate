@@ -66,7 +66,7 @@ struct MainAppView: View {
     @State private var hasCheckedBiometricSetup: Bool = false
 
     var body: some View {
-        MainTabView(context: viewContext)
+        MainTabView()
             .environmentObject(authViewModel)
             .onAppear {
                 checkBiometricSetup()

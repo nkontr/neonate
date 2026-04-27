@@ -6,9 +6,13 @@ import Combine
 @MainActor
 class DiaperViewModel: ObservableObject {
 
+    @Published var cachedStatistics: DiaperStatistics? {
+        didSet { print("DiaperVM cachedStatistics changed") }
+    }
+    
     @Published var diaperEvents: [DiaperEvent] = []
 
-    @Published var isLoading: Bool = false
+    var isLoading: Bool = false
 
     @Published var error: Error?
 
@@ -25,6 +29,7 @@ class DiaperViewModel: ObservableObject {
     func loadDiaperEvents(for childId: UUID) {
         isLoading = true
         diaperEvents = repository.fetchDiaperEvents(for: childId, ascending: false)
+        cachedStatistics = getStatistics(for: childId)
         isLoading = false
     }
 

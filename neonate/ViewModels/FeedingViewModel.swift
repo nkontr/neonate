@@ -6,18 +6,24 @@ import Combine
 @MainActor
 class FeedingViewModel: ObservableObject {
 
-    @Published var feedingEvents: [FeedingEvent] = []
+    @Published var cachedStatistics: FeedingStatistics? {
+        didSet { print("FeedingVM cachedStatistics changed, thread: \(Thread.isMainThread)") }
+    }
 
-    @Published var isLoading: Bool = false
+    @Published var feedingEvents: [FeedingEvent] = [] {
+        didSet { print("FeedingVM feedingEvents changed, count: \(feedingEvents.count)") }
+    }
+   
+    private var isLoading: Bool = false
 
     @Published var error: Error?
 
     @Published var showError: Bool = false
 
-    @Published var todayCount: Int = 0
-    @Published var todayVolume: Double = 0.0
-    @Published var lastFeedingTime: Date?
-
+    private var todayCount: Int = 0
+    private var todayVolume: Double = 0.0
+    private var lastFeedingTime: Date?
+    
     private let repository: FeedingEventRepository
     private let reminderManager = ReminderManager.shared
     private var cancellables = Set<AnyCancellable>()
@@ -27,12 +33,11 @@ class FeedingViewModel: ObservableObject {
     }
 
     func loadFeedingEvents(for childId: UUID) {
-        isLoading = true
+        print(Thread.callStackSymbols.prefix(8).joined(separator: "\n"))
         feedingEvents = repository.fetchFeedingEvents(for: childId, ascending: false)
-        loadStatistics(for: childId)
-        isLoading = false
+        cachedStatistics = getStatistics(for: childId)
     }
-
+    
     func addFeeding(
         childId: UUID,
         timestamp: Date = Date(),
@@ -122,17 +127,6 @@ class FeedingViewModel: ObservableObject {
 
     func getFeedingTypeStatistics(for childId: UUID) -> [String: Int] {
         return repository.getFeedingTypeStatistics(for: childId)
-    }
-
-    private func loadStatistics(for childId: UUID) {
-        todayCount = repository.getTodayFeedingCount(for: childId)
-
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? Date()
-        todayVolume = repository.getTotalVolume(for: childId, from: startOfDay, to: endOfDay)
-
-        lastFeedingTime = repository.fetchLastFeedingEvent(for: childId)?.timestamp
     }
 }
 

@@ -6,18 +6,24 @@ import Combine
 @MainActor
 class SleepViewModel: ObservableObject {
 
-    @Published var sleepEvents: [SleepEvent] = []
+    @Published var cachedStatistics: SleepStatistics? {
+        didSet { print("SleepVM cachedStatistics changed") }
+    }
+
+    @Published var sleepEvents: [SleepEvent] = [] {
+        didSet { print("SleepVM sleepEvents changed, count: \(sleepEvents.count)") }
+    }
 
     @Published var currentSleepSession: SleepEvent?
 
-    @Published var isLoading: Bool = false
+    var isLoading: Bool = false
 
     @Published var error: Error?
 
     @Published var showError: Bool = false
 
     @Published var currentSleepDuration: TimeInterval = 0
-
+    
     private var timer: Timer?
 
     private let repository: SleepEventRepository
@@ -32,6 +38,7 @@ class SleepViewModel: ObservableObject {
         isLoading = true
         sleepEvents = repository.fetchSleepEvents(for: childId, ascending: false)
         loadCurrentSleepSession(for: childId)
+        cachedStatistics = getStatistics(for: childId)
         isLoading = false
     }
 

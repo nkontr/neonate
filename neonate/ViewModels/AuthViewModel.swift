@@ -7,23 +7,16 @@ class AuthViewModel: ObservableObject {
 
     @Published var isAuthenticated: Bool = false
 
-    @Published var currentUser: User?
-
     @Published var isLoading: Bool = false
 
-    @Published var errorMessage: String?
-
-    @Published var showError: Bool = false
-
-    @Published var successMessage: String?
-
-    @Published var showSuccess: Bool = false
-
-    @Published var isBiometricAvailable: Bool = false
-
-    @Published var biometricType: BiometricAuthService.BiometricType = .none
-
-    @Published var isBiometricEnabled: Bool = false
+    var currentUser: User?
+    var errorMessage: String?
+    var showError: Bool = false
+    var successMessage: String?
+    var showSuccess: Bool = false
+    var isBiometricAvailable: Bool = false
+    var biometricType: BiometricAuthService.BiometricType = .none
+    var isBiometricEnabled: Bool = false
 
     private let authService = AuthService.shared
     private let biometricService = BiometricAuthService.shared

@@ -16,6 +16,7 @@ struct DashboardView: View {
     @State private var showingChildSelector = false
 
     var body: some View {
+        let _ = Self._printChanges()
         mainView
     }
 
@@ -29,15 +30,15 @@ struct DashboardView: View {
                         toolbarButton
                     }
                 }
-                .sheet(isPresented: $showingAddFeeding) {
+                .sheet(isPresented: $showingAddFeeding, onDismiss: reloadIfNeeded) {
                     AddFeedingView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .sheet(isPresented: $showingAddSleep) {
+                .sheet(isPresented: $showingAddSleep, onDismiss: reloadIfNeeded) {
                     AddSleepView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .sheet(isPresented: $showingAddDiaper) {
+                .sheet(isPresented: $showingAddDiaper, onDismiss: reloadIfNeeded) {
                     AddDiaperView()
                         .environmentObject(childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
@@ -46,19 +47,9 @@ struct DashboardView: View {
                     ChildrenListView(viewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .fullScreenCover(isPresented: $showingSleepTimer) {
+                .fullScreenCover(isPresented: $showingSleepTimer, onDismiss: reloadIfNeeded) {
                     SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
-                }
-                .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
-                    if let childId = newChild?.id {
-                        loadDataForChild(childId)
-                    }
-                }
-                .onAppear {
-                    if let childId = childProfileViewModel.selectedChild?.id {
-                        loadDataForChild(childId)
-                    }
                 }
         }
     }
@@ -75,7 +66,6 @@ struct DashboardView: View {
 
     private var mainContent: some View {
         ZStack {
-            // Subtle gradient background
             LinearGradient(
                 colors: [
                     Color(.systemBackground),
@@ -186,13 +176,17 @@ struct DashboardView: View {
 
     private func statsCardsSection(for child: ChildProfile) -> some View {
         VStack(spacing: 12) {
-
-            if let childId = child.id {
-                FeedingStatsCard(statistics: feedingViewModel.getStatistics(for: childId))
-
-                SleepStatsCard(statistics: sleepViewModel.getStatistics(for: childId))
-
-                DiaperStatsCard(statistics: diaperViewModel.getStatistics(for: childId))
+            if let stats = feedingViewModel.cachedStatistics {
+                FeedingStatsCard(statistics: stats)
+                    .id("feeding")
+            }
+            if let stats = sleepViewModel.cachedStatistics {
+                SleepStatsCard(statistics: stats)
+                    .id("sleep")
+            }
+            if let stats = diaperViewModel.cachedStatistics {
+                DiaperStatsCard(statistics: stats)
+                    .id("diaper")
             }
         }
     }
@@ -325,6 +319,11 @@ struct DashboardView: View {
             message: String(localized: "dashboard_no_child_title"),
             actionLabel: String(localized: "dashboard_add_child_button")
         )
+    }
+
+    private func reloadIfNeeded() {
+        guard let childId = childProfileViewModel.selectedChild?.id else { return }
+        loadDataForChild(childId)
     }
 
     private func loadDataForChild(_ childId: UUID) {
