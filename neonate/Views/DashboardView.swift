@@ -14,9 +14,10 @@ struct DashboardView: View {
     @State private var showingAddDiaper = false
     @State private var showingSleepTimer = false
     @State private var showingChildSelector = false
-
+    
+    @State private var cachedChildImage: UIImage?
+    
     var body: some View {
-        let _ = Self._printChanges()
         mainView
     }
 
@@ -50,6 +51,12 @@ struct DashboardView: View {
                 .fullScreenCover(isPresented: $showingSleepTimer, onDismiss: reloadIfNeeded) {
                     SleepTimerView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
+                }
+                .onAppear {
+                    cachedChildImage = childProfileViewModel.selectedChild?.photoData.flatMap { UIImage(data: $0) }
+                }
+                .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
+                    cachedChildImage = newChild?.photoData.flatMap { UIImage(data: $0) }
                 }
         }
     }
@@ -101,8 +108,7 @@ struct DashboardView: View {
                 } label: {
                     HStack(spacing: 16) {
                         ZStack {
-                            if let photoData = selectedChild.photoData,
-                               let uiImage = UIImage(data: photoData) {
+                            if let uiImage = cachedChildImage {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFill()
@@ -179,14 +185,17 @@ struct DashboardView: View {
             if let stats = feedingViewModel.cachedStatistics {
                 FeedingStatsCard(statistics: stats)
                     .id("feeding")
+                    .drawingGroup()
             }
             if let stats = sleepViewModel.cachedStatistics {
                 SleepStatsCard(statistics: stats)
                     .id("sleep")
+                    .drawingGroup()
             }
             if let stats = diaperViewModel.cachedStatistics {
                 DiaperStatsCard(statistics: stats)
                     .id("diaper")
+                    .drawingGroup()
             }
         }
     }
