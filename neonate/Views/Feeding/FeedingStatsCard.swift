@@ -108,20 +108,20 @@ struct FeedingStatsCard: View {
 
     private func formatLastFeeding() -> String {
         guard let lastFeeding = statistics.lastFeedingTime else {
-            return "Нет данных"
+            return String(localized: "no_data_stats")
         }
 
         guard let timeSince = statistics.timeSinceLastFeeding else {
-            return "Только что"
+            return String(localized: "just_now_stats")
         }
 
         let hours = timeSince / 60
         let minutes = timeSince % 60
 
         if hours > 0 {
-            return "\(hours)ч \(minutes)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, minutes)
         } else {
-            return "\(minutes)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), minutes)
         }
     }
 }

@@ -33,7 +33,6 @@ class FeedingViewModel: ObservableObject {
     }
 
     func loadFeedingEvents(for childId: UUID) {
-        print(Thread.callStackSymbols.prefix(8).joined(separator: "\n"))
         feedingEvents = repository.fetchFeedingEvents(for: childId, ascending: false)
         cachedStatistics = getStatistics(for: childId)
     }
