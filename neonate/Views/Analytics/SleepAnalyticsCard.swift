@@ -108,7 +108,7 @@ struct SleepAnalyticsCard: View {
                 }
             }
         }
-        .animation(.easeInOut, value: analytics.totalTimeOverPeriod.count)
+        .animation(.smooth(duration: 0.6), value: analytics.totalTimeOverPeriod.count)
     }
 
     private var statisticsView: some View {

@@ -29,7 +29,7 @@ class AnalyticsViewModel: ObservableObject {
         self.analyticsService = AnalyticsService(context: context)
 
         $selectedPeriod
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.loadAnalyticsDataDebounced()
             }
@@ -153,11 +153,7 @@ class AnalyticsViewModel: ObservableObject {
 
     private func loadAnalyticsDataDebounced() {
         guard let childId = selectedChildId else { return }
-
-        debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            self?.loadAnalyticsData(for: childId)
-        }
+        loadAnalyticsData(for: childId)
     }
 
     private func calculateVolumeTrend(data: [ChartDataPoint]) -> TrendDirection {

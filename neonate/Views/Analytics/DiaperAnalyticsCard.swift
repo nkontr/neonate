@@ -106,7 +106,7 @@ struct DiaperAnalyticsCard: View {
         .chartYAxis {
             AxisMarks(position: .leading)
         }
-        .animation(.easeInOut, value: analytics.countByDay.count)
+        .animation(.smooth(duration: 0.6), value: analytics.countByDay.count)
     }
 
     private var statisticsView: some View {

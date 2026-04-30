@@ -25,6 +25,7 @@ struct FeedingAnalyticsCard: View {
                 pieChartView
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: selectedChart)
         .liquidGlassCard(backgroundColor: .green, cornerRadius: 20, glowColor: .green)
     }
 
@@ -84,11 +85,15 @@ struct FeedingAnalyticsCard: View {
 
     @ViewBuilder
     private var chartView: some View {
-        switch selectedChart {
-        case .count:
-            countBarChart
-        case .volume:
-            volumeLineChart
+        ZStack {
+            if selectedChart == .count {
+                countBarChart
+                    .transition(.opacity)
+            }
+            if selectedChart == .volume {
+                volumeLineChart
+                    .transition(.opacity)
+            }
         }
     }
 
@@ -123,7 +128,7 @@ struct FeedingAnalyticsCard: View {
         .chartYAxis {
             AxisMarks(position: .leading)
         }
-        .animation(.easeInOut, value: analytics.countByDay.count)
+        .animation(.smooth(duration: 0.6), value: analytics.countByDay.count)
     }
 
     private var volumeLineChart: some View {
@@ -164,7 +169,7 @@ struct FeedingAnalyticsCard: View {
                 }
             }
         }
-        .animation(.easeInOut, value: analytics.volumeOverTime.count)
+        .animation(.smooth(duration: 0.6), value: analytics.volumeOverTime.count)
     }
 
     private var statisticsView: some View {

@@ -59,40 +59,40 @@ struct DiaperStatsCard: View {
             }
 
             VStack(spacing: 8) {
-                HStack {
+                HStack(alignment: .center, spacing: 8) {
                     Label(String(localized: "wet_count"), systemImage: "drop.fill")
                         .foregroundColor(.blue)
                         .font(.caption)
-
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text("\(statistics.todayWetCount)")
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .monospacedDigit()
                 }
 
-                HStack {
+                HStack(alignment: .center, spacing: 8) {
                     Label(String(localized: "dirty_count"), systemImage: "sparkles")
                         .foregroundColor(.brown)
                         .font(.caption)
-
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text("\(statistics.todayDirtyCount)")
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .monospacedDigit()
                 }
 
-                HStack {
+                HStack(alignment: .center, spacing: 8) {
                     Label(String(localized: "average_per_day"), systemImage: "chart.bar.fill")
                         .foregroundColor(.green)
                         .font(.caption)
-
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text(String(format: "%.1f", statistics.averagePerDay))
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .monospacedDigit()
                 }
             }
             .padding(.top, 8)

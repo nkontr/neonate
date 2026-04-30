@@ -71,39 +71,38 @@ struct SleepStatsCard: View {
             }
 
             VStack(spacing: 8) {
-                HStack {
+                HStack(alignment: .center, spacing: 8) {
                     Label(String(localized: "average_time"), systemImage: "chart.bar.fill")
                         .foregroundColor(.blue)
                         .font(.caption)
-
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text(formatDuration(Int(statistics.averageDuration)))
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .monospacedDigit()
                 }
 
                 if !statistics.isCurrentlySleeping {
-                    HStack {
+                    HStack(alignment: .center, spacing: 8) {
                         Label(String(localized: "since_last_sleep"), systemImage: "clock.fill")
                             .foregroundColor(.orange)
                             .font(.caption)
-
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
                         Text(formatTimeSinceLastSleep())
                             .font(.caption)
                             .fontWeight(.semibold)
+                            .monospacedDigit()
                     }
                 }
 
                 if let bestQuality = getMostCommonQuality() {
-                    HStack {
+                    HStack(alignment: .center, spacing: 8) {
                         Label(String(localized: "common_quality"), systemImage: "star.fill")
                             .foregroundColor(.yellow)
                             .font(.caption)
-
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
                         Text(localizedQuality(bestQuality))
                             .font(.caption)

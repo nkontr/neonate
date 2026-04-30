@@ -60,43 +60,43 @@ struct FeedingStatsCard: View {
 
             VStack(spacing: 8) {
                 if statistics.todayVolume > 0 {
-                    HStack {
+                    HStack(alignment: .center, spacing: 8) {
                         Label(String(localized: "volume_today"), systemImage: "drop.fill")
                             .foregroundColor(.blue)
                             .font(.caption)
-
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
                         Text("\(Int(statistics.todayVolume)) \(String(localized: "unit_ml"))")
                             .font(.caption)
                             .fontWeight(.semibold)
+                            .monospacedDigit()
                     }
                 }
 
                 if statistics.todayDuration > 0 {
-                    HStack {
+                    HStack(alignment: .center, spacing: 8) {
                         Label(String(localized: "time_today"), systemImage: "timer")
                             .foregroundColor(.purple)
                             .font(.caption)
-
-                        Spacer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
                         Text(String(format: NSLocalizedString("minutes_short_format", comment: ""), statistics.todayDuration))
                             .font(.caption)
                             .fontWeight(.semibold)
+                            .monospacedDigit()
                     }
                 }
 
-                HStack {
+                HStack(alignment: .center, spacing: 8) {
                     Label(String(localized: "average_time"), systemImage: "chart.bar.fill")
                         .foregroundColor(.green)
                         .font(.caption)
-
-                    Spacer()
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text(String(format: "%.1f \(String(localized: "unit_minutes"))", statistics.averageDuration))
                         .font(.caption)
                         .fontWeight(.semibold)
+                        .monospacedDigit()
                 }
             }
             .padding(.top, 8)

@@ -59,14 +59,14 @@ struct AnalyticsView: View {
                 PeriodPicker(selectedPeriod: $analyticsViewModel.selectedPeriod)
                     .padding(.top)
 
-                if !analyticsViewModel.isLoading {
-                    summaryCards
-                }
+                summaryCards
+                    .opacity(analyticsViewModel.isLoading && !isFirstAppear ? 0.3 : 1.0)
 
                 analyticsCards
-                    .opacity(analyticsViewModel.isLoading && !isFirstAppear ? 0.5 : 1.0)
+                    .opacity(analyticsViewModel.isLoading && !isFirstAppear ? 0.3 : 1.0)
             }
             .padding(.bottom, 20)
+            .animation(.easeInOut(duration: 0.2), value: analyticsViewModel.isLoading)
         }
         .refreshable {
             analyticsViewModel.refreshAnalytics()
@@ -109,7 +109,6 @@ struct AnalyticsView: View {
                     period: analyticsViewModel.selectedPeriod
                 )
                 .padding(.horizontal)
-                .transition(.opacity.combined(with: .move(edge: .top)))
             }
 
             if let sleepAnalytics = analyticsViewModel.sleepAnalytics {
@@ -118,7 +117,6 @@ struct AnalyticsView: View {
                     period: analyticsViewModel.selectedPeriod
                 )
                 .padding(.horizontal)
-                .transition(.opacity.combined(with: .move(edge: .top)))
             }
 
             if let diaperAnalytics = analyticsViewModel.diaperAnalytics {
@@ -127,10 +125,8 @@ struct AnalyticsView: View {
                     period: analyticsViewModel.selectedPeriod
                 )
                 .padding(.horizontal)
-                .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .animation(.easeInOut, value: analyticsViewModel.isLoading)
     }
 
     private var loadingView: some View {
@@ -252,6 +248,7 @@ struct SummaryCard: View {
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
+                .animation(.easeInOut(duration: 0.3), value: value)
 
             Text(title)
                 .font(.caption)
