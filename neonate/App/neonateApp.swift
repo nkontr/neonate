@@ -28,6 +28,7 @@ struct RootView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
 
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+    @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
         Group {
@@ -49,6 +50,7 @@ struct RootView: View {
                 LoginView()
             }
         }
+        .preferredColorScheme(appTheme.colorScheme)
         .onChange(of: authViewModel.isAuthenticated) { _, newValue in
             print("🔐 Authentication status changed: \(newValue)")
         }
