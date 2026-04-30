@@ -209,9 +209,9 @@ struct FeedingAnalyticsCard: View {
                         innerRadius: .ratio(0.5),
                         angularInset: 2
                     )
-                    .foregroundStyle(by: .value("Тип", item.category))
+                    .foregroundStyle(by: .value("Тип", localizedFeedingType(item.category)))
                     .cornerRadius(4)
-                    .accessibilityLabel(item.category)
+                    .accessibilityLabel(localizedFeedingType(item.category))
                     .accessibilityValue("\(Int(item.percentage))%")
                 }
             }
@@ -221,7 +221,7 @@ struct FeedingAnalyticsCard: View {
             VStack(spacing: 4) {
                 ForEach(analytics.distributionByType) { item in
                     HStack {
-                        Text(item.category)
+                        Text(localizedFeedingType(item.category))
                             .font(.caption)
                             .foregroundColor(.secondary)
 
@@ -248,10 +248,24 @@ struct FeedingAnalyticsCard: View {
         let mins = Int(minutes) % 60
 
         if hours > 0 {
-            return "\(hours)ч \(mins)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, mins)
         } else {
-            return "\(mins)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), mins)
         }
+    }
+
+    private func localizedFeedingType(_ type: String) -> String {
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        if normalized == "Грудное" || normalized == "Грудное вскармливание" || normalized == "Breast" || normalized == "Breastfeeding" {
+            return String(localized: "feeding_type_breast_feeding")
+        } else if normalized == "Бутылочка" || normalized == "Кормление из бутылочки" || normalized == "Bottle" || normalized == "Bottle feeding" {
+            return String(localized: "feeding_type_bottle_feeding")
+        } else if normalized == "Прикорм" || normalized == "Solid" || normalized == "Complementary feeding" {
+            return String(localized: "feeding_type_complementary_feeding")
+        }
+
+        return type
     }
 }
 

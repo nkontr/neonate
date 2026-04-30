@@ -105,7 +105,7 @@ struct SleepStatsCard: View {
 
                         Spacer()
 
-                        Text(bestQuality)
+                        Text(localizedQuality(bestQuality))
                             .font(.caption)
                             .fontWeight(.semibold)
                     }
@@ -150,6 +150,20 @@ struct SleepStatsCard: View {
 
         let sorted = qualities.sorted { $0.value > $1.value }
         return sorted.first?.key
+    }
+
+    private func localizedQuality(_ quality: String) -> String {
+        let normalized = quality.trimmingCharacters(in: .whitespaces)
+
+        if normalized == "Отлично" || normalized == "Excellent" {
+            return String(localized: "sleep_quality_excellent")
+        } else if normalized == "Хорошо" || normalized == "Good" {
+            return String(localized: "sleep_quality_good")
+        } else if normalized == "Плохо" || normalized == "Poor" {
+            return String(localized: "sleep_quality_poor")
+        }
+
+        return quality
     }
 }
 

@@ -102,7 +102,7 @@ struct SleepAnalyticsCard: View {
             AxisMarks(position: .leading) { value in
                 AxisValueLabel {
                     if let hours = value.as(Double.self) {
-                        Text("\(Int(hours))ч")
+                        Text(String(format: NSLocalizedString("duration_hours", comment: ""), Int(hours)))
                             .font(.caption2)
                     }
                 }
@@ -163,9 +163,9 @@ struct SleepAnalyticsCard: View {
                         innerRadius: .ratio(0.5),
                         angularInset: 2
                     )
-                    .foregroundStyle(by: .value("Качество", item.category))
+                    .foregroundStyle(by: .value("Качество", localizedQuality(item.category)))
                     .cornerRadius(4)
-                    .accessibilityLabel(item.category)
+                    .accessibilityLabel(localizedQuality(item.category))
                     .accessibilityValue("\(Int(item.percentage))%")
                 }
             }
@@ -175,7 +175,7 @@ struct SleepAnalyticsCard: View {
             VStack(spacing: 4) {
                 ForEach(analytics.distributionByQuality) { item in
                     HStack {
-                        Text(item.category)
+                        Text(localizedQuality(item.category))
                             .font(.caption)
                             .foregroundColor(.secondary)
 
@@ -202,12 +202,26 @@ struct SleepAnalyticsCard: View {
         let mins = Int(minutes) % 60
 
         if hours > 0 && mins > 0 {
-            return "\(hours)ч \(mins)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, mins)
         } else if hours > 0 {
-            return "\(hours)ч"
+            return String(format: NSLocalizedString("duration_hours", comment: ""), hours)
         } else {
-            return "\(mins)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), mins)
         }
+    }
+
+    private func localizedQuality(_ quality: String) -> String {
+        let normalized = quality.trimmingCharacters(in: .whitespaces)
+
+        if normalized == "Отлично" || normalized == "Excellent" {
+            return String(localized: "sleep_quality_excellent")
+        } else if normalized == "Хорошо" || normalized == "Good" {
+            return String(localized: "sleep_quality_good")
+        } else if normalized == "Плохо" || normalized == "Poor" {
+            return String(localized: "sleep_quality_poor")
+        }
+
+        return quality
     }
 }
 

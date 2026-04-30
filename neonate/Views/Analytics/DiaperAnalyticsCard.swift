@@ -149,9 +149,9 @@ struct DiaperAnalyticsCard: View {
                         innerRadius: .ratio(0.5),
                         angularInset: 2
                     )
-                    .foregroundStyle(by: .value("Тип", item.category))
+                    .foregroundStyle(by: .value("Тип", localizedDiaperType(item.category)))
                     .cornerRadius(4)
-                    .accessibilityLabel(item.category)
+                    .accessibilityLabel(localizedDiaperType(item.category))
                     .accessibilityValue("\(Int(item.percentage))%")
                 }
             }
@@ -161,7 +161,7 @@ struct DiaperAnalyticsCard: View {
             VStack(spacing: 4) {
                 ForEach(analytics.distributionByType) { item in
                     HStack {
-                        Text(item.category)
+                        Text(localizedDiaperType(item.category))
                             .font(.caption)
                             .foregroundColor(.secondary)
 
@@ -226,10 +226,24 @@ struct DiaperAnalyticsCard: View {
         let mins = Int(minutes) % 60
 
         if hours > 0 {
-            return "\(hours)ч \(mins)м"
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), hours, mins)
         } else {
-            return "\(mins)м"
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), mins)
         }
+    }
+
+    private func localizedDiaperType(_ type: String) -> String {
+        let normalized = type.trimmingCharacters(in: .whitespaces)
+
+        if normalized == "Мокрый" || normalized == "Wet" {
+            return String(localized: "diaper_type_wet")
+        } else if normalized == "Грязный" || normalized == "Dirty" {
+            return String(localized: "diaper_type_dirty")
+        } else if normalized == "Оба" || normalized == "Both" {
+            return String(localized: "diaper_type_both")
+        }
+
+        return type
     }
 }
 

@@ -86,7 +86,7 @@ struct AnalyticsView: View {
             SummaryCard(
                 icon: "moon.fill",
                 title: String(localized: "sleep_per_day"),
-                value: String(format: "%.1fч", analyticsViewModel.getAverageSleepPerDay()),
+                value: formatSleepHours(analyticsViewModel.getAverageSleepPerDay()),
                 color: .purple
             )
 
@@ -215,6 +215,23 @@ struct AnalyticsView: View {
         if isFirstAppear {
             analyticsViewModel.loadAnalyticsData(for: childId)
             isFirstAppear = false
+        }
+    }
+
+    private func formatSleepHours(_ hours: Double) -> String {
+        if hours == 0 {
+            return "0"
+        }
+
+        let wholeHours = Int(hours)
+        let minutes = Int((hours - Double(wholeHours)) * 60)
+
+        if wholeHours > 0 && minutes > 0 {
+            return String(format: NSLocalizedString("duration_hours_minutes", comment: ""), wholeHours, minutes)
+        } else if wholeHours > 0 {
+            return String(format: NSLocalizedString("duration_hours", comment: ""), wholeHours)
+        } else {
+            return String(format: NSLocalizedString("duration_minutes", comment: ""), minutes)
         }
     }
 }
