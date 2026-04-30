@@ -93,7 +93,8 @@ struct SleepAnalyticsCard: View {
                 if let date = value.as(Date.self) {
                     AxisValueLabel {
                         Text(formatDate(date))
-                            .font(.caption2)
+                            .font(.system(size: 9))
+                            .lineLimit(1)
                     }
                 }
             }
@@ -108,6 +109,8 @@ struct SleepAnalyticsCard: View {
                 }
             }
         }
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: getVisibleDomainLength())
         .animation(.smooth(duration: 0.6), value: analytics.totalTimeOverPeriod.count)
     }
 
@@ -190,10 +193,30 @@ struct SleepAnalyticsCard: View {
         }
     }
 
+    private func getVisibleDomainLength() -> Int {
+        switch period {
+        case .day:
+            return 24 * 3600
+        case .week:
+            return 7 * 24 * 3600
+        case .month:
+            return 10 * 24 * 3600
+        }
+    }
+
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
-        formatter.dateFormat = period.dateFormat
+
+        switch period {
+        case .day:
+            formatter.dateFormat = "HH:mm"
+        case .week:
+            formatter.dateFormat = "EEE"
+        case .month:
+            formatter.dateFormat = "d/M"
+        }
+
         return formatter.string(from: date)
     }
 

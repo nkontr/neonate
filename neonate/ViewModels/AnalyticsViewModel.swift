@@ -208,7 +208,7 @@ class AnalyticsViewModel: ObservableObject {
         case .week:
             formatter.dateFormat = "EEE"
         case .month:
-            formatter.dateFormat = "dd MMM"
+            formatter.dateFormat = "d MMM"
         }
 
         return formatter.string(from: date)
