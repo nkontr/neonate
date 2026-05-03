@@ -206,6 +206,8 @@
 "biometry_setup_message" = "Allow biometry for quick sign in";
 "biometry_enable" = "Enable %@";
 "biometry_skip" = "Skip";
+"biometric_fallback_password" = "Use Password";
+"biometric_passcode_reason" = "Sign in to access the app";
 
 // MARK: - Onboarding
 
@@ -763,6 +765,8 @@
 "reminder_error_permission" = "Notification permission required";
 "reminder_error_create" = "Error creating reminder: %@";
 "reminder_error_request" = "Error requesting permissions: %@";
+"reminder_error_min_interval" = "Minimum interval is 5 minutes";
+"reminder_error_max_interval" = "Maximum interval is 24 hours";
 "reminder_type_section" = "Reminder Type";
 "reminder_type_label" = "Type";
 "reminder_interval_section" = "Reminder Interval";
@@ -796,3 +800,37 @@
 "detail_feeding_title" = "Feeding";
 "detail_sleep_title" = "Sleep";
 "detail_diaper_title" = "Diaper Change";
+
+// MARK: - Biometric Authentication
+"biometric_enable_error" = "Error enabling biometric authentication";
+"biometric_disable_error" = "Error disabling biometric authentication";
+"biometric_enabled_success" = "Biometric authentication enabled successfully";
+
+// MARK: - Biometric Unlock Screen
+"biometric_unlock_title" = "Unlock with %@";
+"biometric_unlock_message" = "Use biometric authentication to access the app";
+"biometric_auth_failed" = "Biometric authentication failed";
+
+// MARK: - Apple Sign In
+"apple_signin_error" = "Error signing in with Apple ID";
+"apple_user_display_name" = "Apple User";
+"apple_private_email_display" = "Hidden via Apple";
+"apple_signin_button" = "Sign in with Apple ID";
+
+// MARK: - Edit Profile
+"edit_profile_title" = "Edit Profile";
+"edit_profile_photo_section" = "Profile Photo";
+"edit_profile_name_section" = "Your Name";
+"edit_profile_email_section" = "Email";
+"edit_profile_camera_button" = "Camera";
+"edit_profile_gallery_button" = "Gallery";
+"edit_profile_remove_photo" = "Remove Photo";
+"edit_profile_name_placeholder" = "Enter your name";
+"edit_profile_name_hint" = "This name will appear in your profile";
+"edit_profile_email_private" = "Email hidden for privacy protection";
+"edit_profile_email_locked" = "Email cannot be changed";
+"edit_profile_save_button" = "Save Changes";
+"edit_profile_cancel_button" = "Cancel";
+"edit_profile_error_title" = "Error";
+"edit_profile_error_no_user" = "User not found";
+"edit_profile_error_save" = "Failed to save profile";

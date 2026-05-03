@@ -147,15 +147,17 @@ class ReminderViewModel: ObservableObject {
         let minutes = Int(reminder.intervalMinutes)
 
         if minutes < 60 {
-            return "\(minutes) мин"
+            return String(format: String(localized: "minutes_short"), minutes)
         } else {
             let hours = minutes / 60
             let remainingMinutes = minutes % 60
 
             if remainingMinutes == 0 {
-                return "\(hours) ч"
+                return String(format: String(localized: "hours_short"), hours)
             } else {
-                return "\(hours) ч \(remainingMinutes) мин"
+                let hoursStr = String(format: String(localized: "hours_short"), hours)
+                let minutesStr = String(format: String(localized: "minutes_short"), remainingMinutes)
+                return "\(hoursStr) \(minutesStr)"
             }
         }
     }
@@ -171,12 +173,12 @@ class ReminderViewModel: ObservableObject {
     func canCreateReminder(type: ReminderManager.ReminderType, intervalMinutes: Int) -> Bool {
 
         if intervalMinutes < 5 {
-            errorMessage = "Минимальный интервал - 5 минут"
+            errorMessage = String(localized: "reminder_error_min_interval")
             return false
         }
 
         if intervalMinutes > 1440 {
-            errorMessage = "Максимальный интервал - 24 часа"
+            errorMessage = String(localized: "reminder_error_max_interval")
             return false
         }
 

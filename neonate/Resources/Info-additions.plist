@@ -2,97 +2,65 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- Bundle Identifier -->
-    <key>CFBundleIdentifier</key>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-
-    <!-- Bundle Name -->
-    <key>CFBundleName</key>
-    <string>$(PRODUCT_NAME)</string>
-
-    <!-- Display Name -->
-    <key>CFBundleDisplayName</key>
-    <string>Baby Care Tracker</string>
-
-    <!-- Bundle Version -->
-    <key>CFBundleVersion</key>
-    <string>$(CURRENT_PROJECT_VERSION)</string>
-
-    <!-- Short Version String -->
-    <key>CFBundleShortVersionString</key>
-    <string>$(MARKETING_VERSION)</string>
-
-    <!-- Bundle Executable -->
-    <key>CFBundleExecutable</key>
-    <string>$(EXECUTABLE_NAME)</string>
-
-    <!-- Bundle Package Type -->
-    <key>CFBundlePackageType</key>
-    <string>APPL</string>
-
-    <!-- Supported Localizations -->
-    <key>CFBundleLocalizations</key>
-    <array>
-        <string>en</string>
-        <string>ru</string>
-    </array>
-
-    <!-- Development Region (fallback language) -->
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-
-    <!-- Localized strings are in InfoPlist.strings files in en.lproj and ru.lproj -->
-    <!-- These usage description keys will use the localized strings automatically -->
-    <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) needs camera access</string>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) needs photo library access</string>
-
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>$(PRODUCT_NAME) needs to save photos</string>
-
-    <key>NSFaceIDUsageDescription</key>
-    <string>$(PRODUCT_NAME) uses Face ID for authentication</string>
-
-    <key>NSUserNotificationsUsageDescription</key>
-    <string>$(PRODUCT_NAME) sends notifications</string>
-
-    <key>NSSiriUsageDescription</key>
-    <string>$(PRODUCT_NAME) uses Siri</string>
-
-    <!-- UI Configuration -->
-    <key>UIApplicationSceneManifest</key>
-    <dict>
-        <key>UIApplicationSupportsMultipleScenes</key>
-        <false/>
-        <key>UISceneConfigurations</key>
-        <dict/>
-    </dict>
-
-    <key>UILaunchScreen</key>
-    <dict/>
-
-    <key>UISupportedInterfaceOrientations</key>
-    <array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-
-    <key>UISupportedInterfaceOrientations~ipad</key>
-    <array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationPortraitUpsideDown</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-
-    <!-- App Transport Security -->
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <false/>
-    </dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Baby Care Tracker</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ru</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow camera access to take profile photos</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses Face ID for authentication</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs to save photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs photo library access</string>
+	<key>NSSiriUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses Siri</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>$(PRODUCT_NAME) sends notifications</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
 </dict>
 </plist>

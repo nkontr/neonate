@@ -129,8 +129,8 @@ class BiometricAuthService {
     func authenticate(reason: String = "Войдите для доступа к приложению") async throws -> Bool {
         let context = LAContext()
 
-        context.localizedCancelTitle = "Отмена"
-        context.localizedFallbackTitle = "Использовать пароль"
+        context.localizedCancelTitle = String(localized: "cancel")
+        context.localizedFallbackTitle = String(localized: "biometric_fallback_password")
 
         var authError: NSError?
         guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) else {
@@ -158,10 +158,10 @@ class BiometricAuthService {
         }
     }
 
-    func authenticateWithDevicePasscode(reason: String = "Войдите для доступа к приложению") async throws -> Bool {
+    func authenticateWithDevicePasscode(reason: String = String(localized: "biometric_passcode_reason")) async throws -> Bool {
         let context = LAContext()
 
-        context.localizedCancelTitle = "Отмена"
+        context.localizedCancelTitle = String(localized: "cancel")
 
         var authError: NSError?
         guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &authError) else {

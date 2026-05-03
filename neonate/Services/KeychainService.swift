@@ -17,6 +17,7 @@ class KeychainService {
         case userCredentials = "com.neonate.userCredentials"
         case currentUser = "com.neonate.currentUser"
         case biometricEnabled = "com.neonate.biometricEnabled"
+        case profileImage = "com.neonate.profileImage"
     }
 
     enum KeychainError: LocalizedError {
@@ -119,7 +120,7 @@ class KeychainService {
     }
 
     func clearAll() throws {
-        let keys: [KeychainKey] = [.accessToken, .refreshToken, .userCredentials, .currentUser, .biometricEnabled]
+        let keys: [KeychainKey] = [.accessToken, .refreshToken, .userCredentials, .currentUser, .biometricEnabled, .profileImage]
 
         for key in keys {
             try? delete(forKey: key)
@@ -214,6 +215,18 @@ class KeychainService {
         (try? load(Bool.self, forKey: .biometricEnabled)) ?? false
     }
 
+    func saveProfileImage(_ imageData: Data) async throws {
+        try save(imageData, forKey: .profileImage)
+    }
+
+    func loadProfileImage() async throws -> Data? {
+        try? load(forKey: .profileImage)
+    }
+
+    func deleteProfileImage() async throws {
+        try delete(forKey: .profileImage)
+    }
+
     private func baseQuery(forKey key: KeychainKey) -> [String: Any] {
         return [
             kSecClass as String: kSecClassGenericPassword,
@@ -255,7 +268,7 @@ extension KeychainService {
 extension KeychainService {
 
     func debugPrintAllKeys() {
-        let keys: [KeychainKey] = [.accessToken, .refreshToken, .userCredentials, .currentUser, .biometricEnabled]
+        let keys: [KeychainKey] = [.accessToken, .refreshToken, .userCredentials, .currentUser, .biometricEnabled, .profileImage]
 
         print("=== Keychain Contents ===")
         for key in keys {

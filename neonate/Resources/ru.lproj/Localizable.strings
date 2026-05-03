@@ -206,6 +206,8 @@
 "biometry_setup_message" = "Разрешите биометрию для быстрого входа";
 "biometry_enable" = "Включить %@";
 "biometry_skip" = "Пропустить";
+"biometric_fallback_password" = "Использовать пароль";
+"biometric_passcode_reason" = "Войдите для доступа к приложению";
 
 // MARK: - Onboarding
 
@@ -763,6 +765,8 @@
 "reminder_error_permission" = "Требуется разрешение на уведомления";
 "reminder_error_create" = "Ошибка создания напоминания: %@";
 "reminder_error_request" = "Ошибка запроса разрешений: %@";
+"reminder_error_min_interval" = "Минимальный интервал - 5 минут";
+"reminder_error_max_interval" = "Максимальный интервал - 24 часа";
 "reminder_type_section" = "Тип напоминания";
 "reminder_type_label" = "Тип";
 "reminder_interval_section" = "Интервал напоминания";
@@ -796,3 +800,37 @@
 "detail_feeding_title" = "Кормление";
 "detail_sleep_title" = "Сон";
 "detail_diaper_title" = "Смена подгузника";
+
+// MARK: - Biometric Authentication
+"biometric_enable_error" = "Ошибка при включении биометрии";
+"biometric_disable_error" = "Ошибка при отключении биометрии";
+"biometric_enabled_success" = "Биометрическая аутентификация успешно включена";
+
+// MARK: - Biometric Unlock Screen
+"biometric_unlock_title" = "Разблокировать с помощью %@";
+"biometric_unlock_message" = "Используйте биометрическую аутентификацию для доступа к приложению";
+"biometric_auth_failed" = "Биометрическая аутентификация не удалась";
+
+// MARK: - Apple Sign In
+"apple_signin_error" = "Ошибка входа через Apple ID";
+"apple_user_display_name" = "Пользователь Apple";
+"apple_private_email_display" = "Скрыт через Apple";
+"apple_signin_button" = "Войти через Apple ID";
+
+// MARK: - Edit Profile
+"edit_profile_title" = "Редактировать профиль";
+"edit_profile_photo_section" = "Фотография профиля";
+"edit_profile_name_section" = "Ваше имя";
+"edit_profile_email_section" = "Email";
+"edit_profile_camera_button" = "Камера";
+"edit_profile_gallery_button" = "Галерея";
+"edit_profile_remove_photo" = "Удалить фото";
+"edit_profile_name_placeholder" = "Введите ваше имя";
+"edit_profile_name_hint" = "Это имя будет отображаться в вашем профиле";
+"edit_profile_email_private" = "Email скрыт для защиты вашей конфиденциальности";
+"edit_profile_email_locked" = "Email нельзя изменить";
+"edit_profile_save_button" = "Сохранить изменения";
+"edit_profile_cancel_button" = "Отмена";
+"edit_profile_error_title" = "Ошибка";
+"edit_profile_error_no_user" = "Пользователь не найден";
+"edit_profile_error_save" = "Не удалось сохранить профиль";

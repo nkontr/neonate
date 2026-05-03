@@ -1,13 +1,15 @@
 import SwiftUI
+import AuthenticationServices
 
 struct LoginView: View {
 
     @EnvironmentObject var authViewModel: AuthViewModel
 
-    @State private var username: String = ""
+    @State private var email: String = ""
     @State private var password: String = ""
     @State private var showPassword: Bool = false
     @State private var showRegisterView: Bool = false
+    @StateObject private var appleSignInCoordinator = AppleSignInCoordinator()
 
     var body: some View {
         NavigationView {
@@ -25,9 +27,7 @@ struct LoginView: View {
 
                         loginFormView
 
-                        if authViewModel.isBiometricAvailable {
-                            biometricButton
-                        }
+                        appleSignInButton
 
                         bottomActionsView
 
@@ -78,22 +78,24 @@ struct LoginView: View {
         VStack(spacing: 20) {
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(String(localized: "auth_username"))
+                Text(String(localized: "auth_email"))
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.white.opacity(0.9))
 
                 HStack {
-                    Image(systemName: "person.fill")
+                    Image(systemName: "envelope.fill")
                         .foregroundColor(.white.opacity(0.8))
                         .accessibilityHidden(true)
-                    TextField(String(localized: "auth_username_placeholder"), text: $username)
+                    TextField(String(localized: "auth_email_placeholder"), text: $email)
                         .textFieldStyle(PlainTextFieldStyle())
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
                         .foregroundColor(.white)
-                        .accessibilityLabel(String(localized: "auth_username"))
-                        .accessibilityValue(username.isEmpty ? String(localized: "a11y_empty_field") : username)
+                        .accessibilityLabel(String(localized: "auth_email"))
+                        .accessibilityValue(email.isEmpty ? String(localized: "a11y_empty_field") : email)
                 }
                 .glassTextField(cornerRadius: 16)
             }
@@ -146,21 +148,56 @@ struct LoginView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
                 }
             }
-            .liquidGlassButton(color: .white, isPressed: false)
-            .disabled(authViewModel.isLoading || username.isEmpty || password.isEmpty)
-            .opacity((authViewModel.isLoading || username.isEmpty || password.isEmpty) ? 0.6 : 1.0)
+            .background(
+                Group {
+                    if !email.isEmpty && !password.isEmpty && !authViewModel.isLoading {
+                        ZStack {
+                            LinearGradient(
+                                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.white.opacity(0.2), Color.clear],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .blur(radius: 10)
+                        }
+                    } else {
+                        Color.white.opacity(0.3)
+                    }
+                }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
+            )
+            .shadow(
+                color: (!email.isEmpty && !password.isEmpty && !authViewModel.isLoading) ? Color.blue.opacity(0.3) : Color.clear,
+                radius: 8,
+                x: 0,
+                y: 4
+            )
+            .disabled(authViewModel.isLoading || email.isEmpty || password.isEmpty)
             .buttonAccessibility(
                 label: String(localized: "auth_login_button"),
                 hint: nil,
-                isEnabled: !authViewModel.isLoading && !username.isEmpty && !password.isEmpty
+                isEnabled: !authViewModel.isLoading && !email.isEmpty && !password.isEmpty
             )
         }
         .padding(.horizontal, 4)
     }
 
-    private var biometricButton: some View {
+    private var appleSignInButton: some View {
         VStack(spacing: 15) {
             HStack {
                 Rectangle()
@@ -189,25 +226,47 @@ struct LoginView: View {
                     .accessibilityHidden(true)
             }
 
-            Button(action: handleBiometricLogin) {
-                HStack(spacing: 10) {
-                    Image(systemName: authViewModel.biometricIcon)
-                        .font(.title3)
+            Button(action: handleAppleSignInTap) {
+                HStack(spacing: 12) {
+                    Image(systemName: "apple.logo")
+                        .font(.title2)
                         .accessibilityHidden(true)
-                    Text(String(format: NSLocalizedString("biometry_login", comment: ""), authViewModel.biometricDisplayName))
+
+                    Text(String(localized: "apple_signin_button"))
                         .font(.subheadline)
-                        .fontWeight(.medium)
+                        .fontWeight(.semibold)
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(
+                    ZStack {
+                        LinearGradient(
+                            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.white.opacity(0.2), Color.clear],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .blur(radius: 10)
+                    }
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                )
+                .shadow(color: Color.blue.opacity(0.3), radius: 8, x: 0, y: 4)
             }
-            .liquidGlassButton(color: .white.opacity(0.5), isPressed: false)
-            .disabled(authViewModel.isLoading || !authViewModel.isBiometricEnabled)
-            .buttonAccessibility(
-                label: String(format: NSLocalizedString("biometry_login", comment: ""), authViewModel.biometricDisplayName),
-                hint: nil,
-                isEnabled: !authViewModel.isLoading && authViewModel.isBiometricEnabled
-            )
+            .disabled(authViewModel.isLoading)
+            .opacity(authViewModel.isLoading ? 0.6 : 1.0)
         }
     }
 
@@ -227,38 +286,83 @@ struct LoginView: View {
                 label: "\(String(localized: "auth_no_account")) \(String(localized: "auth_register_button"))",
                 hint: nil
             )
-
-            #if DEBUG
-            Button(action: handleDemoLogin) {
-                Text(String(localized: "auth_demo_account"))
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.6))
-            }
-            .buttonAccessibility(
-                label: String(localized: "auth_demo_account"),
-                hint: nil
-            )
-            #endif
         }
     }
 
     private func handleLogin() {
         Task {
-            let credentials = AuthCredentials(username: username, password: password)
+            let credentials = AuthCredentials(username: email, password: password)
             await authViewModel.login(credentials: credentials)
         }
     }
 
-    private func handleBiometricLogin() {
-        Task {
-            await authViewModel.loginWithBiometric()
+    private func handleAppleSignInTap() {
+        print("🍎 Starting Apple Sign In...")
+
+        appleSignInCoordinator.onCompletion = { result in
+            handleAppleSignIn(result)
         }
+
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = appleSignInCoordinator
+        authorizationController.presentationContextProvider = appleSignInCoordinator
+        authorizationController.performRequests()
     }
 
-    private func handleDemoLogin() {
-        Task {
-            await authViewModel.createDemoAccount()
+    private func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) {
+        print("🍎 Apple Sign In result received")
+        switch result {
+        case .success(let authorization):
+            print("✅ Apple Sign In successful")
+            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+                print("✅ Got Apple ID credential, logging in...")
+                Task {
+                    await authViewModel.loginWithApple(credential: appleIDCredential)
+                }
+            }
+        case .failure(let error):
+            print("❌ Apple Sign In failed: \(error.localizedDescription)")
+            Task { @MainActor in
+                authViewModel.errorMessage = "Ошибка входа через Apple: \(error.localizedDescription)"
+                authViewModel.showError = true
+            }
         }
+    }
+}
+
+class AppleSignInCoordinator: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    var onCompletion: ((Result<ASAuthorization, Error>) -> Void)?
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        print("🍎 Coordinator: Authorization completed successfully")
+        onCompletion?(.success(authorization))
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print("🍎 Coordinator: Authorization failed with error: \(error.localizedDescription)")
+
+        // Игнорируем ошибку отмены пользователем
+        if let authError = error as? ASAuthorizationError {
+            if authError.code == .canceled {
+                print("🍎 User canceled Apple Sign In")
+                return
+            }
+        }
+
+        onCompletion?(.failure(error))
+    }
+
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            print("⚠️ Warning: Could not find window for presentation anchor")
+            return UIWindow()
+        }
+        return window
     }
 }
 

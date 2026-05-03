@@ -218,11 +218,46 @@ struct RegisterView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
             }
         }
-        .liquidGlassButton(color: .white, isPressed: false)
+        .background(
+            Group {
+                if isFormValid && !authViewModel.isLoading {
+                    ZStack {
+                        LinearGradient(
+                            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.white.opacity(0.2), Color.clear],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .blur(radius: 10)
+                    }
+                } else {
+                    Color.white.opacity(0.3)
+                }
+            }
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+        )
+        .shadow(
+            color: isFormValid && !authViewModel.isLoading ? Color.blue.opacity(0.3) : Color.clear,
+            radius: 8,
+            x: 0,
+            y: 4
+        )
         .disabled(!isFormValid || authViewModel.isLoading)
-        .opacity((!isFormValid || authViewModel.isLoading) ? 0.6 : 1.0)
     }
 
     private func containsOnlyLetters(_ string: String) -> Bool {

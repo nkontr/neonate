@@ -2,6 +2,7 @@ import Foundation
 import LocalAuthentication
 import Combine
 import CryptoKit
+import AuthenticationServices
 
 class AuthService {
 
@@ -114,7 +115,8 @@ class AuthService {
             throw AuthError.invalidCredentials
         }
 
-        guard let account = userRepository.fetchUserAccount(byUsername: credentials.username) else {
+        // Ищем пользователя по email (username содержит email)
+        guard let account = userRepository.fetchUserAccount(by: credentials.username) else {
             throw AuthError.invalidCredentials
         }
 
@@ -141,7 +143,7 @@ class AuthService {
 
         try await userRepository.updateLastLogin(account)
 
-        mockUsers[credentials.username]?.user = user
+        mockUsers[accountUsername]?.user = user
 
         let tokens = jwtService.generateTokenPair(
             userId: user.id,
@@ -200,6 +202,112 @@ class AuthService {
         currentTokens = validTokens
 
         return AuthResponse(user: user, tokens: validTokens, message: "Вход выполнен с помощью биометрии")
+    }
+
+    func loginWithApple(credential: ASAuthorizationAppleIDCredential) async throws -> AuthResponse {
+        print("🍎 AuthService: Processing Apple Sign In...")
+        print("🍎 User Identifier: \(credential.user)")
+
+        let userIdentifier = credential.user
+        let email = credential.email ?? "\(userIdentifier)@privaterelay.appleid.com"
+        let fullName: String?
+
+        if let givenName = credential.fullName?.givenName,
+           let familyName = credential.fullName?.familyName {
+            fullName = "\(givenName) \(familyName)"
+        } else {
+            fullName = nil
+        }
+
+        let username = "apple_\(userIdentifier.prefix(10))"
+        print("🍎 Email: \(email)")
+        print("🍎 Username: \(username)")
+
+        if let existingAccount = userRepository.fetchUserAccount(by: email) {
+            print("🍎 Existing account found, logging in...")
+
+            guard let accountId = existingAccount.id,
+                  let accountUsername = existingAccount.username,
+                  let accountEmail = existingAccount.email,
+                  let accountRegisteredAt = existingAccount.registeredAt else {
+                throw AuthError.invalidCredentials
+            }
+
+            // При повторном входе Apple не возвращает fullName, поэтому используем сохраненное из Keychain
+            var displayName = fullName
+
+            // Если Apple не вернул имя, попробуем загрузить из Keychain
+            if displayName == nil {
+                if let savedUser = await keychainService.loadUser() {
+                    displayName = savedUser.fullName
+                }
+            }
+
+            let user = User(
+                id: accountId,
+                username: accountUsername,
+                email: accountEmail,
+                fullName: displayName,
+                registeredAt: accountRegisteredAt,
+                lastLoginAt: Date()
+            )
+
+            try await userRepository.updateLastLogin(existingAccount)
+
+            let tokens = jwtService.generateTokenPair(
+                userId: user.id,
+                username: user.username,
+                email: user.email
+            )
+
+            currentUser = user
+            currentTokens = tokens
+
+            try await keychainService.saveTokens(tokens)
+            try await keychainService.saveUser(user)
+
+            print("✅ Apple Sign In successful (existing user)")
+            return AuthResponse(user: user, tokens: tokens, message: "Вход выполнен через Apple ID")
+        } else {
+            print("🍎 No existing account found, creating new user...")
+
+            let user = User(
+                username: username,
+                email: email,
+                fullName: fullName,
+                registeredAt: Date(),
+                lastLoginAt: Date()
+            )
+
+            let dummyPasswordHash = hashPassword(UUID().uuidString)
+
+            do {
+                _ = try await userRepository.createUserAccount(
+                    username: user.username,
+                    email: user.email,
+                    passwordHash: dummyPasswordHash
+                )
+                print("✅ User account created in CoreData")
+            } catch {
+                print("❌ Failed to create user account: \(error)")
+                throw AuthError.registrationFailed("Не удалось создать аккаунт")
+            }
+
+            let tokens = jwtService.generateTokenPair(
+                userId: user.id,
+                username: user.username,
+                email: user.email
+            )
+
+            currentUser = user
+            currentTokens = tokens
+
+            try await keychainService.saveTokens(tokens)
+            try await keychainService.saveUser(user)
+
+            print("✅ Apple Sign In successful (new user)")
+            return AuthResponse(user: user, tokens: tokens, message: "Регистрация через Apple ID выполнена успешно")
+        }
     }
 
     func logout() async throws {

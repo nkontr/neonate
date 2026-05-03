@@ -10,6 +10,9 @@ struct SettingsView: View {
     @State private var showingChildrenList = false
     @State private var showingLogoutAlert = false
     @State private var notificationsEnabled = false
+    @State private var showBiometricSetup = false
+    @State private var showEditProfile = false
+    @State private var profileImage: UIImage?
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -35,6 +38,14 @@ struct SettingsView: View {
                 ChildrenListView(viewModel: childProfileViewModel)
                     .environment(\.managedObjectContext, viewContext)
             }
+            .sheet(isPresented: $showBiometricSetup) {
+                BiometricSetupView()
+                    .environmentObject(authViewModel)
+            }
+            .sheet(isPresented: $showEditProfile) {
+                EditProfileView()
+                    .environmentObject(authViewModel)
+            }
             .alert(String(localized: "settings_logout_title"), isPresented: $showingLogoutAlert) {
                 Button(String(localized: "cancel"), role: .cancel) {}
                 Button(String(localized: "settings_logout"), role: .destructive) {
@@ -45,31 +56,99 @@ struct SettingsView: View {
             } message: {
                 Text(String(localized: "settings_logout_message"))
             }
+            .onAppear {
+                loadProfileImage()
+            }
+            .onChange(of: showEditProfile) { _, newValue in
+                if !newValue {
+                    // Перезагружаем фото после закрытия редактирования
+                    loadProfileImage()
+                }
+            }
         }
     }
 
     private var userProfileSection: some View {
         Section {
-            HStack {
-                Image(systemName: "person.circle.fill")
-                    .font(.system(size: 60))
-                    .foregroundColor(.blue)
-                    .accessibilityHidden(true)
+            Button {
+                showEditProfile = true
+            } label: {
+                HStack {
+                    if let profileImage = profileImage {
+                        Image(uiImage: profileImage)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 60, height: 60)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.blue.opacity(0.3), lineWidth: 2)
+                            )
+                    } else {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.blue)
+                            .accessibilityHidden(true)
+                    }
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(authViewModel.currentUser?.username ?? String(localized: "settings_user_profile"))
-                        .font(.headline)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(displayUserName)
+                            .font(.headline)
+                            .foregroundColor(.primary)
 
-                    Text(authViewModel.currentUser?.email ?? "")
-                        .font(.caption)
+                        HStack(spacing: 4) {
+                            if isApplePrivateEmail {
+                                Image(systemName: "lock.shield.fill")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            Text(displayUserEmail)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
                         .foregroundColor(.secondary)
+                        .font(.caption)
+                        .accessibilityHidden(true)
                 }
             }
             .padding(.vertical, 8)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(authViewModel.currentUser?.username ?? String(localized: "settings_user_profile")), \(authViewModel.currentUser?.email ?? "")")
+            .accessibilityLabel("\(displayUserName), \(authViewModel.currentUser?.email ?? ""). Редактировать профиль")
         }
     }
+
+    private var displayUserName: String {
+        authViewModel.currentUser?.displayName ?? String(localized: "settings_user_profile")
+    }
+
+    private var displayUserEmail: String {
+        authViewModel.currentUser?.displayEmail ?? ""
+    }
+
+    private var isApplePrivateEmail: Bool {
+        authViewModel.currentUser?.email.contains("@privaterelay.appleid.com") ?? false
+    }
+
+    private func loadProfileImage() {
+        Task {
+            if let imageData = try? await KeychainService.shared.loadProfileImage(),
+               let image = UIImage(data: imageData) {
+                await MainActor.run {
+                    profileImage = image
+                }
+            } else {
+                await MainActor.run {
+                    profileImage = nil
+                }
+            }
+        }
+    }
+
 
     private var childrenSection: some View {
         Section(String(localized: "settings_children")) {
@@ -158,7 +237,18 @@ struct SettingsView: View {
             .accessibilityLabel(String(localized: "settings_theme"))
             .accessibilityValue(appTheme.displayName)
 
-            Toggle(isOn: .constant(authViewModel.isBiometricEnabled)) {
+            Toggle(isOn: Binding(
+                get: { authViewModel.isBiometricEnabled },
+                set: { newValue in
+                    if newValue {
+                        showBiometricSetup = true
+                    } else {
+                        Task {
+                            await authViewModel.disableBiometric()
+                        }
+                    }
+                }
+            )) {
                 HStack {
                     Image(systemName: authViewModel.biometricIcon)
                         .foregroundColor(.green)
@@ -168,11 +258,6 @@ struct SettingsView: View {
                 }
             }
             .disabled(!authViewModel.isBiometricAvailable)
-            .onChange(of: authViewModel.isBiometricEnabled) { _, _ in
-                Task {
-                    await authViewModel.toggleBiometric()
-                }
-            }
             .toggleAccessibility(
                 label: authViewModel.biometricDisplayName,
                 isOn: authViewModel.isBiometricEnabled

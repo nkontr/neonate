@@ -42,6 +42,36 @@ struct User: Codable, Identifiable {
         self.preferences = preferences
     }
 
+    var displayName: String {
+        // Если есть полное имя, используем его
+        if let fullName = fullName, !fullName.isEmpty {
+            return fullName
+        }
+
+        // Если username начинается с "apple_", показываем красивое имя
+        if username.hasPrefix("apple_") {
+            return String(localized: "apple_user_display_name")
+        }
+
+        // В остальных случаях показываем username
+        return username
+    }
+
+    var displayEmail: String {
+        // Если email от Apple Private Relay, показываем красиво
+        if email.contains("@privaterelay.appleid.com") {
+            return String(localized: "apple_private_email_display")
+        }
+
+        // Если email от iCloud, показываем как есть
+        if email.contains("@icloud.com") || email.contains("@me.com") || email.contains("@mac.com") {
+            return email
+        }
+
+        // Для остальных показываем полный email
+        return email
+    }
+
     var initials: String {
         if let fullName = fullName, !fullName.isEmpty {
             let components = fullName.split(separator: " ")

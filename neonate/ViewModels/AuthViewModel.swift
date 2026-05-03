@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import AuthenticationServices
 
 @MainActor
 class AuthViewModel: ObservableObject {
@@ -8,15 +9,16 @@ class AuthViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
 
     @Published var isLoading: Bool = false
+    @Published var isBiometricLoading: Bool = false
 
     var currentUser: User?
     var errorMessage: String?
     var showError: Bool = false
     var successMessage: String?
     var showSuccess: Bool = false
-    var isBiometricAvailable: Bool = false
-    var biometricType: BiometricAuthService.BiometricType = .none
-    var isBiometricEnabled: Bool = false
+    @Published var isBiometricAvailable: Bool = false
+    @Published var biometricType: BiometricAuthService.BiometricType = .none
+    @Published var isBiometricEnabled: Bool = false
 
     private let authService = AuthService.shared
     private let biometricService = BiometricAuthService.shared
@@ -102,6 +104,31 @@ class AuthViewModel: ObservableObject {
         isLoading = false
     }
 
+    func loginWithApple(credential: ASAuthorizationAppleIDCredential) async {
+        print("🍎 AuthViewModel: Processing Apple Sign In...")
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            let response = try await authService.loginWithApple(credential: credential)
+            currentUser = response.user
+            isAuthenticated = true
+            successMessage = response.message ?? "Вход выполнен через Apple ID"
+            showSuccess = true
+            print("✅ AuthViewModel: Apple Sign In completed, isAuthenticated = \(isAuthenticated)")
+        } catch let error as AuthService.AuthError {
+            print("❌ AuthViewModel: Auth error - \(error.errorDescription ?? "unknown")")
+            errorMessage = error.errorDescription
+            showError = true
+        } catch {
+            print("❌ AuthViewModel: Unknown error - \(error.localizedDescription)")
+            errorMessage = "Ошибка входа через Apple: \(error.localizedDescription)"
+            showError = true
+        }
+
+        isLoading = false
+    }
+
     func logout() async {
         isLoading = true
         errorMessage = nil
@@ -163,40 +190,38 @@ class AuthViewModel: ObservableObject {
     }
 
     func enableBiometric() async {
-        isLoading = true
+        isBiometricLoading = true
         errorMessage = nil
 
         do {
             try await authService.enableBiometric()
             isBiometricEnabled = true
-            successMessage = "Биометрия успешно включена"
+            successMessage = String(localized: "biometric_enabled_success")
             showSuccess = true
         } catch let error as BiometricAuthService.BiometricError {
             errorMessage = error.errorDescription
             showError = true
         } catch {
-            errorMessage = "Ошибка при включении биометрии: \(error.localizedDescription)"
+            errorMessage = String(localized: "biometric_enable_error")
             showError = true
         }
 
-        isLoading = false
+        isBiometricLoading = false
     }
 
     func disableBiometric() async {
-        isLoading = true
+        isBiometricLoading = true
         errorMessage = nil
 
         do {
             try await authService.disableBiometric()
             isBiometricEnabled = false
-            successMessage = "Биометрия отключена"
-            showSuccess = true
         } catch {
-            errorMessage = "Ошибка при отключении биометрии: \(error.localizedDescription)"
+            errorMessage = String(localized: "biometric_disable_error")
             showError = true
         }
 
-        isLoading = false
+        isBiometricLoading = false
     }
 
     func toggleBiometric() async {
@@ -207,21 +232,27 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    func updateUserProfile(_ user: User) async {
-        isLoading = true
+    func updateUserProfile(_ user: User, showSuccessMessage: Bool = true, updateLoadingState: Bool = true) async {
+        if updateLoadingState {
+            isLoading = true
+        }
         errorMessage = nil
 
         do {
             try await authService.updateUserProfile(user)
             currentUser = user
-            successMessage = "Профиль обновлен"
-            showSuccess = true
+            if showSuccessMessage {
+                successMessage = "Профиль обновлен"
+                showSuccess = true
+            }
         } catch {
             errorMessage = "Ошибка при обновлении профиля: \(error.localizedDescription)"
             showError = true
         }
 
-        isLoading = false
+        if updateLoadingState {
+            isLoading = false
+        }
     }
 
     func changePassword(oldPassword: String, newPassword: String) async {

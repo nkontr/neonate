@@ -31,15 +31,10 @@ struct BiometricSetupView: View {
             )
             .ignoresSafeArea()
         )
-        .alert(String(localized: "success"), isPresented: $authViewModel.showSuccess) {
-            Button(String(localized: "ok")) {
+        .onChange(of: authViewModel.isBiometricEnabled) { _, isEnabled in
+            if isEnabled {
                 authViewModel.clearSuccess()
-                isSetupComplete = true
                 dismiss()
-            }
-        } message: {
-            if let successMessage = authViewModel.successMessage {
-                Text(successMessage)
             }
         }
         .alert(String(localized: "error"), isPresented: $authViewModel.showError) {
@@ -105,7 +100,7 @@ struct BiometricSetupView: View {
         VStack(spacing: 15) {
 
             Button(action: handleEnableBiometric) {
-                if authViewModel.isLoading {
+                if authViewModel.isBiometricLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .frame(maxWidth: .infinity)
@@ -120,7 +115,7 @@ struct BiometricSetupView: View {
             }
             .background(Color.blue)
             .cornerRadius(12)
-            .disabled(authViewModel.isLoading)
+            .disabled(authViewModel.isBiometricLoading)
 
             Button(action: { dismiss() }) {
                 Text(String(localized: "biometric_setup_later"))
