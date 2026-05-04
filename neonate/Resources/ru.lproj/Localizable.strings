@@ -834,3 +834,25 @@
 "edit_profile_error_title" = "Ошибка";
 "edit_profile_error_no_user" = "Пользователь не найден";
 "edit_profile_error_save" = "Не удалось сохранить профиль";
+
+// MARK: - Registration
+"register_title" = "Создать аккаунт";
+"register_subtitle" = "Присоединяйтесь к neonate";
+"register_username_placeholder" = "Имя пользователя (только буквы)";
+"register_email_placeholder" = "Email";
+"register_fullname_placeholder" = "Полное имя (необязательно)";
+"register_password_placeholder" = "Пароль (минимум 6 символов)";
+"register_confirm_password_placeholder" = "Подтвердите пароль";
+"register_terms_agreement" = "Я соглашаюсь с условиями использования и политикой конфиденциальности";
+"register_button" = "Зарегистрироваться";
+
+// MARK: - Registration Validation Errors
+"register_error_username_required" = "Имя пользователя обязательно";
+"register_error_username_letters_only" = "Только буквы (без цифр и символов)";
+"register_error_username_min_length" = "Минимум 3 символа";
+"register_error_email_required" = "Email обязателен";
+"register_error_email_invalid" = "Неверный формат email";
+"register_error_password_required" = "Пароль обязателен";
+"register_error_password_min_length" = "Минимум 6 символов";
+"register_error_confirm_password_required" = "Подтвердите пароль";
+"register_error_passwords_mismatch" = "Пароли не совпадают";

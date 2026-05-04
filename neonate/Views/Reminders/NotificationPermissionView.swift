@@ -99,6 +99,13 @@ struct NotificationPermissionView: View {
 
         Task {
             await viewModel.requestNotificationPermission()
+
+            // Подождем небольшую задержку для обновления статуса
+            try await Task.sleep(nanoseconds: 500_000_000) // 0.5 секунды
+
+            // Перепроверим статус
+            viewModel.checkNotificationPermission()
+
             isRequesting = false
 
             if viewModel.notificationPermissionStatus == .authorized {

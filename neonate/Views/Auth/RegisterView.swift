@@ -33,25 +33,23 @@ struct RegisterView: View {
                 )
                 .ignoresSafeArea()
 
-                ScrollView {
-                    VStack(spacing: 25) {
-                        Spacer()
-                            .frame(height: 40)
+                VStack(spacing: 16) {
+                    Spacer(minLength: 0)
 
-                        headerView
+                    headerView
 
-                        registrationFormView
+                    registrationFormView
 
-                        termsAgreementView
+                    termsAgreementView
 
-                        registerButton
+                    registerButton
 
-                        Spacer()
-                            .frame(height: 30)
-                    }
-                    .padding(.horizontal, 30)
+                    Spacer(minLength: 0)
                 }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 8)
             }
+            .scrollDisabled(true)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -61,8 +59,8 @@ struct RegisterView: View {
                     }
                 }
             }
-            .alert("Ошибка", isPresented: $authViewModel.showError) {
-                Button("OK") {
+            .alert(String(localized: "error"), isPresented: $authViewModel.showError) {
+                Button(String(localized: "ok")) {
                     authViewModel.clearError()
                 }
             } message: {
@@ -79,28 +77,28 @@ struct RegisterView: View {
     }
 
     private var headerView: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             Image(systemName: "person.badge.plus.fill")
-                .font(.system(size: 60))
+                .font(.system(size: 44))
                 .foregroundColor(.white)
 
-            Text("Создать аккаунт")
-                .font(.system(size: 28, weight: .bold, design: .rounded))
+            Text(String(localized: "register_title"))
+                .font(.system(size: 24, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
 
-            Text("Присоединяйтесь к neonate")
-                .font(.subheadline)
+            Text(String(localized: "register_subtitle"))
+                .font(.caption)
                 .foregroundColor(.white.opacity(0.8))
         }
     }
 
     private var registrationFormView: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
 
             VStack(alignment: .leading, spacing: 4) {
                 CustomTextField(
                     icon: "person.fill",
-                    placeholder: "Имя пользователя (только буквы)",
+                    placeholder: String(localized: "register_username_placeholder"),
                     text: $username,
                     isSecure: false
                 )
@@ -120,7 +118,7 @@ struct RegisterView: View {
             VStack(alignment: .leading, spacing: 4) {
                 CustomTextField(
                     icon: "envelope.fill",
-                    placeholder: "Email",
+                    placeholder: String(localized: "register_email_placeholder"),
                     text: $email,
                     isSecure: false,
                     keyboardType: .emailAddress
@@ -140,7 +138,7 @@ struct RegisterView: View {
 
             CustomTextField(
                 icon: "person.text.rectangle.fill",
-                placeholder: "Полное имя (необязательно)",
+                placeholder: String(localized: "register_fullname_placeholder"),
                 text: $fullName,
                 isSecure: false
             )
@@ -148,7 +146,7 @@ struct RegisterView: View {
             VStack(alignment: .leading, spacing: 4) {
                 CustomTextField(
                     icon: "lock.fill",
-                    placeholder: "Пароль (минимум 6 символов)",
+                    placeholder: String(localized: "register_password_placeholder"),
                     text: $password,
                     isSecure: !showPassword,
                     showToggle: true,
@@ -170,7 +168,7 @@ struct RegisterView: View {
             VStack(alignment: .leading, spacing: 4) {
                 CustomTextField(
                     icon: "lock.fill",
-                    placeholder: "Подтвердите пароль",
+                    placeholder: String(localized: "register_confirm_password_placeholder"),
                     text: $confirmPassword,
                     isSecure: !showConfirmPassword,
                     showToggle: true,
@@ -199,7 +197,7 @@ struct RegisterView: View {
                     .font(.title3)
             }
 
-            Text("Я соглашаюсь с условиями использования и политикой конфиденциальности")
+            Text(String(localized: "register_terms_agreement"))
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.9))
                 .fixedSize(horizontal: false, vertical: true)
@@ -213,12 +211,12 @@ struct RegisterView: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     .frame(maxWidth: .infinity)
             } else {
-                Text("Зарегистрироваться")
+                Text(String(localized: "register_button"))
                     .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
+                    .padding(.vertical, 12)
             }
         }
         .background(
@@ -272,15 +270,15 @@ struct RegisterView: View {
     private var usernameError: String? {
         guard usernameTouched else { return nil }
         if username.isEmpty {
-            return "Имя пользователя обязательно"
+            return String(localized: "register_error_username_required")
         }
 
         if !containsOnlyLetters(username) {
-            return "Только буквы (без цифр и символов)"
+            return String(localized: "register_error_username_letters_only")
         }
 
         if username.count < 3 {
-            return "Минимум 3 символа"
+            return String(localized: "register_error_username_min_length")
         }
         return nil
     }
@@ -325,10 +323,10 @@ struct RegisterView: View {
     private var emailError: String? {
         guard emailTouched else { return nil }
         if email.isEmpty {
-            return "Email обязателен"
+            return String(localized: "register_error_email_required")
         }
         if !isEmailValid {
-            return "Неверный формат email"
+            return String(localized: "register_error_email_invalid")
         }
         return nil
     }
@@ -340,10 +338,10 @@ struct RegisterView: View {
     private var passwordError: String? {
         guard passwordTouched else { return nil }
         if password.isEmpty {
-            return "Пароль обязателен"
+            return String(localized: "register_error_password_required")
         }
         if password.count < 6 {
-            return "Минимум 6 символов"
+            return String(localized: "register_error_password_min_length")
         }
         return nil
     }
@@ -355,10 +353,10 @@ struct RegisterView: View {
     private var confirmPasswordError: String? {
         guard confirmPasswordTouched else { return nil }
         if confirmPassword.isEmpty {
-            return "Подтвердите пароль"
+            return String(localized: "register_error_confirm_password_required")
         }
         if password != confirmPassword {
-            return "Пароли не совпадают"
+            return String(localized: "register_error_passwords_mismatch")
         }
         return nil
     }

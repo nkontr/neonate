@@ -201,11 +201,11 @@ class SleepViewModel: ObservableObject {
         stopTimer()
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            guard let self = self,
-                  let session = self.currentSleepSession,
-                  let startTime = session.startTime else { return }
-
             Task { @MainActor in
+                guard let self = self,
+                      let session = self.currentSleepSession,
+                      let startTime = session.startTime else { return }
+
                 self.currentSleepDuration = Date().timeIntervalSince(startTime)
             }
         }

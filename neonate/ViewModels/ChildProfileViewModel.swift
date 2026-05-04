@@ -93,6 +93,12 @@ class ChildProfileViewModel: ObservableObject {
 
             loadChildren()
 
+            // Обновляем selectedChild на обновленный объект из массива
+            if let childId = child.id,
+               let updatedChild = children.first(where: { $0.id == childId }) {
+                selectedChild = updatedChild
+            }
+
         } catch {
             self.error = error
             self.showError = true

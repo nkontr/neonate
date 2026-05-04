@@ -834,3 +834,25 @@
 "edit_profile_error_title" = "Error";
 "edit_profile_error_no_user" = "User not found";
 "edit_profile_error_save" = "Failed to save profile";
+
+// MARK: - Registration
+"register_title" = "Create Account";
+"register_subtitle" = "Join neonate";
+"register_username_placeholder" = "Username (letters only)";
+"register_email_placeholder" = "Email";
+"register_fullname_placeholder" = "Full name (optional)";
+"register_password_placeholder" = "Password (minimum 6 characters)";
+"register_confirm_password_placeholder" = "Confirm password";
+"register_terms_agreement" = "I agree to the terms of service and privacy policy";
+"register_button" = "Register";
+
+// MARK: - Registration Validation Errors
+"register_error_username_required" = "Username is required";
+"register_error_username_letters_only" = "Letters only (no numbers or symbols)";
+"register_error_username_min_length" = "Minimum 3 characters";
+"register_error_email_required" = "Email is required";
+"register_error_email_invalid" = "Invalid email format";
+"register_error_password_required" = "Password is required";
+"register_error_password_min_length" = "Minimum 6 characters";
+"register_error_confirm_password_required" = "Confirm password";
+"register_error_passwords_mismatch" = "Passwords do not match";

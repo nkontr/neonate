@@ -152,20 +152,30 @@ class NotificationService: NSObject {
         body: String,
         timeInterval: TimeInterval,
         identifier: String,
-        category: NotificationCategory? = nil
+        category: NotificationCategory? = nil,
+        repeats: Bool = false
     ) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
 
+        // Добавляем информацию для повторения в userInfo
+        content.userInfo = [
+            "reminder_id": identifier,
+            "interval": timeInterval
+        ]
+
         if let category = category {
             content.categoryIdentifier = category.rawValue
         }
 
+        // Для повторяющихся уведомлений интервал должен быть минимум 60 секунд
+        let actualInterval = repeats ? max(timeInterval, 60) : timeInterval
+
         let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: timeInterval,
-            repeats: false
+            timeInterval: actualInterval,
+            repeats: repeats
         )
 
         let request = UNNotificationRequest(
@@ -177,6 +187,8 @@ class NotificationService: NSObject {
         notificationCenter.add(request) { error in
             if let error = error {
                 print("Ошибка при создании уведомления: \(error)")
+            } else {
+                print("✅ Уведомление запланировано: \(identifier), интервал: \(actualInterval)с, повтор: \(repeats)")
             }
         }
     }

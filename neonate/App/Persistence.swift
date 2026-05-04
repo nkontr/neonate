@@ -97,10 +97,11 @@ struct PersistenceController {
 
     func batchDelete(entityName: String, predicate: NSPredicate? = nil) async throws {
         let context = backgroundContext
+        let predicateCopy = predicate
 
         try await context.perform {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-            fetchRequest.predicate = predicate
+            fetchRequest.predicate = predicateCopy
 
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             batchDeleteRequest.resultType = .resultTypeObjectIDs
@@ -117,10 +118,11 @@ struct PersistenceController {
     func batchUpdate(entityName: String, propertiesToUpdate: [String: Any], predicate: NSPredicate? = nil) async throws {
         let context = backgroundContext
 
+        let predicateCopy = predicate
         try await context.perform {
             let batchUpdateRequest = NSBatchUpdateRequest(entityName: entityName)
             batchUpdateRequest.propertiesToUpdate = propertiesToUpdate
-            batchUpdateRequest.predicate = predicate
+            batchUpdateRequest.predicate = predicateCopy
             batchUpdateRequest.resultType = .updatedObjectIDsResultType
 
             let result = try context.execute(batchUpdateRequest) as? NSBatchUpdateResult

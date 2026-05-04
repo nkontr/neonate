@@ -49,7 +49,7 @@ struct DiaperListView: View {
                         .environmentObject(childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .onChange(of: childProfileViewModel.selectedChild) { _ in
+                .onChange(of: childProfileViewModel.selectedChild) {
                     loadEvents()
                 }
                 .onAppear {
@@ -123,9 +123,6 @@ struct DiaperListView: View {
         }
         .pickerStyle(.segmented)
         .padding()
-        .onChange(of: dateFilter) { _ in
-
-        }
     }
 
     private var filteredEvents: [DiaperEvent] {

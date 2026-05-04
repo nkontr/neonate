@@ -123,7 +123,7 @@ class KeychainService {
         let keys: [KeychainKey] = [.accessToken, .refreshToken, .userCredentials, .currentUser, .biometricEnabled, .profileImage]
 
         for key in keys {
-            try? delete(forKey: key)
+            _ = try? delete(forKey: key)
         }
     }
 

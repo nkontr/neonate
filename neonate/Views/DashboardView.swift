@@ -44,7 +44,7 @@ struct DashboardView: View {
                         .environmentObject(childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
-                .sheet(isPresented: $showingChildSelector) {
+                .sheet(isPresented: $showingChildSelector, onDismiss: updateCachedImage) {
                     ChildrenListView(viewModel: childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }
@@ -53,10 +53,13 @@ struct DashboardView: View {
                         .environment(\.managedObjectContext, viewContext)
                 }
                 .onAppear {
-                    cachedChildImage = childProfileViewModel.selectedChild?.photoData.flatMap { UIImage(data: $0) }
+                    updateCachedImage()
                 }
-                .onChange(of: childProfileViewModel.selectedChild) { _, newChild in
-                    cachedChildImage = newChild?.photoData.flatMap { UIImage(data: $0) }
+                .onChange(of: childProfileViewModel.selectedChild) { _, _ in
+                    updateCachedImage()
+                }
+                .onChange(of: childProfileViewModel.selectedChild?.photoData) { _, _ in
+                    updateCachedImage()
                 }
         }
     }
@@ -330,9 +333,14 @@ struct DashboardView: View {
         )
     }
 
+    private func updateCachedImage() {
+        cachedChildImage = childProfileViewModel.selectedChild?.photoData.flatMap { UIImage(data: $0) }
+    }
+
     private func reloadIfNeeded() {
         guard let childId = childProfileViewModel.selectedChild?.id else { return }
         loadDataForChild(childId)
+        updateCachedImage()
     }
 
     private func loadDataForChild(_ childId: UUID) {

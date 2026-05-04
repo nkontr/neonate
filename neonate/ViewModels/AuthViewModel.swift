@@ -24,9 +24,10 @@ class AuthViewModel: ObservableObject {
     private let biometricService = BiometricAuthService.shared
 
     init() {
+        // Не проверяем авторизацию автоматически при инициализации
+        // Это будет сделано позже в RootView
         Task {
             await checkBiometricAvailability()
-            await checkAuthenticationStatus()
         }
     }
 

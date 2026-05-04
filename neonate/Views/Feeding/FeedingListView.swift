@@ -111,7 +111,6 @@ struct FeedingListView: View {
         guard let date = date else { return "" }
 
         let calendar = Calendar.current
-        let now = Date()
 
         if calendar.isDateInToday(date) {
             let formatter = DateFormatter()

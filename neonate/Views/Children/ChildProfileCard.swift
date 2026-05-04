@@ -78,6 +78,7 @@ struct ChildProfileCard: View {
                         .font(.title2)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .liquidGlassCard(
                 backgroundColor: isSelected ? .blue : .gray,
                 cornerRadius: 20,

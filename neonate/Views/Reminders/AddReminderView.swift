@@ -17,14 +17,11 @@ struct AddReminderView: View {
                 Section(String(localized: "reminder_type_section")) {
                     Picker(String(localized: "reminder_type_label"), selection: $selectedType) {
                         ForEach(ReminderManager.ReminderType.allCases, id: \.self) { type in
-                            HStack {
-                                Image(systemName: type.icon)
-                                Text(type.displayName)
-                            }
-                            .tag(type)
+                            Label(type.displayName, systemImage: type.icon)
+                                .tag(type)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.menu)
                 }
 
                 Section {

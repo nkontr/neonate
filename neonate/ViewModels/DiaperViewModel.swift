@@ -93,7 +93,7 @@ class DiaperViewModel: ObservableObject {
 
     func getStatistics(for childId: UUID) -> DiaperStatistics {
         let todayCount = repository.getTodayDiaperCount(for: childId)
-        let todayEvents = getEventsToday(for: childId)
+        _ = getEventsToday(for: childId)
 
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())

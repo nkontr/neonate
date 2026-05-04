@@ -124,20 +124,28 @@ struct RemindersListView: View {
 
     private var emptyStateSection: some View {
         Section {
-            VStack(spacing: 16) {
+            VStack(spacing: 20) {
+                Spacer()
+                    .frame(height: 20)
+
                 Image(systemName: "bell.slash.fill")
                     .font(.system(size: 60))
                     .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity)
 
                 VStack(spacing: 8) {
                     Text(String(localized: "no_reminders"))
                         .font(.headline)
+                        .frame(maxWidth: .infinity)
 
                     Text(String(localized: "no_reminders_message"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 24)
                 }
+                .frame(maxWidth: .infinity)
 
                 Button {
                     if viewModel.notificationPermissionStatus == .authorized {
@@ -148,12 +156,17 @@ struct RemindersListView: View {
                 } label: {
                     Label(String(localized: "add_reminder"), systemImage: "plus.circle.fill")
                         .font(.headline)
+                        .frame(minWidth: 200)
                 }
                 .buttonStyle(.borderedProminent)
-                .padding(.top, 8)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 40)
+                .padding(.top, 4)
+
+                Spacer()
+                    .frame(height: 20)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 32)
         }
     }
 

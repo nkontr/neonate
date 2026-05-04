@@ -45,6 +45,9 @@ struct OnboardingView: View {
             )
             .ignoresSafeArea()
             .animation(.easeInOut(duration: 0.3), value: currentPage)
+            .onAppear {
+                print("👋 OnboardingView appeared!")
+            }
 
             VStack(spacing: 0) {
 

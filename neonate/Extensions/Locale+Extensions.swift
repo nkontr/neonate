@@ -230,15 +230,15 @@ extension TimeInterval {
 extension Locale {
 
     var isRussian: Bool {
-        languageCode == "ru"
+        language.languageCode?.identifier == "ru"
     }
 
     var isEnglish: Bool {
-        languageCode == "en"
+        language.languageCode?.identifier == "en"
     }
 
     var safeLanguageCode: String {
-        languageCode ?? "en"
+        language.languageCode?.identifier ?? "en"
     }
 
     var localizedName: String {

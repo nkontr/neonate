@@ -144,10 +144,10 @@ class BiometricAuthService {
             context.evaluatePolicy(
                 .deviceOwnerAuthenticationWithBiometrics,
                 localizedReason: reason
-            ) { success, error in
+            ) { [weak self] success, error in
                 if success {
                     continuation.resume(returning: true)
-                } else if let error = error as? LAError {
+                } else if let error = error as? LAError, let self = self {
                     continuation.resume(throwing: self.mapLAError(error))
                 } else if let error = error {
                     continuation.resume(throwing: BiometricError.unknown(error))
@@ -175,7 +175,12 @@ class BiometricAuthService {
             context.evaluatePolicy(
                 .deviceOwnerAuthentication,
                 localizedReason: reason
-            ) { success, error in
+            ) { [weak self] success, error in
+                guard let self = self else {
+                    continuation.resume(returning: false)
+                    return
+                }
+
                 if success {
                     continuation.resume(returning: true)
                 } else if let error = error as? LAError {

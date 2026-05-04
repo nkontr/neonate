@@ -18,25 +18,23 @@ struct LoginView: View {
                 LiquidGlassGradients.primaryAuth
                     .ignoresSafeArea()
 
-                ScrollView {
-                    VStack(spacing: 30) {
-                        Spacer()
-                            .frame(height: 60)
+                VStack(spacing: 20) {
+                    Spacer(minLength: 0)
 
-                        headerView
+                    headerView
 
-                        loginFormView
+                    loginFormView
 
-                        appleSignInButton
+                    appleSignInButton
 
-                        bottomActionsView
+                    bottomActionsView
 
-                        Spacer()
-                            .frame(height: 40)
-                    }
-                    .padding(.horizontal, 30)
+                    Spacer(minLength: 0)
                 }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 8)
             }
+            .scrollDisabled(true)
             .navigationBarHidden(true)
             .sheet(isPresented: $showRegisterView) {
                 RegisterView()
@@ -55,18 +53,18 @@ struct LoginView: View {
     }
 
     private var headerView: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 8) {
             Image(systemName: "heart.circle.fill")
-                .font(.system(size: 80))
+                .font(.system(size: 70))
                 .foregroundColor(.white)
                 .accessibilityHidden(true)
 
             Text("neonate")
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(.system(size: 36, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
 
             Text(String(localized: "app_name"))
-                .font(.subheadline)
+                .font(.caption)
                 .foregroundColor(.white.opacity(0.8))
         }
         .accessibilityElement(children: .combine)
@@ -75,7 +73,7 @@ struct LoginView: View {
     }
 
     private var loginFormView: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 14) {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(String(localized: "auth_email"))
@@ -148,7 +146,7 @@ struct LoginView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
+                        .padding(.vertical, 12)
                 }
             }
             .background(
@@ -198,7 +196,7 @@ struct LoginView: View {
     }
 
     private var appleSignInButton: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: 12) {
             HStack {
                 Rectangle()
                     .fill(
@@ -238,7 +236,7 @@ struct LoginView: View {
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
+                .padding(.vertical, 12)
                 .background(
                     ZStack {
                         LinearGradient(
@@ -271,7 +269,7 @@ struct LoginView: View {
     }
 
     private var bottomActionsView: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: 12) {
             Button(action: { showRegisterView = true }) {
                 HStack {
                     Text(String(localized: "auth_no_account"))

@@ -155,6 +155,9 @@ class ReminderManager {
 
         let intervalSeconds = TimeInterval(Int(reminder.intervalMinutes) * 60)
 
+        // Проверяем минимальный интервал для повторяющихся уведомлений (60 секунд)
+        let canRepeat = intervalSeconds >= 60
+
         let nextTriggerDate: Date
         if let lastTriggered = reminder.lastTriggered {
             nextTriggerDate = lastTriggered.addingTimeInterval(intervalSeconds)
@@ -175,10 +178,11 @@ class ReminderManager {
             body: reminderType.notificationBody(childName: childName),
             timeInterval: timeInterval,
             identifier: identifier,
-            category: reminderType.notificationCategory
+            category: reminderType.notificationCategory,
+            repeats: canRepeat
         )
 
-        print("Запланировано напоминание \(identifier) на \(Date().addingTimeInterval(timeInterval))")
+        print("✅ Запланировано напоминание \(identifier) на \(Date().addingTimeInterval(timeInterval)), повтор: \(canRepeat)")
     }
 
     func rescheduleAllReminders(for childId: UUID) async {

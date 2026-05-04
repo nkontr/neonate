@@ -186,7 +186,7 @@ struct TrackingView: View {
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            if let childId = child.id {
+            if child.id != nil {
                 VStack(spacing: 12) {
 
                     if let lastFeeding = feedingViewModel.feedingEvents.first(where: {

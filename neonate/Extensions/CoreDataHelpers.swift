@@ -46,10 +46,6 @@ extension NSManagedObjectContext {
 
 extension NSManagedObject {
 
-    var isFault: Bool {
-        return self.isFault
-    }
-
     var entityName: String {
         return entity.name ?? String(describing: type(of: self))
     }
