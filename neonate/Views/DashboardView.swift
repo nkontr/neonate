@@ -14,8 +14,10 @@ struct DashboardView: View {
     @State private var showingAddDiaper = false
     @State private var showingSleepTimer = false
     @State private var showingChildSelector = false
-    
+
     @State private var cachedChildImage: UIImage?
+
+    @Binding var selectedTab: Tab
     
     var body: some View {
         mainView
@@ -92,8 +94,13 @@ struct DashboardView: View {
                     childSelectorSection
 
                     if let selectedChild = childProfileViewModel.selectedChild {
+                        QuickAddSectionView(
+                            showingAddFeeding: $showingAddFeeding,
+                            showingAddSleep: $showingAddSleep,
+                            showingAddDiaper: $showingAddDiaper,
+                            showingSleepTimer: $showingSleepTimer
+                        )
                         statsCardsSection(for: selectedChild)
-                        quickActionsSection
                     } else {
                         noChildSelectedView
                     }
@@ -186,94 +193,42 @@ struct DashboardView: View {
     private func statsCardsSection(for child: ChildProfile) -> some View {
         VStack(spacing: 12) {
             if let stats = feedingViewModel.cachedStatistics {
-                FeedingStatsCard(statistics: stats)
-                    .id("feeding")
-                    .drawingGroup()
+                NavigationLink(destination:
+                    FeedingListView(
+                        viewModel: feedingViewModel,
+                        childViewModel: childProfileViewModel
+                    )
+                ) {
+                    FeedingStatsCard(statistics: stats)
+                        .id("feeding")
+                }
+                .buttonStyle(.plain)
             }
             if let stats = sleepViewModel.cachedStatistics {
-                SleepStatsCard(statistics: stats)
-                    .id("sleep")
-                    .drawingGroup()
+                NavigationLink(destination:
+                    SleepListView(
+                        viewModel: sleepViewModel,
+                        childViewModel: childProfileViewModel
+                    )
+                ) {
+                    SleepStatsCard(statistics: stats)
+                        .id("sleep")
+                }
+                .buttonStyle(.plain)
             }
             if let stats = diaperViewModel.cachedStatistics {
-                DiaperStatsCard(statistics: stats)
-                    .id("diaper")
-                    .drawingGroup()
+                NavigationLink(destination:
+                    DiaperListView(context: viewContext)
+                        .environmentObject(childProfileViewModel)
+                ) {
+                    DiaperStatsCard(statistics: stats)
+                        .id("diaper")
+                }
+                .buttonStyle(.plain)
             }
         }
     }
 
-    private var quickActionsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(String(localized: "dashboard_quick_add"))
-                .font(.headline)
-                .accessibilityAddTraits(.isHeader)
-
-            HStack(spacing: 12) {
-                QuickActionButton(
-                    title: String(localized: "event_feeding"),
-                    icon: "fork.knife.circle.fill",
-                    color: .green
-                ) {
-                    showingAddFeeding = true
-                }
-
-                Menu {
-                    Button {
-                        showingSleepTimer = true
-                    } label: {
-                        Label(String(localized: "sleep_timer"), systemImage: "timer")
-                    }
-
-                    Button {
-                        showingAddSleep = true
-                    } label: {
-                        Label(String(localized: "sleep_manual_entry"), systemImage: "pencil")
-                    }
-                } label: {
-                    VStack(spacing: 12) {
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Color.indigo.opacity(0.3), Color.indigo.opacity(0.15)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 50, height: 50)
-                                .shadow(color: Color.indigo.opacity(0.3), radius: 8, x: 0, y: 4)
-
-                            Image(systemName: "moon.zzz.fill")
-                                .font(.title2)
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [Color.indigo, Color.indigo.opacity(0.8)],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                        }
-
-                        Text(String(localized: "event_sleep"))
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.primary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .liquidGlassCard(backgroundColor: .indigo, cornerRadius: 18)
-                }
-
-                QuickActionButton(
-                    title: String(localized: "event_diaper"),
-                    icon: "drop.fill",
-                    color: .blue
-                ) {
-                    showingAddDiaper = true
-                }
-            }
-        }
-    }
 
     private var noChildSelectedView: some View {
         VStack(spacing: 20) {
@@ -404,7 +359,7 @@ struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PersistenceController.preview.container.viewContext
 
-        DashboardView()
+        DashboardView(selectedTab: .constant(.dashboard))
             .environmentObject(ChildProfileViewModel(context: context))
             .environmentObject(FeedingViewModel(context: context))
             .environmentObject(SleepViewModel(context: context))

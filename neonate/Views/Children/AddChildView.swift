@@ -1,5 +1,4 @@
 import SwiftUI
-import PhotosUI
 
 struct AddChildView: View {
 
@@ -13,8 +12,9 @@ struct AddChildView: View {
     @State private var birthWeight: String = ""
     @State private var birthHeight: String = ""
     @State private var notes: String = ""
-    @State private var selectedPhoto: PhotosPickerItem?
-    @State private var photoData: Data?
+    @State private var profileImage: UIImage?
+    @State private var showingCameraPicker = false
+    @State private var showingGalleryPicker = false
 
     var genderOptions: [String] {
         [
@@ -44,27 +44,55 @@ struct AddChildView: View {
                     }
                 }
 
-                Section(String(localized: "form_photo")) {
-                    PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                        if let photoData = photoData, let uiImage = UIImage(data: photoData) {
-                            HStack {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 60, height: 60)
-                                    .clipShape(Circle())
+                // Profile Photo Display
+                Section {
+                    HStack {
+                        Spacer()
 
-                                Text(String(localized: "profile_change_photo"))
-                            }
+                        if let profileImage = profileImage {
+                            Image(uiImage: profileImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.blue.opacity(0.3), lineWidth: 2)
+                                )
                         } else {
-                            Label(String(localized: "profile_add_photo"), systemImage: "camera")
+                            Image(systemName: "person.circle.fill")
+                                .font(.system(size: 100))
+                                .foregroundColor(.blue)
+                        }
+
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
+                } header: {
+                    Text(String(localized: "form_photo"))
+                }
+
+                // Photo Actions
+                Section {
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        Button {
+                            showingCameraPicker = true
+                        } label: {
+                            Label(String(localized: "edit_profile_camera_button"), systemImage: "camera")
                         }
                     }
-                    .onChange(of: selectedPhoto) { _, newValue in
-                        Task {
-                            if let data = try? await newValue?.loadTransferable(type: Data.self) {
-                                photoData = data
-                            }
+
+                    Button {
+                        showingGalleryPicker = true
+                    } label: {
+                        Label(String(localized: "edit_profile_gallery_button"), systemImage: "photo")
+                    }
+
+                    if profileImage != nil {
+                        Button(role: .destructive) {
+                            profileImage = nil
+                        } label: {
+                            Label(String(localized: "edit_profile_remove_photo"), systemImage: "trash")
                         }
                     }
                 }
@@ -84,6 +112,12 @@ struct AddChildView: View {
             }
             .navigationTitle(String(localized: "profile_new"))
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showingCameraPicker) {
+                ImagePicker(image: $profileImage, sourceType: .camera)
+            }
+            .sheet(isPresented: $showingGalleryPicker) {
+                ImagePicker(image: $profileImage, sourceType: .photoLibrary)
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(String(localized: "cancel")) {
@@ -103,6 +137,9 @@ struct AddChildView: View {
 
     private func saveChild() {
         Task {
+            // Convert UIImage to Data if present
+            let photoData = profileImage?.jpegData(compressionQuality: 0.8)
+
             await viewModel.addChild(
                 name: name,
                 dateOfBirth: dateOfBirth,

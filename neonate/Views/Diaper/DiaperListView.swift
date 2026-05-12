@@ -4,7 +4,6 @@ import CoreData
 struct DiaperListView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var childProfileViewModel: ChildProfileViewModel
 
     @StateObject private var viewModel: DiaperViewModel
@@ -18,44 +17,30 @@ struct DiaperListView: View {
     }
 
     var body: some View {
-        bodyContent
-    }
-
-    private var bodyContent: some View {
-        NavigationView {
-            mainContent
-                .navigationTitle(String(localized: "diaper_list_title"))
-                .navigationBarTitleDisplayMode(.large)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
-                    }
-
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        addButton
-                    }
+        mainContent
+            .navigationTitle(String(localized: "diaper_list_title"))
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    addButton
                 }
-                .sheet(isPresented: $showingAddDiaperView) {
-                    AddDiaperView()
-                        .environmentObject(childProfileViewModel)
-                        .environment(\.managedObjectContext, viewContext)
-                }
-                .sheet(item: $selectedEvent) { event in
-                    DiaperDetailView(event: event)
-                        .environmentObject(childProfileViewModel)
-                        .environment(\.managedObjectContext, viewContext)
-                }
-                .onChange(of: childProfileViewModel.selectedChild) {
-                    loadEvents()
-                }
-                .onAppear {
-                    loadEvents()
-                }
-        }
+            }
+            .sheet(isPresented: $showingAddDiaperView) {
+                AddDiaperView()
+                    .environmentObject(childProfileViewModel)
+                    .environment(\.managedObjectContext, viewContext)
+            }
+            .sheet(item: $selectedEvent) { event in
+                DiaperDetailView(event: event)
+                    .environmentObject(childProfileViewModel)
+                    .environment(\.managedObjectContext, viewContext)
+            }
+            .onChange(of: childProfileViewModel.selectedChild) {
+                loadEvents()
+            }
+            .onAppear {
+                loadEvents()
+            }
     }
 
     private var mainContent: some View {

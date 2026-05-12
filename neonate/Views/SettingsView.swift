@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var childProfileViewModel: ChildProfileViewModel
+    @EnvironmentObject var reminderViewModel: ReminderViewModel
 
     @State private var showingChildrenList = false
     @State private var showingLogoutAlert = false
@@ -196,14 +197,12 @@ struct SettingsView: View {
 
                     Spacer()
 
-                    if let selectedChild = childProfileViewModel.selectedChild {
-                        let remindersCount = ReminderManager.shared.fetchActiveReminders(for: selectedChild.id!).count
-                        if remindersCount > 0 {
-                            Text("\(remindersCount)")
-                                .foregroundColor(.secondary)
-                                .font(.subheadline)
-                                .accessibilityLabel(String.localizedStringWithFormat(NSLocalizedString("reminders_count", comment: ""), remindersCount))
-                        }
+                    let remindersCount = reminderViewModel.reminders.filter { $0.isEnabled }.count
+                    if remindersCount > 0 {
+                        Text("\(remindersCount)")
+                            .foregroundColor(.secondary)
+                            .font(.subheadline)
+                            .accessibilityLabel(String.localizedStringWithFormat(NSLocalizedString("reminders_count", comment: ""), remindersCount))
                     }
                 }
             }

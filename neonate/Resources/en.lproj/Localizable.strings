@@ -776,8 +776,6 @@
 "reminder_new_title" = "New Reminder";
 "reminder_edit_title" = "Edit Reminder";
 "reminder_add_button" = "Add";
-"hours_short" = "h";
-"minutes_short" = "min";
 "zero_minutes" = "0 minutes";
 
 // MARK: - Notification Texts

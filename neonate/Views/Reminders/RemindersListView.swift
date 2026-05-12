@@ -10,8 +10,6 @@ struct RemindersListView: View {
     @State private var showingAddReminder = false
     @State private var showingPermissionView = false
     @State private var reminderToEdit: ReminderSchedule?
-    @State private var reminderToDelete: ReminderSchedule?
-    @State private var showingDeleteAlert = false
 
     init(context: NSManagedObjectContext) {
         _viewModel = StateObject(wrappedValue: ReminderViewModel(context: context))
@@ -58,18 +56,6 @@ struct RemindersListView: View {
         .sheet(isPresented: $showingPermissionView) {
             NotificationPermissionView(viewModel: viewModel)
         }
-        .alert(String(localized: "delete_reminder"), isPresented: $showingDeleteAlert) {
-            Button(String(localized: "cancel"), role: .cancel) {
-                reminderToDelete = nil
-            }
-            Button(String(localized: "action_delete"), role: .destructive) {
-                if let reminder = reminderToDelete {
-                    deleteReminder(reminder)
-                }
-            }
-        } message: {
-            Text(String(localized: "delete_reminder_message"))
-        }
     }
 
     private var remindersList: some View {
@@ -81,13 +67,16 @@ struct RemindersListView: View {
 
             if viewModel.reminders.isEmpty {
                 emptyStateSection
+                    .transition(.opacity)
             } else {
                 remindersSection
+                    .transition(.opacity)
             }
 
             infoSection
         }
         .listStyle(.insetGrouped)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.reminders.isEmpty)
     }
 
     private var permissionSection: some View {
@@ -154,13 +143,13 @@ struct RemindersListView: View {
                         showingPermissionView = true
                     }
                 } label: {
-                    Label(String(localized: "add_reminder"), systemImage: "plus.circle.fill")
+                    Text(String(localized: "add_reminder"))
                         .font(.headline)
-                        .frame(minWidth: 200)
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 40)
+                .frame(height: 50)
+                .padding(.horizontal, 16)
                 .padding(.top, 4)
 
                 Spacer()
@@ -180,13 +169,16 @@ struct RemindersListView: View {
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(role: .destructive) {
-                            reminderToDelete = reminder
-                            showingDeleteAlert = true
+                            Task {
+                                await viewModel.deleteReminder(reminder)
+                            }
                         } label: {
                             Label("Удалить", systemImage: "trash")
                         }
                     }
+                    .id(reminder.id)
             }
+            .animation(.easeInOut(duration: 0.3), value: viewModel.reminders)
         } header: {
             Text(String(format: NSLocalizedString("active_reminders", comment: ""), viewModel.activeRemindersCount))
         }
@@ -235,13 +227,6 @@ struct RemindersListView: View {
 
     private func checkPermissions() {
         viewModel.checkNotificationPermission()
-    }
-
-    private func deleteReminder(_ reminder: ReminderSchedule) {
-        Task {
-            await viewModel.deleteReminder(reminder)
-            reminderToDelete = nil
-        }
     }
 }
 

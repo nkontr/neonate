@@ -776,8 +776,6 @@
 "reminder_new_title" = "Новое напоминание";
 "reminder_edit_title" = "Редактировать напоминание";
 "reminder_add_button" = "Добавить";
-"hours_short" = "ч";
-"minutes_short" = "мин";
 "zero_minutes" = "0 минут";
 
 // MARK: - Notification Texts

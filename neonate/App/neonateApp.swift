@@ -10,13 +10,6 @@ struct neonateApp: App {
 
     init() {
         UNUserNotificationCenter.current().delegate = NotificationService.shared
-
-        // ВРЕМЕННО: Сброс для тестирования onboarding
-        UserDefaults.standard.removeObject(forKey: "appInstallDate")
-        UserDefaults.standard.removeObject(forKey: "hasSeenOnboarding")
-        UserDefaults.standard.removeObject(forKey: "hasLaunchedBefore")
-        print("🔄 RESET: All onboarding flags cleared")
-
         checkFirstLaunch()
     }
 

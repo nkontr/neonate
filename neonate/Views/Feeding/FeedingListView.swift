@@ -5,39 +5,36 @@ struct FeedingListView: View {
     @ObservedObject var viewModel: FeedingViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
-    @Environment(\.dismiss) private var dismiss
-
     @State private var selectedRange: DateRangePicker.DateRange = .today
     @State private var showAddFeeding = false
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
 
-                DateRangePicker(selectedRange: $selectedRange)
-                    .padding()
+            DateRangePicker(selectedRange: $selectedRange)
+                .padding()
 
-                if viewModel.feedingEvents.isEmpty {
-                    EmptyStateView(
-                        icon: "fork.knife",
-                        title: String(localized: "feeding_empty"),
-                        message: String(localized: "feeding_empty_message"),
-                        actionTitle: String(localized: "feeding_add"),
-                        action: { showAddFeeding = true }
-                    )
-                } else {
-                    List {
-                        ForEach(filteredEvents, id: \.id) { event in
-                            NavigationLink(destination: FeedingDetailView(event: event, viewModel: viewModel, childViewModel: childViewModel)) {
-                                EventRow(
-                                    icon: "fork.knife",
-                                    iconColor: .orange,
-                                    title: event.feedingType ?? String(localized: "feeding_default_title"),
-                                    subtitle: feedingSubtitle(event),
-                                    timestamp: formatTimestamp(event.timestamp),
-                                    details: feedingDetails(event)
-                                )
-                            }
+            if viewModel.feedingEvents.isEmpty {
+                EmptyStateView(
+                    icon: "fork.knife",
+                    title: String(localized: "feeding_empty"),
+                    message: String(localized: "feeding_empty_message"),
+                    actionTitle: String(localized: "feeding_add"),
+                    action: { showAddFeeding = true }
+                )
+            } else {
+                List {
+                    ForEach(filteredEvents, id: \.id) { event in
+                        NavigationLink(destination: FeedingDetailView(event: event, viewModel: viewModel, childViewModel: childViewModel)) {
+                            EventRow(
+                                icon: "fork.knife",
+                                iconColor: .orange,
+                                title: event.feedingType ?? String(localized: "feeding_default_title"),
+                                subtitle: feedingSubtitle(event),
+                                timestamp: formatTimestamp(event.timestamp),
+                                details: feedingDetails(event)
+                            )
+                        }
                         }
                         .onDelete { indexSet in
                             deleteEvents(at: indexSet)
@@ -49,14 +46,6 @@ struct FeedingListView: View {
             .navigationTitle(String(localized: "feeding_list_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
-                }
-
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showAddFeeding = true
@@ -73,7 +62,6 @@ struct FeedingListView: View {
                     viewModel.loadFeedingEvents(for: childId)
                 }
             }
-        }
     }
 
     private var filteredEvents: [FeedingEvent] {

@@ -10,6 +10,7 @@ struct MainTabView: View {
     @StateObject private var feedingViewModel: FeedingViewModel
     @StateObject private var sleepViewModel: SleepViewModel
     @StateObject private var diaperViewModel: DiaperViewModel
+    @StateObject private var reminderViewModel: ReminderViewModel
 
     @State private var selectedTab: Tab = .dashboard
 
@@ -19,13 +20,14 @@ struct MainTabView: View {
         _feedingViewModel = StateObject(wrappedValue: FeedingViewModel(context: context))
         _sleepViewModel = StateObject(wrappedValue: SleepViewModel(context: context))
         _diaperViewModel = StateObject(wrappedValue: DiaperViewModel(context: context))
+        _reminderViewModel = StateObject(wrappedValue: ReminderViewModel(context: context))
     }
 
     var body: some View {
         let _ = Self._printChanges()
         TabView(selection: $selectedTab) {
 
-            DashboardView()
+            DashboardView(selectedTab: $selectedTab)
                 .environmentObject(childProfileViewModel)
                 .environmentObject(feedingViewModel)
                 .environmentObject(sleepViewModel)
@@ -61,6 +63,7 @@ struct MainTabView: View {
             SettingsView()
                 .environmentObject(authViewModel)
                 .environmentObject(childProfileViewModel)
+                .environmentObject(reminderViewModel)
                 .environment(\.managedObjectContext, viewContext)
                 .tabItem {
                     Label(String(localized: "tab_settings"), systemImage: "gearshape.fill")
@@ -85,6 +88,7 @@ struct MainTabView: View {
         feedingViewModel.loadFeedingEvents(for: childId)
         sleepViewModel.loadSleepEvents(for: childId)
         diaperViewModel.loadDiaperEvents(for: childId)
+        reminderViewModel.loadReminders(for: childId)
     }
 }
 

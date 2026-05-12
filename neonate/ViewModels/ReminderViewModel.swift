@@ -116,17 +116,19 @@ class ReminderViewModel: ObservableObject {
     func deleteReminder(_ reminder: ReminderSchedule) async {
         guard let reminderId = reminder.id else { return }
 
-        isLoading = true
-        errorMessage = nil
-
-        do {
-            try await reminderManager.deleteReminder(id: reminderId)
-            refreshReminders()
-        } catch {
-            errorMessage = "Ошибка удаления напоминания: \(error.localizedDescription)"
+        // Remove locally first — single instant UI update
+        await MainActor.run {
+            reminders.removeAll { $0.id == reminderId }
         }
 
-        isLoading = false
+        // Then delete from CoreData silently
+        do {
+            try await reminderManager.deleteReminder(id: reminderId)
+        } catch {
+            // If failed — restore by reloading
+            errorMessage = "Ошибка удаления напоминания: \(error.localizedDescription)"
+            refreshReminders()
+        }
     }
 
     func toggleReminder(_ reminder: ReminderSchedule, enabled: Bool) async {

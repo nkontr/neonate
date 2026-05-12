@@ -5,105 +5,93 @@ struct SleepListView: View {
     @ObservedObject var viewModel: SleepViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
-    @Environment(\.dismiss) private var dismiss
-
     @State private var selectedRange: DateRangePicker.DateRange = .today
     @State private var showAddSleep = false
     @State private var showSleepTimer = false
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                DateRangePicker(selectedRange: $selectedRange)
-                    .padding()
+        VStack(spacing: 0) {
+            DateRangePicker(selectedRange: $selectedRange)
+                .padding()
 
-                if viewModel.currentSleepSession != nil {
+            if viewModel.currentSleepSession != nil {
+                Button {
+                    showSleepTimer = true
+                } label: {
+                    HStack {
+                        Image(systemName: "moon.zzz.fill")
+                            .foregroundColor(.purple)
+                        Text(String(localized: "sleep_child_sleeping"))
+                            .fontWeight(.medium)
+                        Spacer()
+                        Text(formatDuration(viewModel.currentSleepDuration))
+                            .font(.headline)
+                    }
+                    .padding()
+                    .background(Color.purple.opacity(0.1))
+                    .cornerRadius(12)
+                }
+                .padding(.horizontal)
+            }
+
+            if viewModel.sleepEvents.isEmpty {
+                EmptyStateView(
+                    icon: "bed.double.fill",
+                    title: String(localized: "sleep_empty"),
+                    message: String(localized: "sleep_empty_message"),
+                    actionTitle: String(localized: "sleep_start_tracking"),
+                    action: { showSleepTimer = true }
+                )
+            } else {
+                List {
+                    ForEach(filteredEvents, id: \.id) { event in
+                        NavigationLink(destination: SleepDetailView(event: event, viewModel: viewModel, childViewModel: childViewModel)) {
+                            EventRow(
+                                icon: "bed.double.fill",
+                                iconColor: .purple,
+                                title: sleepTitle(event),
+                                subtitle: localizedQuality(event.quality),
+                                timestamp: formatTimestamp(event.startTime),
+                                details: sleepDetails(event)
+                            )
+                        }
+                    }
+                    .onDelete { indexSet in
+                        deleteEvents(at: indexSet)
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+        .navigationTitle(String(localized: "sleep_title"))
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
                     Button {
                         showSleepTimer = true
                     } label: {
-                        HStack {
-                            Image(systemName: "moon.zzz.fill")
-                                .foregroundColor(.purple)
-                            Text(String(localized: "sleep_child_sleeping"))
-                                .fontWeight(.medium)
-                            Spacer()
-                            Text(formatDuration(viewModel.currentSleepDuration))
-                                .font(.headline)
-                        }
-                        .padding()
-                        .background(Color.purple.opacity(0.1))
-                        .cornerRadius(12)
+                        Label(String(localized: "start_timer"), systemImage: "timer")
                     }
-                    .padding(.horizontal)
-                }
-
-                if viewModel.sleepEvents.isEmpty {
-                    EmptyStateView(
-                        icon: "bed.double.fill",
-                        title: String(localized: "sleep_empty"),
-                        message: String(localized: "sleep_empty_message"),
-                        actionTitle: String(localized: "sleep_start_tracking"),
-                        action: { showSleepTimer = true }
-                    )
-                } else {
-                    List {
-                        ForEach(filteredEvents, id: \.id) { event in
-                            NavigationLink(destination: SleepDetailView(event: event, viewModel: viewModel, childViewModel: childViewModel)) {
-                                EventRow(
-                                    icon: "bed.double.fill",
-                                    iconColor: .purple,
-                                    title: sleepTitle(event),
-                                    subtitle: localizedQuality(event.quality),
-                                    timestamp: formatTimestamp(event.startTime),
-                                    details: sleepDetails(event)
-                                )
-                            }
-                        }
-                        .onDelete { indexSet in
-                            deleteEvents(at: indexSet)
-                        }
-                    }
-                    .listStyle(.plain)
-                }
-            }
-            .navigationTitle(String(localized: "sleep_title"))
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        dismiss()
+                        showAddSleep = true
                     } label: {
-                        Image(systemName: "xmark")
+                        Label(String(localized: "add_completed"), systemImage: "plus")
                     }
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button {
-                            showSleepTimer = true
-                        } label: {
-                            Label(String(localized: "start_timer"), systemImage: "timer")
-                        }
-                        Button {
-                            showAddSleep = true
-                        } label: {
-                            Label(String(localized: "add_completed"), systemImage: "plus")
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
                 }
             }
-            .sheet(isPresented: $showSleepTimer) {
-                SleepTimerView(viewModel: viewModel, childViewModel: childViewModel)
-            }
-            .sheet(isPresented: $showAddSleep) {
-                AddSleepView(viewModel: viewModel, childViewModel: childViewModel)
-            }
-            .onAppear {
-                if let childId = childViewModel.selectedChild?.id {
-                    viewModel.loadSleepEvents(for: childId)
-                }
+        }
+        .sheet(isPresented: $showSleepTimer) {
+            SleepTimerView(viewModel: viewModel, childViewModel: childViewModel)
+        }
+        .sheet(isPresented: $showAddSleep) {
+            AddSleepView(viewModel: viewModel, childViewModel: childViewModel)
+        }
+        .onAppear {
+            if let childId = childViewModel.selectedChild?.id {
+                viewModel.loadSleepEvents(for: childId)
             }
         }
     }

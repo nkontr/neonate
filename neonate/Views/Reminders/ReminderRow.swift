@@ -8,19 +8,15 @@ struct ReminderRow: View {
     var body: some View {
         HStack(spacing: 12) {
 
-            if let type = viewModel.getReminderType(reminder) {
-                Image(systemName: type.icon)
-                    .font(.title3)
-                    .foregroundColor(reminder.isEnabled ? .blue : .gray)
-                    .frame(width: 32)
-            }
+            Image(systemName: viewModel.getReminderType(reminder)?.icon ?? "bell")
+                .font(.title3)
+                .foregroundColor(reminder.isEnabled ? .blue : .gray)
+                .frame(width: 32)
 
             VStack(alignment: .leading, spacing: 4) {
-                if let type = viewModel.getReminderType(reminder) {
-                    Text(type.displayName)
-                        .font(.headline)
-                        .foregroundColor(reminder.isEnabled ? .primary : .secondary)
-                }
+                Text(viewModel.getReminderType(reminder)?.displayName ?? "")
+                    .font(.headline)
+                    .foregroundColor(reminder.isEnabled ? .primary : .secondary)
 
                 Text(String(format: NSLocalizedString("reminder_every", comment: ""), viewModel.getFormattedInterval(reminder)))
                     .font(.subheadline)
@@ -45,7 +41,8 @@ struct ReminderRow: View {
             ))
             .labelsHidden()
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
+        .frame(minHeight: 60, alignment: .center)
     }
 
     private func formatDate(_ date: Date) -> String {
