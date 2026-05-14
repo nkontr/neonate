@@ -21,15 +21,46 @@ class ChildProfileViewModel: ObservableObject {
 
     private let selectedChildIdKey = "selectedChildId"
 
+    /// Current user ID for filtering children
+    var currentUserId: UUID?
+
     init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
         self.repository = ChildProfileRepository(context: context)
+    }
+
+    /// Set current user and load their children
+    func setCurrentUser(userId: UUID) {
+        // Check if user changed
+        let userChanged = self.currentUserId != userId
+
+        self.currentUserId = userId
+
+        // Clear selected child if user changed
+        if userChanged {
+            selectedChild = nil
+        }
+
         loadChildren()
         loadSelectedChild()
+
+        // Perform migration if needed
+        Task {
+            await DataMigrationService.shared.performMigrationIfNeeded(userId: userId)
+            // Reload children after migration
+            loadChildren()
+            // Reload selected child after migration (might have new children)
+            loadSelectedChild()
+        }
     }
 
     func loadChildren() {
         isLoading = true
-        children = repository.fetchAllChildren(ascending: false)
+        if let userId = currentUserId {
+            children = repository.fetchChildren(for: userId, ascending: false)
+        } else {
+            // Fallback: load all children (for backwards compatibility during migration)
+            children = repository.fetchAllChildren(ascending: false)
+        }
         isLoading = false
     }
 
@@ -52,7 +83,8 @@ class ChildProfileViewModel: ObservableObject {
                 photoData: photoData,
                 birthWeight: birthWeight,
                 birthHeight: birthHeight,
-                notes: notes
+                notes: notes,
+                userId: currentUserId  // Pass current user ID
             )
 
             loadChildren()
@@ -176,11 +208,22 @@ class ChildProfileViewModel: ObservableObject {
             return
         }
 
-        if let child = repository.fetchChildProfile(by: savedId) {
-            selectedChild = child
+        // Check if user has access to this child
+        if let userId = currentUserId {
+            if repository.hasAccess(userId: userId, childId: savedId),
+               let child = repository.fetchChildProfile(by: savedId) {
+                selectedChild = child
+                return
+            }
         } else {
-
-            selectedChild = children.first
+            // Fallback for backwards compatibility
+            if let child = repository.fetchChildProfile(by: savedId) {
+                selectedChild = child
+                return
+            }
         }
+
+        // Child not found or no access - select first available child
+        selectedChild = children.first
     }
 }

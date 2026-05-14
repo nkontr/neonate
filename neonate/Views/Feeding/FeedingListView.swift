@@ -5,16 +5,33 @@ struct FeedingListView: View {
     @ObservedObject var viewModel: FeedingViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
+    @Environment(\.dismiss) private var dismiss
+
     @State private var selectedRange: DateRangePicker.DateRange = .today
     @State private var showAddFeeding = false
 
+    /// Определяет, открыт ли View через fullScreenCover (требует кастомной кнопки "Назад")
+    var isFullScreenPresentation: Bool = false
+
     var body: some View {
+        Group {
+            if isFullScreenPresentation {
+                NavigationView {
+                    contentView
+                }
+            } else {
+                contentView
+            }
+        }
+    }
+
+    private var contentView: some View {
         VStack(spacing: 0) {
 
             DateRangePicker(selectedRange: $selectedRange)
                 .padding()
 
-            if viewModel.feedingEvents.isEmpty {
+                if viewModel.feedingEvents.isEmpty {
                 EmptyStateView(
                     icon: "fork.knife",
                     title: String(localized: "feeding_empty"),
@@ -46,6 +63,18 @@ struct FeedingListView: View {
             .navigationTitle(String(localized: "feeding_list_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                if isFullScreenPresentation {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text(String(localized: "back"))
+                            }
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showAddFeeding = true
@@ -83,12 +112,12 @@ struct FeedingListView: View {
         var parts: [String] = []
 
         if event.duration > 0 {
-            let label = String(localized: "feeding_duration_label").replacingOccurrences(of: "%d", with: "\(event.duration)")
+            let label = String(format: NSLocalizedString("feeding_duration_label", comment: ""), event.duration)
             parts.append(label)
         }
 
         if event.volume > 0 {
-            let label = String(localized: "feeding_volume_label").replacingOccurrences(of: "%d", with: "\(Int(event.volume))")
+            let label = String(format: NSLocalizedString("feeding_volume_label", comment: ""), Int(event.volume))
             parts.append(label)
         }
 

@@ -807,6 +807,7 @@
 // MARK: - Biometric Unlock Screen
 "biometric_unlock_title" = "Разблокировать с помощью %@";
 "biometric_unlock_message" = "Используйте биометрическую аутентификацию для доступа к приложению";
+"biometric_unlock_reason" = "Войдите для доступа к приложению";
 "biometric_auth_failed" = "Биометрическая аутентификация не удалась";
 
 // MARK: - Apple Sign In

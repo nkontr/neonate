@@ -56,7 +56,8 @@ struct RootView: View {
 
     var body: some View {
         ZStack {
-            if authViewModel.isLoading {
+            if authViewModel.isLoading && !requiresBiometricAuth {
+                // Show loading only if we're not on biometric auth screen
                 LoadingView()
             } else if !hasSeenOnboarding && !authViewModel.isAuthenticated {
                 OnboardingView()
@@ -64,12 +65,18 @@ struct RootView: View {
                         hasSeenOnboarding = true
                     }
             } else if authViewModel.isAuthenticated {
+                // If biometric is required and not yet checked, show biometric auth
                 if requiresBiometricAuth {
-                    BiometricAuthView()
-                        .environmentObject(authViewModel)
-                        .onAppear {
-                            authenticateWithBiometric()
-                        }
+                    BiometricAuthView(onRetry: {
+                        authenticateWithBiometric()
+                    })
+                    .environmentObject(authViewModel)
+                    .onAppear {
+                        authenticateWithBiometric()
+                    }
+                } else if authViewModel.isBiometricEnabled && !hasCheckedBiometric {
+                    // Biometric is enabled but not yet checked - show loading
+                    LoadingView()
                 } else {
                     MainAppView()
                 }
@@ -129,9 +136,19 @@ struct RootView: View {
 
     private func authenticateWithBiometric() {
         Task {
-            await authViewModel.loginWithBiometric()
-            hasCheckedBiometric = true
-            requiresBiometricAuth = false
+            // Use local biometric verification instead of full login
+            let success = await authViewModel.verifyBiometric()
+
+            if success {
+                // Biometric authentication succeeded
+                hasCheckedBiometric = true
+                requiresBiometricAuth = false
+            } else {
+                // Authentication failed or cancelled - keep requiring biometric auth
+                // User can retry via the retry button in BiometricAuthView
+                hasCheckedBiometric = false
+                // Keep requiresBiometricAuth = true to show BiometricAuthView
+            }
         }
     }
 }

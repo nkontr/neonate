@@ -86,7 +86,7 @@ struct AddSleepView: View {
         let duration = endTime.timeIntervalSince(startTime)
         let hours = Int(duration) / 3600
         let minutes = (Int(duration) % 3600) / 60
-        return String(localized: "duration_short_format").replacingOccurrences(of: "%d", with: "\(hours)").replacingOccurrences(of: "%d", with: "\(minutes)")
+        return String(format: NSLocalizedString("duration_short_format", comment: ""), hours, minutes)
     }
 
     private func saveSleep() {

@@ -4,6 +4,7 @@ import CoreData
 struct DiaperListView: View {
 
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var childProfileViewModel: ChildProfileViewModel
 
     @StateObject private var viewModel: DiaperViewModel
@@ -12,15 +13,43 @@ struct DiaperListView: View {
     @State private var selectedEvent: DiaperEvent?
     @State private var dateFilter: DateFilter = .today
 
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    /// Определяет, открыт ли View через fullScreenCover (требует кастомной кнопки "Назад")
+    var isFullScreenPresentation: Bool = false
+
+    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext, isFullScreenPresentation: Bool = false) {
         _viewModel = StateObject(wrappedValue: DiaperViewModel(context: context))
+        self.isFullScreenPresentation = isFullScreenPresentation
     }
 
     var body: some View {
+        Group {
+            if isFullScreenPresentation {
+                NavigationView {
+                    contentView
+                }
+            } else {
+                contentView
+            }
+        }
+    }
+
+    private var contentView: some View {
         mainContent
             .navigationTitle(String(localized: "diaper_list_title"))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                if isFullScreenPresentation {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text(String(localized: "back"))
+                            }
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     addButton
                 }

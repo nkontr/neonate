@@ -3,6 +3,7 @@ import SwiftUI
 struct BiometricAuthView: View {
 
     @EnvironmentObject var authViewModel: AuthViewModel
+    var onRetry: (() -> Void)? = nil
 
     var body: some View {
         ZStack {
@@ -47,7 +48,13 @@ struct BiometricAuthView: View {
 
                 Spacer()
 
-                if authViewModel.showError {
+                if authViewModel.isLoading && !authViewModel.showError {
+                    // Show loading indicator while authenticating
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(1.5)
+                        .frame(height: 60)
+                } else if authViewModel.showError {
                     VStack(spacing: 12) {
                         Text(authViewModel.errorMessage ?? String(localized: "biometric_auth_failed"))
                             .font(.subheadline)
@@ -55,19 +62,41 @@ struct BiometricAuthView: View {
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
 
-                        Button {
-                            authViewModel.clearError()
-                            Task {
-                                await authViewModel.loginWithBiometric()
+                        VStack(spacing: 12) {
+                            Button {
+                                authViewModel.clearError()
+                                if let onRetry = onRetry {
+                                    onRetry()
+                                } else {
+                                    Task {
+                                        await authViewModel.loginWithBiometric()
+                                    }
+                                }
+                            } label: {
+                                Text(String(localized: "retry"))
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(12)
                             }
-                        } label: {
-                            Text(String(localized: "retry"))
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(12)
+                            .disabled(authViewModel.isLoading)
+
+                            Button {
+                                Task {
+                                    await authViewModel.logout()
+                                }
+                            } label: {
+                                Text(String(localized: "logout"))
+                                    .font(.headline)
+                                    .foregroundColor(.red)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.white.opacity(0.2))
+                                    .cornerRadius(12)
+                            }
+                            .disabled(authViewModel.isLoading)
                         }
                         .padding(.horizontal, 40)
                     }

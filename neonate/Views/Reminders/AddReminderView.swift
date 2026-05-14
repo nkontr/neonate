@@ -83,11 +83,13 @@ struct AddReminderView: View {
         var components: [String] = []
 
         if intervalHours > 0 {
-            components.append("\(intervalHours) \(String(localized: "hours_short"))")
+            let hoursStr = String(format: NSLocalizedString("hours_short", comment: ""), intervalHours)
+            components.append(hoursStr)
         }
 
         if intervalMinutes > 0 {
-            components.append("\(intervalMinutes) \(String(localized: "minutes_short"))")
+            let minsStr = String(format: NSLocalizedString("minutes_short", comment: ""), intervalMinutes)
+            components.append(minsStr)
         }
 
         return components.joined(separator: " ")

@@ -73,8 +73,19 @@ struct MainTabView: View {
         }
         .accentColor(.blue)
         .onAppear {
+            // Set current user ID for child filtering
+            if let userId = authViewModel.currentUser?.id {
+                childProfileViewModel.setCurrentUser(userId: userId)
+            }
+
             if let childId = childProfileViewModel.selectedChild?.id {
                 loadDataForChild(childId)
+            }
+        }
+        .onChange(of: authViewModel.currentUser?.id) { _, newUserId in
+            // User changed - update child filtering
+            if let userId = newUserId {
+                childProfileViewModel.setCurrentUser(userId: userId)
             }
         }
         .onChange(of: childProfileViewModel.selectedChild) { _, newChild in

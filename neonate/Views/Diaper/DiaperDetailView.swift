@@ -164,14 +164,14 @@ struct DiaperDetailView: View {
         let minutes = (Int(interval) % 3600) / 60
 
         if hours > 0 {
-            let hoursStr = String(localized: "hours_short")
-            let minsStr = String(localized: "minutes_short")
+            let hoursStr = String(format: NSLocalizedString("hours_short", comment: ""), hours)
+            let minsStr = String(format: NSLocalizedString("minutes_short", comment: ""), minutes)
             let agoStr = String(localized: "time_ago")
-            return "\(hours) \(hoursStr) \(minutes) \(minsStr) \(agoStr)"
+            return "\(hoursStr) \(minsStr) \(agoStr)"
         } else if minutes > 0 {
-            let minsStr = String(localized: "minutes_short")
+            let minsStr = String(format: NSLocalizedString("minutes_short", comment: ""), minutes)
             let agoStr = String(localized: "time_ago")
-            return "\(minutes) \(minsStr) \(agoStr)"
+            return "\(minsStr) \(agoStr)"
         } else {
             return String(localized: "just_now")
         }

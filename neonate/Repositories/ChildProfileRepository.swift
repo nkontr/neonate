@@ -4,6 +4,10 @@ import Combine
 
 class ChildProfileRepository: BaseRepository<ChildProfile> {
 
+    private var relationshipRepository: UserChildRelationshipRepository {
+        return UserChildRelationshipRepository(context: context)
+    }
+
     func createChildProfile(
         name: String,
         dateOfBirth: Date,
@@ -11,7 +15,8 @@ class ChildProfileRepository: BaseRepository<ChildProfile> {
         photoData: Data? = nil,
         birthWeight: Double? = nil,
         birthHeight: Double? = nil,
-        notes: String? = nil
+        notes: String? = nil,
+        userId: UUID? = nil
     ) async throws -> ChildProfile {
         let child = create()
         child.id = UUID()
@@ -25,6 +30,16 @@ class ChildProfileRepository: BaseRepository<ChildProfile> {
         child.createdAt = Date()
 
         try await PersistenceController.shared.saveContext(context)
+
+        // Create relationship if userId is provided
+        if let userId = userId {
+            _ = try await relationshipRepository.createRelationship(
+                userId: userId,
+                childId: child.id!,
+                role: "owner"
+            )
+        }
+
         return child
     }
 
@@ -62,6 +77,21 @@ class ChildProfileRepository: BaseRepository<ChildProfile> {
     func fetchAllChildren(ascending: Bool = false) -> [ChildProfile] {
         let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: ascending)
         return fetch(sortedBy: [sortDescriptor])
+    }
+
+    /// Fetch all children for a specific user
+    func fetchChildren(for userId: UUID, ascending: Bool = false) -> [ChildProfile] {
+        let childrenIds = relationshipRepository.fetchChildrenIds(for: userId)
+        guard !childrenIds.isEmpty else { return [] }
+
+        let predicate = NSPredicate(format: "id IN %@", childrenIds)
+        let sortDescriptor = NSSortDescriptor(key: "createdAt", ascending: ascending)
+        return fetch(sortedBy: [sortDescriptor], predicate: predicate)
+    }
+
+    /// Check if user has access to child
+    func hasAccess(userId: UUID, childId: UUID) -> Bool {
+        return relationshipRepository.hasAccess(userId: userId, childId: childId)
     }
 
     func searchChildren(by name: String) -> [ChildProfile] {

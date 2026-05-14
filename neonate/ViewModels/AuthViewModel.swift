@@ -225,6 +225,30 @@ class AuthViewModel: ObservableObject {
         isBiometricLoading = false
     }
 
+    /// Verify biometric authentication locally without changing isAuthenticated state
+    /// Returns true if biometric authentication succeeded, false otherwise
+    func verifyBiometric() async -> Bool {
+        isLoading = true
+        errorMessage = nil
+        showError = false
+
+        do {
+            let authenticated = try await biometricService.authenticate(reason: String(localized: "biometric_unlock_reason"))
+            isLoading = false
+            return authenticated
+        } catch let error as BiometricAuthService.BiometricError {
+            errorMessage = error.errorDescription
+            showError = true
+            isLoading = false
+            return false
+        } catch {
+            errorMessage = "Ошибка биометрической аутентификации"
+            showError = true
+            isLoading = false
+            return false
+        }
+    }
+
     func toggleBiometric() async {
         if isBiometricEnabled {
             await disableBiometric()

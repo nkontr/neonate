@@ -14,11 +14,7 @@
         <relationship name="feedingEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FeedingEvent" inverseName="child" inverseEntity="FeedingEvent"/>
         <relationship name="reminders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReminderSchedule" inverseName="child" inverseEntity="ReminderSchedule"/>
         <relationship name="sleepEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SleepEvent" inverseName="child" inverseEntity="SleepEvent"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
+        <relationship name="userRelationships" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserChildRelationship" inverseName="child" inverseEntity="UserChildRelationship"/>
     </entity>
     <entity name="DiaperEvent" representedClassName="DiaperEvent" syncable="YES" codeGenerationType="class">
         <attribute name="childId" attributeType="UUID" usesScalarValueType="NO"/>
@@ -96,6 +92,22 @@
         <attribute name="preferences" optional="YES" attributeType="String"/>
         <attribute name="registeredAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="username" attributeType="String"/>
+        <relationship name="childRelationships" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserChildRelationship" inverseName="user" inverseEntity="UserChildRelationship"/>
+    </entity>
+    <entity name="UserChildRelationship" representedClassName="UserChildRelationship" syncable="YES" codeGenerationType="class">
+        <attribute name="addedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="childId" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="role" attributeType="String" defaultValueString="owner"/>
+        <attribute name="userId" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="child" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ChildProfile" inverseName="userRelationships" inverseEntity="ChildProfile"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserAccount" inverseName="childRelationships" inverseEntity="UserAccount"/>
+        <fetchIndex name="byUserIdIndex">
+            <fetchIndexElement property="userId" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byChildIdIndex">
+            <fetchIndexElement property="childId" type="Binary" order="ascending"/>
+        </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>

@@ -62,15 +62,15 @@ struct TrackingView: View {
                         .environment(\.managedObjectContext, viewContext)
                 }
                 .fullScreenCover(isPresented: $showingFeedingList, onDismiss: reloadIfNeeded) {
-                    FeedingListView(viewModel: feedingViewModel, childViewModel: childProfileViewModel)
+                    FeedingListView(viewModel: feedingViewModel, childViewModel: childProfileViewModel, isFullScreenPresentation: true)
                         .environment(\.managedObjectContext, viewContext)
                 }
                 .fullScreenCover(isPresented: $showingSleepList, onDismiss: reloadIfNeeded) {
-                    SleepListView(viewModel: sleepViewModel, childViewModel: childProfileViewModel)
+                    SleepListView(viewModel: sleepViewModel, childViewModel: childProfileViewModel, isFullScreenPresentation: true)
                         .environment(\.managedObjectContext, viewContext)
                 }
                 .fullScreenCover(isPresented: $showingDiaperList, onDismiss: reloadIfNeeded) {
-                    DiaperListView()
+                    DiaperListView(isFullScreenPresentation: true)
                         .environmentObject(childProfileViewModel)
                         .environment(\.managedObjectContext, viewContext)
                 }

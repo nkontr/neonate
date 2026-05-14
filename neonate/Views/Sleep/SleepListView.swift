@@ -5,11 +5,28 @@ struct SleepListView: View {
     @ObservedObject var viewModel: SleepViewModel
     @ObservedObject var childViewModel: ChildProfileViewModel
 
+    @Environment(\.dismiss) private var dismiss
+
     @State private var selectedRange: DateRangePicker.DateRange = .today
     @State private var showAddSleep = false
     @State private var showSleepTimer = false
 
+    /// Определяет, открыт ли View через fullScreenCover (требует кастомной кнопки "Назад")
+    var isFullScreenPresentation: Bool = false
+
     var body: some View {
+        Group {
+            if isFullScreenPresentation {
+                NavigationView {
+                    contentView
+                }
+            } else {
+                contentView
+            }
+        }
+    }
+
+    private var contentView: some View {
         VStack(spacing: 0) {
             DateRangePicker(selectedRange: $selectedRange)
                 .padding()
@@ -66,6 +83,18 @@ struct SleepListView: View {
         .navigationTitle(String(localized: "sleep_title"))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
+            if isFullScreenPresentation {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text(String(localized: "back"))
+                        }
+                    }
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button {
@@ -117,7 +146,7 @@ struct SleepListView: View {
         }
         let hours = event.duration / 60
         let minutes = event.duration % 60
-        return String(localized: "sleep_duration_label").replacingOccurrences(of: "%d", with: "\(hours)").replacingOccurrences(of: "%d", with: "\(minutes)")
+        return String(format: NSLocalizedString("sleep_duration_label", comment: ""), hours, minutes)
     }
 
     private func formatTimestamp(_ date: Date?) -> String {

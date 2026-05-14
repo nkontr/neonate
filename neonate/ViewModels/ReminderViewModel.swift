@@ -25,8 +25,15 @@ class ReminderViewModel: ObservableObject {
     }
 
     func checkNotificationPermission() {
-        notificationService.checkAuthorizationStatus { [weak self] status in
-            self?.notificationPermissionStatus = status
+        Task {
+            await withCheckedContinuation { continuation in
+                notificationService.checkAuthorizationStatus { [weak self] status in
+                    Task { @MainActor in
+                        self?.notificationPermissionStatus = status
+                        continuation.resume()
+                    }
+                }
+            }
         }
     }
 
@@ -53,7 +60,16 @@ class ReminderViewModel: ObservableObject {
 
     func loadReminders(for childId: UUID) {
         currentChildId = childId
-        reminders = reminderManager.fetchReminders(for: childId)
+
+        // Perform fetch asynchronously to avoid blocking main thread
+        Task {
+            // Fetch on background context to prevent UI freeze
+            let fetchedReminders = await context.perform {
+                self.reminderManager.fetchReminders(for: childId)
+            }
+
+            self.reminders = fetchedReminders
+        }
     }
 
     func refreshReminders() {
@@ -149,16 +165,16 @@ class ReminderViewModel: ObservableObject {
         let minutes = Int(reminder.intervalMinutes)
 
         if minutes < 60 {
-            return String(format: String(localized: "minutes_short"), minutes)
+            return String(format: NSLocalizedString("minutes_short", comment: ""), minutes)
         } else {
             let hours = minutes / 60
             let remainingMinutes = minutes % 60
 
             if remainingMinutes == 0 {
-                return String(format: String(localized: "hours_short"), hours)
+                return String(format: NSLocalizedString("hours_short", comment: ""), hours)
             } else {
-                let hoursStr = String(format: String(localized: "hours_short"), hours)
-                let minutesStr = String(format: String(localized: "minutes_short"), remainingMinutes)
+                let hoursStr = String(format: NSLocalizedString("hours_short", comment: ""), hours)
+                let minutesStr = String(format: NSLocalizedString("minutes_short", comment: ""), remainingMinutes)
                 return "\(hoursStr) \(minutesStr)"
             }
         }

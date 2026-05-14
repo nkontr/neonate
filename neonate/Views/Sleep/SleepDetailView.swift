@@ -56,7 +56,7 @@ struct SleepDetailView: View {
     private func formatDuration(_ minutes: Int32) -> String {
         let hours = minutes / 60
         let mins = minutes % 60
-        return String(localized: "duration_short_format").replacingOccurrences(of: "%d", with: "\(hours)").replacingOccurrences(of: "%d", with: "\(mins)")
+        return String(format: NSLocalizedString("duration_short_format", comment: ""), hours, mins)
     }
 
     private func deleteEvent() {
